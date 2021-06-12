@@ -1,0 +1,80 @@
+<%--=========================================================================== 
+Header (top area). 
+===========================================================================--%>
+<%@ include file="head.jspf"%>
+<%@ page session="true"%>
+<tr>
+    <td id="header">
+        <fmt:setLocale value="${defaultLocale}" scope="session"/>
+        <%-- load the bundle (by locale) --%>
+        <fmt:setBundle var="rb" basename="lang"  />
+
+        <c:if test="${not empty user}">
+            <%--===========================================================================
+            This is the user menu.
+            ===========================================================================--%>
+            <div id="leftHeader">
+
+                <c:choose>
+
+                    <%--===========================================================================
+                    This way we define the ADMIN MENU.
+                    ===========================================================================--%>
+                    <c:when test="${userRole.name == 'manager' }">
+                        <a href="controller?command=listRequest">
+                            <fmt:message key="header_jspf.manager.request.list" bundle="${rb}"/>
+                        </a> &nbsp;
+                        <a href="controller?command=listBooked">
+                            <fmt:message key="header_jspf.manager.booked.list" bundle="${rb}"/>
+                        </a> &nbsp;
+                    </c:when>
+
+
+                    <%--===========================================================================
+                    This way we define the USER MENU.
+                    ===========================================================================--%>
+                    <c:when test="${userRole.name == 'user'}">
+                        <a href="controller?command=listFreeRooms">
+                            <fmt:message key="header_jspf.user.create-order.list" bundle="${rb}"/>
+                        </a> &nbsp;
+                    </c:when>
+                </c:choose>
+            </div>
+
+            <%--===========================================================================
+            This way we define the menu located at the right of header.
+            ===========================================================================--%>
+            <div id="rightHeader">
+
+                <%--===========================================================================
+                Type user name if the user object is presented in the current session.
+                ===========================================================================--%>
+                <c:out value="${user.name} ${user.surname}"/>
+
+
+                <%--===========================================================================
+                Type user role name if the user object is presented in the current session.
+                ===========================================================================--%>
+                <c:if test="${not empty userRole}">
+                    (<fmt:message key="${userRole.name}" bundle="${rb}"/>)
+                </c:if>
+
+                <%--===========================================================================
+                Type link to logout
+                ===========================================================================--%>
+                <a href="controller?command=logout">
+                    <fmt:message key="header_jspf.link.logout" bundle="${rb}"/>
+                </a>
+            </div>
+        </c:if>
+
+        <c:if test="${empty user and title ne 'Login'}">
+            <div id="rightHeader">
+                <a href="login.jsp">
+                    <fmt:message key="header_jspf.link.login" bundle="${rb}"/>
+                </a>
+            </div>
+        </c:if>
+    </td>
+</tr>
+
