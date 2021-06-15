@@ -1,24 +1,52 @@
 package project.db;
 
-import project.db.bean.RequestedForBooking;
+import project.db.entity.RequestedForBooking;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class RequestedDao {
-    private static final String SQL__FIRM_ALL_REQUESTED_ROOMS =
-            "SELECT requested_rooms.*,  users.login, hotel_rooms.number\n" +
-                    "FROM requested_rooms, hotel_rooms, users WHERE\n" +
-                    "    (hotel_rooms.id IN\n" +
-                    "        (SELECT requested_rooms.room_id FROM requested_rooms)\n" +
-                    "    AND hotel_rooms.id = requested_rooms.room_id)\n" +
-                    "    AND (users.id IN\n" +
-                    "         (SELECT requested_rooms.user_id FROM requested_rooms)\n" +
-                    "    AND  users.id = requested_rooms.user_id)";
+    private static final String SQL__FIND_ALL_REQUESTED_ROOMS =
+            "SELECT requested_rooms.*, users.login, hotel_rooms.number\n" +
+                    "FROM requested_rooms, hotel_rooms, users\n" +
+                    "WHERE (hotel_rooms.id IN\n" +
+                        "(SELECT requested_rooms.room_id FROM requested_rooms)\n" +
+                        "AND hotel_rooms.id = requested_rooms.room_id)\n" +
+                    "AND (users.id IN\n" +
+                        "(SELECT requested_rooms.user_id FROM requested_rooms)\n" +
+                    "AND users.id = requested_rooms.user_id)";
 
-    private static final String SQL__FIND_REQUESTED_ROOMS_BY_ROOM_ID =
-            "SELECT * FROM requested_rooms WHERE room_id = ?";
+    private static final String SQL__FIND_REQUESTED_ROOM_BY_ID =
+            "SELECT requested_rooms.*,  users.login, hotel_rooms.number\n" +
+                    "FROM requested_rooms, hotel_rooms, users " +
+                    "WHERE (hotel_rooms.id IN\n" +
+                        "(SELECT requested_rooms.room_id FROM requested_rooms)\n" +
+                        "AND hotel_rooms.id = requested_rooms.room_id)\n" +
+                    "AND (users.id IN\n" +
+                        "(SELECT requested_rooms.user_id FROM requested_rooms))\n" +
+                    "AND requested_rooms.id = ?;";
+
+    private static final String SQL__FIND_REQUESTED_ROOMS_BY_USER_ID =
+            "SELECT requested_rooms.*,  users.login, hotel_rooms.number\n" +
+                    "FROM requested_rooms, hotel_rooms, users " +
+                    "WHERE (hotel_rooms.id IN\n" +
+                        "(SELECT requested_rooms.room_id FROM requested_rooms)\n" +
+                        "AND hotel_rooms.id = requested_rooms.room_id)\n" +
+                    "AND (users.id IN\n" +
+                        "(SELECT requested_rooms.user_id FROM requested_rooms))\n" +
+                    "AND requested_rooms.user_id = ?";
+
+    private static final String SQL__FIND_REQUESTED_ROOMS_BY_USER_ID_AND_ROOM_NUMBER =
+            "SELECT requested_rooms.*,  users.login, hotel_rooms.number\n" +
+                    "FROM requested_rooms, hotel_rooms, users " +
+                    "WHERE (hotel_rooms.id IN\n" +
+                         "(SELECT requested_rooms.room_id FROM requested_rooms)\n" +
+                        "AND hotel_rooms.id = requested_rooms.room_id)\n" +
+                    "AND (users.id IN\n" +
+                        "(SELECT requested_rooms.user_id FROM requested_rooms))\n" +
+                    "AND requested_rooms.user_id = ?\n" +
+                    "AND hotel_rooms.number = ?";
 
     private static final String SQL__DELETE_REQUESTED_ROOMS_BY_ROOM_ID =
             "DELETE FROM requested_rooms WHERE room_id = ?";
@@ -26,6 +54,10 @@ public class RequestedDao {
     private static final String SQL__CREATE_REQUEST =
             "INSERT INTO requested_rooms(user_id, room_id) " +
                     "VALUE (?,?)";
+
+    public static final String SQL__DELETE_REQUESTED_BY_ID =
+            "DELETE FROM requested_rooms WHERE id = ?";
+
     /**
      * Returns all applications for booking rooms.
      *
@@ -40,7 +72,7 @@ public class RequestedDao {
             con = DBManager.getInstance().getConnection();
             RequestedRoomsMapper mapper = new RequestedRoomsMapper();
             stmt = con.createStatement();
-            rs = stmt.executeQuery(SQL__FIRM_ALL_REQUESTED_ROOMS);
+            rs = stmt.executeQuery(SQL__FIND_ALL_REQUESTED_ROOMS);
             while (rs.next())
                 requestedForBookingList.add(mapper.mapRow(rs));
         } catch (SQLException ex) {
@@ -52,7 +84,57 @@ public class RequestedDao {
         return requestedForBookingList;
     }
 
-    public RequestedForBooking findRequestedRoomsById(long id) {
+    public List<RequestedForBooking> findRequestedRoomsByUserId(long id) {
+        List<RequestedForBooking> requestedForBookingList = new ArrayList<>();
+        PreparedStatement prStmt = null;
+        ResultSet rs = null;
+        Connection con = null;
+        try {
+            con = DBManager.getInstance().getConnection();
+            RequestedRoomsMapper mapper = new RequestedRoomsMapper();
+            prStmt = con.prepareStatement(SQL__FIND_REQUESTED_ROOMS_BY_USER_ID);
+            prStmt.setLong(1, id);
+            rs = prStmt.executeQuery();
+            while (rs.next())
+                requestedForBookingList.add(mapper.mapRow(rs));
+            rs.close();
+            prStmt.close();
+        } catch (SQLException ex) {
+            DBManager.getInstance().rollback(con);
+            ex.printStackTrace();
+        } finally {
+            DBManager.getInstance().commitAndClose(con);
+        }
+        return requestedForBookingList;
+    }
+
+    public boolean isCreatedRequestRoomByUserIdAndRoomNumber(long id, long roomNumber) {
+        PreparedStatement prStmt = null;
+        ResultSet rs = null;
+        Connection con = null;
+        boolean isCreated = true;
+        try {
+            con = DBManager.getInstance().getConnection();
+            RequestedRoomsMapper mapper = new RequestedRoomsMapper();
+            prStmt = con.prepareStatement(SQL__FIND_REQUESTED_ROOMS_BY_USER_ID_AND_ROOM_NUMBER);
+            int indexValue = 1;
+            prStmt.setLong(indexValue++, id);
+            prStmt.setLong(indexValue, roomNumber);
+            rs = prStmt.executeQuery();
+            if (rs.next())
+                isCreated = false;
+            rs.close();
+            prStmt.close();
+        } catch (SQLException ex) {
+            DBManager.getInstance().rollback(con);
+            ex.printStackTrace();
+        } finally {
+            DBManager.getInstance().commitAndClose(con);
+        }
+        return isCreated;
+    }
+
+    public RequestedForBooking findRequestedRoomById(long id) {
         RequestedForBooking requestedForBooking = null;
         PreparedStatement prStmt = null;
         ResultSet rs = null;
@@ -60,7 +142,7 @@ public class RequestedDao {
         try {
             con = DBManager.getInstance().getConnection();
             RequestedRoomsMapper mapper = new RequestedRoomsMapper();
-            prStmt = con.prepareStatement(SQL__FIND_REQUESTED_ROOMS_BY_ROOM_ID);
+            prStmt = con.prepareStatement(SQL__FIND_REQUESTED_ROOM_BY_ID);
             prStmt.setLong(1, id);
             rs = prStmt.executeQuery();
             if (rs.next())
@@ -76,7 +158,7 @@ public class RequestedDao {
         return requestedForBooking;
     }
 
-    public void createRequest(long user_id, long room_id){
+    public void createRequest(long user_id, long room_id) {
         PreparedStatement prStmt = null;
         Connection con = null;
         try {
@@ -95,15 +177,31 @@ public class RequestedDao {
         }
     }
 
-    public void deleteRequestedRoomById(Long id){
+    public void deleteRequestedByRoomNumber(int roomId) {
         PreparedStatement prStmt = null;
         Connection con = null;
         try {
             con = DBManager.getInstance().getConnection();
             prStmt = con.prepareStatement(SQL__DELETE_REQUESTED_ROOMS_BY_ROOM_ID);
-            prStmt.setLong(1, id);
+            prStmt.setInt(1, roomId);
             prStmt.executeUpdate();
             prStmt.close();
+        } catch (SQLException ex) {
+            DBManager.getInstance().rollback(con);
+            ex.printStackTrace();
+        } finally {
+            DBManager.getInstance().commitAndClose(con);
+        }
+    }
+
+    public void deleteRequestById(long id) {
+        Connection con = null;
+        PreparedStatement preparedStatement = null;
+        try {
+            con = DBManager.getInstance().getConnection();
+            preparedStatement = con.prepareStatement(SQL__DELETE_REQUESTED_BY_ID);
+            preparedStatement.setLong(1, id);
+            preparedStatement.executeUpdate();
         } catch (SQLException ex) {
             DBManager.getInstance().rollback(con);
             ex.printStackTrace();
@@ -124,8 +222,9 @@ public class RequestedDao {
                 rfb.setId(rs.getLong(Fields.BOOKING_REQUEST_BEAN__BOOKED_ID));
                 try {
                     rfb.setUserLogin(rs.getString(Fields.BOOKING_REQUEST_BEAN__USER_LOGIN_WHO_BOOKED));
-                    rfb.setRoomNumber(rs.getString(Fields.BOOKING_REQUEST_BEAN__RESERVED_ROOM_NUMBER));
-                }catch(SQLException ignored){}
+                    rfb.setRoomNumber(rs.getInt(Fields.BOOKING_REQUEST_BEAN__RESERVED_ROOM_NUMBER));
+                } catch (SQLException ignored) {
+                }
                 rfb.setRoomId(rs.getLong(Fields.BOOKING_REQUEST_BEAN__RESERVED_ROOM_ID));
                 rfb.setUserId(rs.getLong(Fields.BOOKING_REQUEST_BEAN__USER_ID_WHO_BOOKED));
                 return rfb;

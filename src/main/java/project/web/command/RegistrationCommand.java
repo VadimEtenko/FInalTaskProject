@@ -1,15 +1,17 @@
 package project.web.command;
 
 import org.apache.log4j.Logger;
-import project.Path;
+import project.web.Path;
 import project.db.UserDao;
 import project.db.entity.User;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+
 
 public class RegistrationCommand extends Command {
 
@@ -23,10 +25,15 @@ public class RegistrationCommand extends Command {
         UserDao userDao = new UserDao();
         String errorMessage = null;
 
-        String name = request.getParameter("name");
+        System.out.println(request.getCharacterEncoding());
+        System.out.println(request.getParameter("charset"));
+
+        String name = new String(request.getParameter("name").
+                getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
         log.trace("Request parameter: name --> " + name);
 
-        String surname = request.getParameter("surname");
+        String surname = new String(request.getParameter("surname").
+                getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
         log.trace("Request parameter: surname --> " + surname);
 
         String login = request.getParameter("login");
@@ -56,5 +63,15 @@ public class RegistrationCommand extends Command {
         }
         log.debug("Command finished");
         return Path.PAGE__LOGIN;
+    }
+
+    static public String encode(String src, String defpage ,String codepage)
+    {
+        String answer="";
+        try
+        {answer= new String(src.getBytes(defpage), codepage);}
+        //тут бывают ошибки если указаной кодировки не существует
+        catch (Throwable e){answer=src;}
+        return answer;
     }
 }

@@ -1,11 +1,7 @@
-<%@ page pageEncoding="UTF-8" %>
-<%@ include file="../../jspf/directive/page.jspf" %>
 <%@ include file="../../jspf/directive/taglib.jspf" %>
 <%@ include file="../../jspf/header.jspf"%>
 <html>
-
-<c:set var="title" value="Room reserving" scope="page"/>
-<%@ include file="../../jspf/head.jspf" %>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 
 <body>
 <table id="main-container">
@@ -14,7 +10,7 @@
         <td class="content">
             <%-- CONTENT --%>
 
-            <form id="make_order" action="controller">
+            <form id="make_order" action="controller" method="post">
                 <input type="hidden" name="command" value="makeRequest"/>
                 <input type="submit" value='<fmt:message key="free_room_list_jsp.button.send.apply" bundle="${rb}"/>'/>
 
@@ -44,10 +40,10 @@
                 </table>
 
             </form>
-
+            <h5>${createdSuccessfulMessageLabel}</h5>
+            <h5>${createdUnsuccessfulMessageLabel}</h5>
             <%-- CONTENT --%>
         </td>
     </tr>
-
 </table>
 </body>

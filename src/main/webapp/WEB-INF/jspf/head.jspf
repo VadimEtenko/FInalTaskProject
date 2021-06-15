@@ -1,17 +1,13 @@
-<%@ include file="directive/page.jspf" %>
 <%@ include file="directive/taglib.jspf" %>
 
 <head>
-
 	<title>
 		${title}
 	</title>
-
-	
 <%--=========================================================================== 
 If you define http-equiv attribute, set the content type and the charset the same
 as you set them in a page directive.
-===========================================================================--%> 
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+===========================================================================--%>
+
 
 </head>

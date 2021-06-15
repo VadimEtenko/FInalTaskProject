@@ -9,7 +9,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
-import project.Path;
 
 /**
  * Main servlet controller.
@@ -60,12 +59,14 @@ public class Controller extends HttpServlet {
         }catch (Exception e){
             String errorMessage = "Oops... Smth get wrong";
             request.setAttribute("errorMessage", errorMessage);
-            log.error("errorMessage --> " + errorMessage);
+            log.error("errorMessage --> " + Arrays.toString(e.getStackTrace()) + " ");
             RequestDispatcher dispatcher = request.getRequestDispatcher(Path.PAGE__ERROR_PAGE);
             dispatcher.forward(request, response);
         }
 
-         */
+             */
+
+
     }
 
 }

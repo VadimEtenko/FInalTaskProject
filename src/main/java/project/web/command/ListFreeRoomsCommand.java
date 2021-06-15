@@ -1,7 +1,7 @@
 package project.web.command;
 
 import org.apache.log4j.Logger;
-import project.Path;
+import project.web.Path;
 import project.db.RoomDao;
 import project.db.entity.Room;
 

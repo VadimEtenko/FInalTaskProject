@@ -19,9 +19,23 @@ public class BookingDao {
                     "AND  users.id = booked_rooms.user_id)";
 
     public static final String SQL__UPDATE_RESERVATION_BY_ID =
-            "UPDATE booked_rooms\n" +
-                    "    SET status_id = ?\n" +
-                    "    WHERE id = ?";
+            "UPDATE booked_rooms SET status_id = ? WHERE id = ?";
+
+    public static final String SQL__FIND_RESERVATION_BY_ID =
+            "SELECT booked_rooms.id,  users.login, hotel_rooms.number, booked_rooms.status_id\n" +
+                    "FROM booked_rooms, hotel_rooms, users WHERE\n" +
+                    "    (hotel_rooms.id IN\n" +
+                    "     (SELECT booked_rooms.room_id FROM booked_rooms)\n" +
+                    "        AND hotel_rooms.id = booked_rooms.room_id)\n" +
+                    "                                        AND (users.id IN\n" +
+                    "                                             (SELECT booked_rooms.user_id FROM booked_rooms)\n" +
+                    "        AND  users.id = booked_rooms.user_id)\n" +
+                    "                                        AND booked_rooms.id = ?";
+
+    public static final String SQL__DELETE_FREE_BOOKED_ROOMS =
+            "DELETE FROM booked_rooms WHERE status_id = 0";
+
+
 
     public List<BookingRooms> findAllBookingRecords() {
         List<BookingRooms> allBookingRecordsList = new ArrayList<>();
@@ -44,6 +58,30 @@ public class BookingDao {
         return allBookingRecordsList;
     }
 
+    public BookingRooms findBookingRecordsById(long id) {
+        BookingRooms bookingRecordst = new BookingRooms();
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        Connection con = null;
+        try {
+            con = DBManager.getInstance().getConnection();
+            BookingMapper mapper = new BookingMapper();
+            stmt = con.prepareStatement(SQL__FIND_RESERVATION_BY_ID);
+            stmt.setLong(1, id);
+            rs = stmt.executeQuery();
+            while (rs.next())
+                bookingRecordst = mapper.mapRow(rs);
+            rs.close();
+            con.close();
+        } catch (SQLException ex) {
+            DBManager.getInstance().rollback(con);
+            ex.printStackTrace();
+        } finally {
+            DBManager.getInstance().commitAndClose(con);
+        }
+        return bookingRecordst;
+    }
+
 
 
     public void editBookingRecords(long idBooked, long bookedStatusId) {
@@ -51,10 +89,10 @@ public class BookingDao {
         Connection con = null;
         try {
             con = DBManager.getInstance().getConnection();
-            stmt = con.prepareStatement(SQL__FIND_ALL_RESERVATION_ENTRIES);
+            stmt = con.prepareStatement(SQL__UPDATE_RESERVATION_BY_ID);
             int indexValue = 1;
-            stmt.setLong(indexValue++, idBooked);
-            stmt.setLong(indexValue, bookedStatusId);
+            stmt.setLong(indexValue++, bookedStatusId);
+            stmt.setLong(indexValue, idBooked);
             stmt.executeUpdate();
         } catch (SQLException ex) {
             DBManager.getInstance().rollback(con);
@@ -64,7 +102,19 @@ public class BookingDao {
         }
     }
 
-
+    public void deleteFreeReservation(){
+        Connection con = null;
+        try {
+            con = DBManager.getInstance().getConnection();
+            con.createStatement().
+                    executeUpdate(SQL__DELETE_FREE_BOOKED_ROOMS);
+        } catch (SQLException ex) {
+            DBManager.getInstance().rollback(con);
+            ex.printStackTrace();
+        } finally {
+            DBManager.getInstance().commitAndClose(con);
+        }
+    }
 
     private static class BookingMapper implements EntityMapper<BookingRooms> {
 

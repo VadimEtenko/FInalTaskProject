@@ -1,6 +1,6 @@
 package project.web.command;
 
-import project.Path;
+import project.web.Path;
 import project.db.UserDao;
 import project.db.entity.Role;
 import project.db.entity.User;
@@ -76,7 +76,7 @@ public class LoginCommand extends Command {
             log.info("User " + user + " logged as " + userRole.toString().toLowerCase());
 
             // work with i18n
-            String userLocal = user.getLocal();
+            String userLocal = user.getLocale();
             log.trace("userLocal --> " + userLocal);
 
             if (userLocal != null && !userLocal.isEmpty()) {

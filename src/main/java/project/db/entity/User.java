@@ -8,17 +8,17 @@ public class User extends Entity{
     private String password;
     private String email;
     private int roleId;
-    private String local;
+    private String locale;
 
     public User(String name, String surname, String login,
-                String password, String email, int roleId, String local) {
+                String password, String email, int roleId, String locale) {
         this.name = name;
         this.surname = surname;
         this.login = login;
         this.password = password;
         this.email = email;
         this.roleId = roleId;
-        this.local = local;
+        this.locale = locale;
     }
 
     public User(){
@@ -73,12 +73,12 @@ public class User extends Entity{
         this.roleId = roleId;
     }
 
-    public String getLocal() {
-        return local;
+    public String getLocale() {
+        return locale;
     }
 
-    public void setLocal(String local) {
-        this.local = local;
+    public void setLocale(String locale) {
+        this.locale = locale;
     }
 
 	@Override
@@ -88,7 +88,9 @@ public class User extends Entity{
 		", login=" + login + 
 		", password=" + password + 
 		", email=" + email + 
-		", roleId=" + roleId + "];";
+		", roleId=" + roleId +
+        ", local=" + locale +
+        "];";
 	}
 }
 

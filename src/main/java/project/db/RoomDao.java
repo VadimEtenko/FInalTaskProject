@@ -1,6 +1,5 @@
 package project.db;
 
-import project.db.entity.BookingRooms;
 import project.db.entity.Room;
 
 import java.sql.*;
@@ -14,6 +13,12 @@ public class RoomDao {
                     "(SELECT room_id FROM booked_rooms)\n" +
                     "AND\n" +
                     "hotel_rooms.class_id = class_of_room.id;";
+
+    public static final String SQL__FIND_ROOM_BY_ID =
+            "SELECT hotel_rooms.id, hotel_rooms.number, class_of_room.class, hotel_rooms.number_of_beds, hotel_rooms.cost\n" +
+                    "FROM hotel_rooms, class_of_room\n" +
+                    "WHERE hotel_rooms.class_id = class_of_room.id\n" +
+                    "AND hotel_rooms.id = ?";
 
     private static final String SQL__FIND_ALL_FREE_ROOMS =
             "SELECT hotel_rooms.id, hotel_rooms.number, class_of_room.class,hotel_rooms.number_of_beds, hotel_rooms.cost\n" +
@@ -45,6 +50,8 @@ public class RoomDao {
             rs = stmt.executeQuery(SQL__FIND_ALL_BOOKED_ROOMS);
             while (rs.next())
                 allBookedRoomsList.add(mapper.mapRow(rs));
+            stmt.close();
+            rs.close();
         } catch (SQLException ex) {
             DBManager.getInstance().rollback(con);
             ex.printStackTrace();
@@ -54,13 +61,37 @@ public class RoomDao {
         return allBookedRoomsList;
     }
 
+    public int findBookedRoomNumberById(long roomId) {
+        Room room = new Room();
+        PreparedStatement prStmt = null;
+        ResultSet rs = null;
+        Connection con = null;
+        try {
+            con = DBManager.getInstance().getConnection();
+            RoomsMapper mapper = new RoomsMapper();
+            prStmt = con.prepareStatement(SQL__FIND_ROOM_BY_ID);
+            prStmt.setLong(1, roomId);
+            rs = prStmt.executeQuery();
+            while (rs.next())
+                room = mapper.mapRow(rs);
+            prStmt.close();
+            rs.close();
+        } catch (SQLException ex) {
+            DBManager.getInstance().rollback(con);
+            ex.printStackTrace();
+        } finally {
+            DBManager.getInstance().commitAndClose(con);
+        }
+        return room.getNumber();
+    }
+
     /**
      * Returns all free rooms.
      *
      * @return List of free room entities.
      */
     public List<Room> findFreeRooms() {
-        List<Room> RoomsList = new ArrayList<Room>();
+        List<Room> RoomsList = new ArrayList<>();
         Statement stmt = null;
         ResultSet rs = null;
         Connection con = null;
@@ -71,6 +102,8 @@ public class RoomDao {
             rs = stmt.executeQuery(SQL__FIND_ALL_FREE_ROOMS);
             while (rs.next())
                 RoomsList.add(mapper.mapRow(rs));
+            stmt.close();
+            rs.close();
         } catch (SQLException ex) {
             DBManager.getInstance().rollback(con);
             ex.printStackTrace();
@@ -91,6 +124,7 @@ public class RoomDao {
             preStmt.setLong(indexValue++, userId);
             preStmt.setInt(indexValue, 1);
             preStmt.executeUpdate();
+            preStmt.close();
         } catch (SQLException ex) {
             DBManager.getInstance().rollback(con);
             ex.printStackTrace();

@@ -1,7 +1,8 @@
 package project.web.filters;
 
 import org.apache.log4j.Logger;
-import project.Path;
+import project.web.Path;
+import project.db.entity.User;
 
 import java.io.IOException;
 
@@ -14,7 +15,6 @@ public class LoginFilter implements Filter {
     private static final Logger log = Logger.getLogger(LoginFilter.class);
 
     public LoginFilter() {
-
     }
 
     @Override
@@ -35,14 +35,17 @@ public class LoginFilter implements Filter {
         HttpServletRequest req = (HttpServletRequest) request;
         HttpSession session = req.getSession();
 
+        log.debug("Try to get User parametr from session");
+        User user = (User)session.getAttribute("user");
+
         // Check, is user  log in, and is he try to log in
-        if (session.getAttribute("user") == null &&
+        if (user == null &&
                 request.getParameter("command") != null &&
                 (!request.getParameter("command").equals("login")
                         && !request.getParameter("command").equals("logout")
                         && !request.getParameter("command").equals("registration"))) {
             //Forward to login page
-            log.debug("User wasn't logged");
+            log.info("User wasn't logged");
             RequestDispatcher dispatcher = request.getRequestDispatcher(Path.PAGE__LOGIN);
             dispatcher.forward(request, response);
         } else {

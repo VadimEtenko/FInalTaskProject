@@ -1,10 +1,10 @@
-<%@ include file="WEB-INF/jspf/directive/page.jspf" %>
 <%@ include file="WEB-INF/jspf/directive/taglib.jspf" %>
 <c:set var="title" value="Registration"/>
 <%@ include file="WEB-INF/jspf/header.jspf" %>
-
 <html>
 
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="utf-8" %>
+<meta http-equiv="Content-Type" content="text/html" charset="utf-8" />
 <body>
 <table id="main-container">
     <tr>
@@ -20,7 +20,7 @@
 
                 <fieldset>
                     <fmt:message key="registration_jsp.label.surname" bundle="${rb}"/>
-                    <input name="surname" required pattern="[A-Za-zА-Яа-яЁё]{2,}"
+                    <input type="text" name="surname" required pattern="[A-Za-zА-Яа-яЁё]{2,}"
                            title="Must contain at least 2 lat. letters"/>
                 </fieldset>
 

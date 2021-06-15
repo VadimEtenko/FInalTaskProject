@@ -1,0 +1,33 @@
+package project.web.command.notification;
+
+import org.apache.log4j.Logger;
+import project.web.Path;
+import project.db.NotificationDao;
+import project.web.command.Command;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+
+public class DeleteNotificationCommand extends Command {
+
+    private static final Logger log = Logger.getLogger(DeleteNotificationCommand.class);
+
+    @Override
+    public String execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+        log.debug("Command starts");
+
+        for (String s : request.getParameterValues("notificationId")) {
+            long notificationId = Long.parseLong(s);
+            log.info("Request parameter: notificationId --> " + notificationId);
+
+            new NotificationDao().deleteNotificationById(notificationId);
+            log.info("Notification was deleted");
+        }
+
+        log.debug("Command finished");
+        return Path.COMMAND__USER_NOTIFICATIONS_LIST;
+    }
+}
+

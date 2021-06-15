@@ -1,13 +1,33 @@
-<%--=========================================================================== 
+<%@ include file="head.jspf" %>
+
+<%--===========================================================================
 Header (top area). 
 ===========================================================================--%>
-<%@ include file="head.jspf"%>
-<%@ page session="true"%>
+
 <tr>
+    <%--onClick="window.location.reload()--%>
     <td id="header">
         <fmt:setLocale value="${defaultLocale}" scope="session"/>
         <%-- load the bundle (by locale) --%>
-        <fmt:setBundle var="rb" basename="lang"  />
+        <fmt:setBundle var="rb" basename="lang"/>
+
+        <form id="change-local" action="controller" method="post">
+            <input type="hidden" name="command" value="change-local"/>
+            <c:choose>
+                <c:when test="${defaultLocale == 'en'}">
+                    <input type="submit" value="RU">
+                    <input type="hidden" name="newLocal" value="ru">
+                    <label> / EN</label>
+                </c:when>
+                <c:when test="${defaultLocale == 'ru'}">
+                    <label>RU / </label>
+                    <input type="submit" value="EN"/>
+                    <input type="hidden" name="newLocal" value="en"/>
+
+                </c:when>
+            </c:choose>
+        </form>
+
 
         <c:if test="${not empty user}">
             <%--===========================================================================
@@ -33,9 +53,16 @@ Header (top area).
                     <%--===========================================================================
                     This way we define the USER MENU.
                     ===========================================================================--%>
-                    <c:when test="${userRole.name == 'user'}">
+                    <c:when test="${userRole.name == 'client'}">
                         <a href="controller?command=listFreeRooms">
-                            <fmt:message key="header_jspf.user.create-order.list" bundle="${rb}"/>
+                            <fmt:message key="header_jspf.user.href.create-order" bundle="${rb}"/>
+                        </a> &nbsp;
+                        <a href="controller?command=list-user-requested">
+                            <fmt:message key="header_jspf.user.href.user-order-list" bundle="${rb}"/>
+                        </a> &nbsp;
+                        <a href="controller?command=notifications">
+                            <fmt:message key="header_jspf.user.href.user-notification-list" bundle="${rb}"/>
+                            <notif:count user="${user}"/>
                         </a> &nbsp;
                     </c:when>
                 </c:choose>
@@ -46,22 +73,22 @@ Header (top area).
             ===========================================================================--%>
             <div id="rightHeader">
 
-                <%--===========================================================================
-                Type user name if the user object is presented in the current session.
-                ===========================================================================--%>
+                    <%--===========================================================================
+                    Type user name if the user object is presented in the current session.
+                    ===========================================================================--%>
                 <c:out value="${user.name} ${user.surname}"/>
 
 
-                <%--===========================================================================
-                Type user role name if the user object is presented in the current session.
-                ===========================================================================--%>
+                    <%--===========================================================================
+                    Type user role name if the user object is presented in the current session.
+                    ===========================================================================--%>
                 <c:if test="${not empty userRole}">
                     (<fmt:message key="${userRole.name}" bundle="${rb}"/>)
                 </c:if>
 
-                <%--===========================================================================
-                Type link to logout
-                ===========================================================================--%>
+                    <%--===========================================================================
+                    Type link to logout
+                    ===========================================================================--%>
                 <a href="controller?command=logout">
                     <fmt:message key="header_jspf.link.logout" bundle="${rb}"/>
                 </a>

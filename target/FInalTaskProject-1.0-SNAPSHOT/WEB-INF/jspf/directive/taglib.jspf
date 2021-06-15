@@ -11,4 +11,4 @@ JSTL i18n tag library.
 <%--===========================================================================
 Custom tag file.
 ===========================================================================--%>
-<!--%@ taglib uri = "/WEB-INF/tags/implicit.tld" prefix = "customTagFile" %-->
+<%@ taglib uri="notif-tag" prefix="notif"%>

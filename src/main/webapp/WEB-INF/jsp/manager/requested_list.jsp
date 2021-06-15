@@ -1,9 +1,7 @@
-<%@ page pageEncoding="UTF-8" %>
-<%@ include file="../../jspf/directive/page.jspf" %>
 <%@ include file="../../jspf/directive/taglib.jspf" %>
 <%@ include file="../../jspf/header.jspf"%>
 <html>
-
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <c:set var="title" value="Menu" scope="page"/>
 
 <body>
@@ -33,7 +31,7 @@
                             <td><c:out value="${k}"/></td>
                             <td>${item.roomNumber}</td>
                             <td>${item.userLogin}</td>
-                            <td><input type="checkbox" name="roomId" value="${item.roomId}"/></td>
+                            <td><input type="checkbox" name="requestedId" value="${item.id}"/></td>
                         </tr>
                     </c:forEach>
                 </table>

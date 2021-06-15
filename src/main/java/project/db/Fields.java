@@ -25,13 +25,16 @@ public final class Fields {
     public static final String ROOM__NUMBER_OF_BEDS= "number_of_beds";
     public static final String ROOM__COST= "cost";
 
+
     public static final String  BOOKED_ROOM_STATUS = "status_id";
     public static final int  BOOKED_ROOM_STATUS__FREE = 0;
     public static final int  BOOKED_ROOM_STATUS__BOOKED = 1;
     public static final int  BOOKED_ROOM_STATUS__OCCUPIED = 2;
     public static final int  BOOKED_ROOM_STATUS__NOT_AVAILABLE = 3;
 
-    // beans
+    public static final String NOTIFICATION__USER_ID = "user_id";
+    public static final String NOTIFICATION__TEXT = "text";
+
     public static final String BOOKING_REQUEST_BEAN__BOOKED_ID = "id";
     public static final String BOOKING_REQUEST_BEAN__USER_ID_WHO_BOOKED = "user_id";
     public static final String BOOKING_REQUEST_BEAN__RESERVED_ROOM_ID = "room_id";

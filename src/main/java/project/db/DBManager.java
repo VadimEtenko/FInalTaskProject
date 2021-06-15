@@ -42,7 +42,7 @@ public class DBManager {
             e.printStackTrace();
         }
         Connection conn = DriverManager.getConnection(
-                "jdbc:mysql://localhost:3306/hotel?useSSL=false","root","password");
+                "jdbc:mysql://localhost:3306/hotel?useSSL=false&characterEncoding=UTF-8","root","password");
         conn.setAutoCommit(false);
         return conn;
     }
