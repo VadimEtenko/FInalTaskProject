@@ -30,8 +30,9 @@ public class CommandContainer {
 		//commands.put("noCommand", new NoCommand());
 
 		// manager's commands
-		commands.put("listRequest", new ListRequestedCommand());
-		commands.put("listBooked", new ListBookedRoomCommand());
+		commands.put("find-free-rooms", new FindFreeRoomsCommand());
+		commands.put("list-request", new ListRequestedCommand());
+		commands.put("list-booked", new ListBookedRoomCommand());
 		commands.put("verify-application", new VerifyRequestedCommand());
 		commands.put("update-booked",new UpdateBookedRoomCommand());
 		commands.put("update-booked-list",new ListUpdateBookedRoomCommand());
@@ -41,7 +42,7 @@ public class CommandContainer {
 		commands.put("create-offer", new CreateOfferCommand());
 
 		// client's commands
-		commands.put("listFreeRooms", new ListFreeRoomsCommand());
+		commands.put("list-free-rooms", new ListFreeRoomsCommand());
 		commands.put("create-request", new CreateRequestCommand());
 		commands.put("list-user-requested", new ListUserRequestedCommand());
 		commands.put("delete-reservation", new DeleteRequestedCommand());

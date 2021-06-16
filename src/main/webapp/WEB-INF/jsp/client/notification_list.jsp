@@ -10,10 +10,6 @@
         <td class="content">
             <%-- CONTENT --%>
 
-            <form id="nitification-form" action="controller">
-                <input type="hidden" name="command" value="delete-notification"/>
-                <input type="submit" value='<fmt:message key="user_notification_list_jsp.button.delete" bundle="${rb}"/>'/>
-
                 <table id="nitification_list_table">
                     <thead>
                     <tr>
@@ -28,12 +24,18 @@
                         <tr>
                             <td><c:out value="${k}"/></td>
                             <td>${item.text}</td>
-                            <td><input type="checkbox" name="notificationId" value="${item.id}"/></td>
+                            <td>
+                                <form id="nitification-form" action="controller">
+                                    <input type="hidden" name="command" value="delete-notification"/>
+                                    <input type="submit" value='<fmt:message key="user_notification_list_jsp.button.pay" bundle="${rb}"/>'/>
+                                    <input type="hidden" name="notificationId" value="${item.id}"/>
+                                    <input type="hidden" name="bookedId" value="${item.bookedId}"/>
+                                </form>
+                            </td>
                         </tr>
                     </c:forEach>
                 </table>
 
-            </form>
             <%-- CONTENT --%>
         </td>
     </tr>

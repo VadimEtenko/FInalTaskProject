@@ -19,8 +19,8 @@ public class NotificationDao {
             "SELECT * FROM users_notifications WHERE id = ?";
 
     private static final String SQL__CREATE_NOTIFICATION =
-            "INSERT INTO users_notifications(user_id, text) " +
-                    "VALUE (?,?)";
+            "INSERT INTO users_notifications(user_id, booked_id, text) " +
+                    "VALUE (?,?,?)";
 
     public static final String SQL__DELETE_NOTIFICATION_BY_ID =
             "DELETE FROM users_notifications WHERE id = ?";
@@ -49,14 +49,16 @@ public class NotificationDao {
         return notificationList;
     }
 
-    public void createNotification(long userId, String text){
+    public void createNotification(long userId, long bookedId, String text){
         PreparedStatement prStmt = null;
         Connection con = null;
         try {
             con = DBManager.getInstance().getConnection();
             prStmt = con.prepareStatement(SQL__CREATE_NOTIFICATION);
-            prStmt.setLong(1, userId);
-            prStmt.setString(2, text);
+            int indexValue = 1;
+            prStmt.setLong(indexValue++, userId);
+            prStmt.setLong(indexValue++, bookedId);
+            prStmt.setString(indexValue, text);
             prStmt.executeUpdate();
             prStmt.close();
         } catch (SQLException ex) {
@@ -144,6 +146,7 @@ public class NotificationDao {
                 Notification notification = new Notification();
                 notification.setId(rs.getLong(Fields.ENTITY__ID));
                 notification.setUserId(rs.getLong(Fields.NOTIFICATION__USER_ID));
+                notification.setBookedId(rs.getLong(Fields.NOTIFICATION__BOOKED_ID));
                 notification.setText(rs.getString(Fields.NOTIFICATION__TEXT));
                 return notification;
             } catch (SQLException e) {

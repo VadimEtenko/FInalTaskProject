@@ -14,6 +14,7 @@ public final class Path {
     public static final String PAGE__USER_NOTIFICATIONS_LIST = "/WEB-INF/jsp/client/notification_list.jsp";
     public static final String PAGE__PLAN_REQUEST = "/WEB-INF/jsp/client/plane_request.jsp";
     public static final String PAGE__VERIFY_OFFERS = "/WEB-INF/jsp/client/offers_list.jsp";
+    public static final String PAGE__FIND_FREE_ROOM_LIST = "/WEB-INF/jsp/client/find_free_room_list.jsp";
 
     public static final String PAGE__LIST_REQUESTED = "/WEB-INF/jsp/manager/requested_list.jsp";
     public static final String PAGE__BOOKED_ROOM_LIST = "/WEB-INF/jsp/manager/booked_room_list.jsp";
@@ -25,7 +26,7 @@ public final class Path {
     // commands
     public static final String COMMAND__LOGIN = "/controller?command=login";
     public static final String COMMAND__LIST_REQUESTED = "/controller?command=listRequest";
-    public static final String COMMAND__LIST_FREE_ROOMS = "/controller?command=listFreeRooms";
+    public static final String COMMAND__LIST_FREE_ROOMS = "/controller?command=list-free-rooms";
     public static final String COMMAND__LIST_BOOKED_ROOMS = "/controller?command=listBooked";
     public static final String COMMAND__USER_NOTIFICATIONS_LIST = "/controller?command=notifications";
     public static final String COMMAND__LIST_REQUEST_WISH = "/controller?command=list-requests-wish";

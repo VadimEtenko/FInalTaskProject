@@ -48,6 +48,9 @@ public class VerifyRequestedCommand extends Command {
                 if(!notVerifiedUsers.getId().equals(verifiedUser.getId())) {
                     log.trace("Found id DB: user witch requested was canceled:" + notVerifiedUsers);
                     notificationDao.createNotification(notVerifiedUsers.getId(),
+                            bookingDao.findBookingRecordsByUserIdAndRoomId(
+                                    notVerifiedUsers.getId(),
+                                    requestedForBooking.getRoomId()).getId(),
                             Notification.getMessageCanceled(notVerifiedUsers,
                                     requestDao.findRequestedRoomById(Long.parseLong(s))));
 
@@ -59,6 +62,9 @@ public class VerifyRequestedCommand extends Command {
 
             log.trace("Found id DB: user witch requested was verified:" + verifiedUser);
             notificationDao.createNotification(verifiedUser.getId(),
+                    bookingDao.findBookingRecordsByUserIdAndRoomId(
+                            verifiedUser.getId(),
+                            requestedForBooking.getRoomId()).getId(),
                     Notification.getMessageVerified(verifiedUser,
                             requestDao.findRequestedRoomById(Long.parseLong(s))));
 

@@ -32,13 +32,17 @@ public final class Fields {
     public static final int  BOOKED_ROOM_STATUS__NOT_AVAILABLE = 3;
 
     public static final String NOTIFICATION__USER_ID = "user_id";
+    public static final String NOTIFICATION__BOOKED_ID = "booked_id";
     public static final String NOTIFICATION__TEXT = "text";
+
 
     public static final String BOOKING_REQUEST__BOOKED_ID = "id";
     public static final String BOOKING_REQUEST__USER_ID_WHO_BOOKED = "user_id";
     public static final String BOOKING_REQUEST__RESERVED_ROOM_ID = "room_id";
     public static final String BOOKING_REQUEST__USER_LOGIN_WHO_BOOKED = "login";
     public static final String BOOKING_REQUEST__RESERVED_ROOM_NUMBER = "number";
+    public static final String BOOKING_REQUEST__RESERVED_ROOM_TIME_IN = "time_in";
+    public static final String BOOKING_REQUEST__RESERVED_ROOM_TIME_OUT = "time_out";
 
     public static final String REQUEST_WISHED__USER_ID_WHO_WISHED = "user_id";
 
@@ -46,6 +50,5 @@ public final class Fields {
     public static final String REQUEST_WISHED__WISHED_NUMBER_OF_BEDS = "number_of_beds";
     public static final String REQUEST_WISHED__WISHED_TIME_IN = "time_in";
     public static final String REQUEST_WISHED__WISHED_TIME_OUT = "time_out";
-
 
 }

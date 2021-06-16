@@ -46,7 +46,7 @@ public class UnLoginFilter implements Filter {
             String forward = Path.PAGE__LOGIN;
 
             if (userRole == Role.CLIENT)
-                forward = Path.COMMAND__LIST_FREE_ROOMS;
+                forward = Path.PAGE__FIND_FREE_ROOM_LIST;
 
             if (userRole == Role.MANAGER)
                 forward = Path.COMMAND__LIST_REQUESTED;

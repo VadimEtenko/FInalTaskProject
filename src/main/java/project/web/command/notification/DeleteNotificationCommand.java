@@ -1,6 +1,7 @@
 package project.web.command.notification;
 
 import org.apache.log4j.Logger;
+import project.db.BookingDao;
 import project.web.Path;
 import project.db.NotificationDao;
 import project.web.command.Command;
@@ -17,17 +18,26 @@ public class DeleteNotificationCommand extends Command {
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         log.debug("Command starts");
+        NotificationDao notificationDao = new NotificationDao();
 
-        for (String s : request.getParameterValues("notificationId")) {
-            long notificationId = Long.parseLong(s);
-            log.info("Request parameter: notificationId --> " + notificationId);
+        long notificationId = Long.parseLong(request.getParameter("notificationId"));
+        log.trace("Request parameter: notificationId --> " + notificationId);
 
-            new NotificationDao().deleteNotificationById(notificationId);
-            log.info("Notification was deleted");
-        }
+        long bookedId = Long.parseLong(request.getParameter("bookedId"));
+        log.trace("Request parameter: bookedId --> " + bookedId);
+
+        //First - pay, then - delete !!!
+        new BookingDao().makePaidByNotificationId(notificationId);
+        log.info("Booked was paid");
+
+        notificationDao.deleteNotificationById(notificationId);
+        log.trace("Notification was deleted");
+
+
 
         log.debug("Command finished");
         return Path.COMMAND__USER_NOTIFICATIONS_LIST;
     }
+
 }
 

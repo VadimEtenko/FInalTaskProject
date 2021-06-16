@@ -1,9 +1,10 @@
 package project.db;
 
-import project.db.entity.RequestWish;
 import project.db.entity.Room;
 
 import java.sql.*;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,7 +13,7 @@ public class RoomDao {
             "SELECT hotel_rooms.id, hotel_rooms.number, class_of_room.class,hotel_rooms.number_of_beds, hotel_rooms.cost\n" +
                     "FROM hotel_rooms, class_of_room " +
                     "WHERE hotel_rooms.id IN\n" +
-                        "(SELECT room_id FROM booked_rooms)\n" +
+                    "(SELECT room_id FROM booked_rooms)\n" +
                     "AND hotel_rooms.class_id = class_of_room.id;";
 
     public static final String SQL__FIND_ROOM_BY_ID =
@@ -22,11 +23,19 @@ public class RoomDao {
                     "AND hotel_rooms.id = ?";
 
     private static final String SQL__FIND_ALL_FREE_ROOMS =
-            "SELECT hotel_rooms.id, hotel_rooms.number, class_of_room.class,hotel_rooms.number_of_beds, hotel_rooms.cost\n" +
-                    "FROM hotel_rooms, class_of_room " +
+            "SELECT hotel_rooms.id, hotel_rooms.number, class_of_room.class, hotel_rooms.number_of_beds, hotel_rooms.cost\n" +
+                    "FROM hotel_rooms, class_of_room\n" +
                     "WHERE hotel_rooms.id NOT IN\n" +
-                        "(SELECT room_id FROM booked_rooms WHERE status_id != 0)\n" +
-                    "AND hotel_rooms.class_id = class_of_room.id;";
+                        "(SELECT room_id\n" +
+                        "FROM booked_rooms\n" +
+                        "WHERE status_id != 0\n" +
+                            "AND ((time_out > ?\n" +
+                                "AND time_out < ?)\n" +
+                            "OR\n" +
+                                "(time_in > ?\n" +
+                                    "AND\n" +
+                                "time_in < ?)))\n" +
+                    "  AND hotel_rooms.class_id = class_of_room.id\n";
 
     private static final String SQL__FIND_ALL_FREE_ROOMS_BY_CRITERIA =
             "SELECT hotel_rooms.id, hotel_rooms.number, class_of_room.class, hotel_rooms.number_of_beds, hotel_rooms.cost\n" +
@@ -45,9 +54,6 @@ public class RoomDao {
                     "    AND hotel_rooms.id = offers.room_id)\n" +
                     "    AND hotel_rooms.class_id = class_of_room.id\n" +
                     "    AND offers.user_id = ?;";
-
-
-
 
 
     /**
@@ -131,16 +137,25 @@ public class RoomDao {
      *
      * @return List of free room entities.
      */
-    public List<Room> findFreeRooms() {
+    public List<Room> findFreeRooms(Date time_in, Date time_out) {
         List<Room> RoomsList = new ArrayList<>();
-        Statement stmt = null;
+        PreparedStatement stmt = null;
         ResultSet rs = null;
         Connection con = null;
         try {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
             con = DBManager.getInstance().getConnection();
             RoomsMapper mapper = new RoomsMapper();
-            stmt = con.createStatement();
-            rs = stmt.executeQuery(SQL__FIND_ALL_FREE_ROOMS);
+
+            Date start = Date.valueOf(time_in.toString());
+            Date end = Date.valueOf(time_out.toString());
+            stmt = con.prepareStatement(SQL__FIND_ALL_FREE_ROOMS);
+            int indexValue = 1;
+            stmt.setString(indexValue++, sdf.format(start));
+            stmt.setString(indexValue++, sdf.format(end));
+            stmt.setString(indexValue++, sdf.format(start));
+            stmt.setString(indexValue, sdf.format(end));
+            rs = stmt.executeQuery();
             while (rs.next())
                 RoomsList.add(mapper.mapRow(rs));
             stmt.close();
@@ -167,7 +182,7 @@ public class RoomDao {
             stmt.setLong(indexValue++, classId);
             stmt.setInt(indexValue, numberOfBeds);
             rs = stmt.executeQuery();
-            while(rs.next())
+            while (rs.next())
                 requestWish.add(mapper.mapRow(rs));
             rs.close();
             stmt.close();
@@ -180,7 +195,7 @@ public class RoomDao {
         return requestWish;
     }
 
-    public List<Room> getOfferedRoomListByUserId(long user_id){
+    public List<Room> getOfferedRoomListByUserId(long user_id) {
         List<Room> RoomsList = new ArrayList<>();
         PreparedStatement prStmt = null;
         ResultSet rs = null;

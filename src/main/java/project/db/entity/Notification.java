@@ -7,6 +7,7 @@ import java.util.Locale;
 public class Notification extends Entity {
 
     long userId;
+    long bookedId;
     String text;
 
     public long getUserId() {
@@ -25,6 +26,14 @@ public class Notification extends Entity {
         this.text = text;
     }
 
+    public long getBookedId() {
+        return bookedId;
+    }
+
+    public void setBookedId(long bookedId) {
+        this.bookedId = bookedId;
+    }
+
     public static String getMessageVerified(User user, RequestedForBooking requested) {
         ResourceBundle rb = ResourceBundle.getBundle("notification",
                 new Locale(user.getLocale()));
@@ -34,7 +43,7 @@ public class Notification extends Entity {
         sb.append(" ").append(user.getName()).append(" ").append(user.getSurname()).append("! ");
         sb.append(new String(rb.getString("notification.verified.maintext.part1").getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8));
         sb.append(" ").append(requested.getRoomNumber()).append(" ");
-        sb.append(new String(rb.getString("notification.verified.maintext.verified").getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8));;
+        sb.append(new String(rb.getString("notification.verified.maintext.verified").getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8));
         return sb.toString();
 
     }
@@ -52,4 +61,12 @@ public class Notification extends Entity {
         return sb.toString();
     }
 
+    @Override
+    public String toString() {
+        return "Notification[" +
+                "userId=" + userId +
+                ", bookedId=" + bookedId +
+                ", text='" + text + '\'' +
+                ']';
+    }
 }

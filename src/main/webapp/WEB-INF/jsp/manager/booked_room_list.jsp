@@ -21,6 +21,8 @@
                         <td><fmt:message key="booked_room_list_jsp.label.room.number" bundle="${rb}"/></td>
                         <td><fmt:message key="booked_room_list_jsp.label.user" bundle="${rb}"/></td>
                         <td><fmt:message key="booked_room_list_jsp.label.status" bundle="${rb}"/></td>
+                        <td><fmt:message key="booked_room_list_jsp.label.date.timein" bundle="${rb}"/></td>
+                        <td><fmt:message key="booked_room_list_jsp.label.date.timout" bundle="${rb}"/></td>
                     </tr>
                     </thead>
                     <c:set var="k" value="0"/>

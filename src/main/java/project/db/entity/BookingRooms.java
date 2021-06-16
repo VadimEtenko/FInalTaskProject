@@ -2,6 +2,7 @@ package project.db.entity;
 
 import project.db.Fields;
 
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 
 public class BookingRooms extends Entity{
@@ -12,6 +13,7 @@ public class BookingRooms extends Entity{
     private LocalDate time_in ;
     private LocalDate time_out;
 
+    public static SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
     public long getStatusId() {
         return statusId;

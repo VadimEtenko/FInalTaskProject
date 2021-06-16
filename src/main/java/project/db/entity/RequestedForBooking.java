@@ -8,8 +8,8 @@ public class RequestedForBooking extends Entity {
     private int roomNumber;
     private long userId;
     private long roomId;
-    private LocalDate time_in;
-    private LocalDate time_out;
+    private LocalDate timeIn;
+    private LocalDate timeOut;
 
     public String getUserLogin() {
         return userLogin;
@@ -43,20 +43,20 @@ public class RequestedForBooking extends Entity {
         this.roomId = roomId;
     }
 
-    public LocalDate getTime_in() {
-        return time_in;
+    public LocalDate getTimeIn() {
+        return timeIn;
     }
 
-    public void setTime_in(LocalDate time_in) {
-        this.time_in = time_in;
+    public void setTimeIn(LocalDate timeIn) {
+        this.timeIn = timeIn;
     }
 
-    public LocalDate getTime_out() {
-        return time_out;
+    public LocalDate getTimeOut() {
+        return timeOut;
     }
 
-    public void setTime_out(LocalDate time_out) {
-        this.time_out = time_out;
+    public void setTimeOut(LocalDate timeOut) {
+        this.timeOut = timeOut;
     }
 
     @Override
@@ -66,8 +66,8 @@ public class RequestedForBooking extends Entity {
                 ", roomNumber='" + roomNumber + '\'' +
                 ", userId=" + userId +
                 ", roomId=" + roomId +
-                ", time_in=" + time_in +
-                ", time_out=" + time_out +
+                ", time_in=" + timeIn +
+                ", time_out=" + timeOut +
                 ']';
     }
 }

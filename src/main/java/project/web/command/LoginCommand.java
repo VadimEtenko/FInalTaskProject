@@ -62,7 +62,7 @@ public class LoginCommand extends Command {
             log.trace("userRole --> " + userRole);
 
             if (userRole == Role.CLIENT)
-                forward = Path.COMMAND__LIST_FREE_ROOMS;
+                forward = Path.PAGE__FIND_FREE_ROOM_LIST;
 
             if (userRole == Role.MANAGER)
                 forward = Path.COMMAND__LIST_REQUESTED;

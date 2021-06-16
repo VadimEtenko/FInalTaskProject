@@ -3,6 +3,7 @@ package project.db;
 import project.db.entity.RequestedForBooking;
 
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,8 +53,8 @@ public class RequestDao {
             "DELETE FROM requested_rooms WHERE room_id = ?";
 
     private static final String SQL__CREATE_REQUEST =
-            "INSERT INTO requested_rooms(user_id, room_id) " +
-                    "VALUE (?,?)";
+            "INSERT INTO requested_rooms(user_id, room_id, time_in, time_out) " +
+                    "VALUE (?,?,?,?)";
 
     public static final String SQL__DELETE_REQUESTED_BY_ID =
             "DELETE FROM requested_rooms WHERE id = ?";
@@ -158,7 +159,7 @@ public class RequestDao {
         return requestedForBooking;
     }
 
-    public void createRequest(long user_id, long room_id) {
+    public void createRequest(long user_id, long room_id, LocalDate time_in, LocalDate time_out) {
         PreparedStatement prStmt = null;
         Connection con = null;
         try {
@@ -166,7 +167,9 @@ public class RequestDao {
             prStmt = con.prepareStatement(SQL__CREATE_REQUEST);
             int indexValue = 1;
             prStmt.setLong(indexValue++, user_id);
-            prStmt.setLong(indexValue, room_id);
+            prStmt.setLong(indexValue++, room_id);
+            prStmt.setDate(indexValue++, Date.valueOf(time_in));
+            prStmt.setDate(indexValue, Date.valueOf(time_out));
             prStmt.executeUpdate();
             prStmt.close();
         } catch (SQLException ex) {
@@ -227,6 +230,8 @@ public class RequestDao {
                 }
                 rfb.setRoomId(rs.getLong(Fields.BOOKING_REQUEST__RESERVED_ROOM_ID));
                 rfb.setUserId(rs.getLong(Fields.BOOKING_REQUEST__USER_ID_WHO_BOOKED));
+                rfb.setTimeIn(rs.getDate(Fields.BOOKING_REQUEST__RESERVED_ROOM_TIME_IN).toLocalDate());
+                rfb.setTimeOut(rs.getDate(Fields.BOOKING_REQUEST__RESERVED_ROOM_TIME_OUT).toLocalDate());
                 return rfb;
             } catch (SQLException e) {
                 throw new IllegalStateException(e);
