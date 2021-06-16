@@ -9,7 +9,7 @@ import java.util.List;
 public class BookingDao {
 
     private static final String SQL__FIND_ALL_RESERVATION_ENTRIES =
-            "SELECT booked_rooms.id,  users.login, hotel_rooms.number, booked_rooms.status_id\n" +
+            "SELECT booked_rooms.id,  users.login, hotel_rooms.number, booked_rooms.status_id, booked_rooms.time_in, booked_rooms.time_out\n" +
                     "FROM booked_rooms, hotel_rooms, users WHERE\n" +
                     "(hotel_rooms.id IN\n" +
                     "(SELECT booked_rooms.room_id FROM booked_rooms)\n" +
@@ -34,6 +34,10 @@ public class BookingDao {
 
     public static final String SQL__DELETE_FREE_BOOKED_ROOMS =
             "DELETE FROM booked_rooms WHERE status_id = 0";
+
+    private static final String SQL__CREATE_NEW_BOOKING_RECORDS =
+            "INSERT INTO booked_rooms(room_id, user_id, status_id, time_in, time_out, is_paied)\n" +
+                    "VALUE (?,?,?,?,?,?);";
 
 
 
@@ -108,6 +112,29 @@ public class BookingDao {
             con = DBManager.getInstance().getConnection();
             con.createStatement().
                     executeUpdate(SQL__DELETE_FREE_BOOKED_ROOMS);
+        } catch (SQLException ex) {
+            DBManager.getInstance().rollback(con);
+            ex.printStackTrace();
+        } finally {
+            DBManager.getInstance().commitAndClose(con);
+        }
+    }
+
+    public void createBookedRoom(long roomId, long userId){
+        PreparedStatement preStmt = null;
+        Connection con = null;
+        try {
+            con = DBManager.getInstance().getConnection();
+            preStmt = con.prepareStatement(SQL__CREATE_NEW_BOOKING_RECORDS);
+            int indexValue = 1;
+            preStmt.setLong(indexValue++, roomId);
+            preStmt.setLong(indexValue++, userId);
+            preStmt.setInt(indexValue++, 1);
+            preStmt.setDate(indexValue++, new Date(3423));
+            preStmt.setDate(indexValue++, new Date(23423));
+            preStmt.setBoolean(indexValue, false);
+            preStmt.executeUpdate();
+            preStmt.close();
         } catch (SQLException ex) {
             DBManager.getInstance().rollback(con);
             ex.printStackTrace();

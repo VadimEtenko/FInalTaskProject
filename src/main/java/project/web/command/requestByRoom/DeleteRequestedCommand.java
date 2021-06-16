@@ -1,8 +1,8 @@
-package project.web.command.requested;
+package project.web.command.requestByRoom;
 
 import org.apache.log4j.Logger;
 import project.web.Path;
-import project.db.RequestedDao;
+import project.db.RequestDao;
 import project.web.command.Command;
 
 import javax.servlet.ServletException;
@@ -23,7 +23,7 @@ public class DeleteRequestedCommand extends Command {
                 long bookedId = Long.parseLong(s);
                 log.info("Request parameter: bookedId --> " + bookedId);
 
-                new RequestedDao().deleteRequestById(bookedId);
+                new RequestDao().deleteRequestById(bookedId);
                 log.info("Record was deleted");
             }
 

@@ -1,8 +1,8 @@
-package project.web.command.requested;
+package project.web.command.requestByRoom;
 
 import org.apache.log4j.Logger;
 import project.web.Path;
-import project.db.RequestedDao;
+import project.db.RequestDao;
 import project.db.entity.RequestedForBooking;
 import project.web.command.Command;
 import project.web.command.ListFreeRoomsCommand;
@@ -24,7 +24,7 @@ public class ListRequestedCommand extends Command {
         log.debug("Command starts");
 
         List<RequestedForBooking> requestedRoomsList =
-                new RequestedDao().findAllRequestedRooms();
+                new RequestDao().findAllRequestedRooms();
         log.trace("Found in DB: requested rooms List --> " + requestedRoomsList);
 
         // sort menu by number (lambda)

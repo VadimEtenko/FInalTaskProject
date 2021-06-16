@@ -3,11 +3,8 @@ package project.db.entity;
 public class Room extends Entity {
 
     private Integer number;
-
     private String roomClass;
-
     private Integer numberOfBeds;
-
     private Double cost;
 
     public Integer getNumber() {
@@ -45,7 +42,7 @@ public class Room extends Entity {
     @Override
     public String toString(){
         return "Room [number=" + number +
-                ", classId=" + roomClass +
+                ", roomClass=" + roomClass +
                 ", numberOfBeds=" + numberOfBeds+
                 ", cost=" + cost + "];";
     }

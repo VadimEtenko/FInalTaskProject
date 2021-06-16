@@ -1,7 +1,5 @@
 package project.db.entity;
 
-import project.db.RequestedDao;
-
 import java.nio.charset.StandardCharsets;
 import java.util.ResourceBundle;
 import java.util.Locale;

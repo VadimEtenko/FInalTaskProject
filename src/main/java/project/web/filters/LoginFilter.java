@@ -38,12 +38,13 @@ public class LoginFilter implements Filter {
         log.debug("Try to get User parametr from session");
         User user = (User)session.getAttribute("user");
 
-        // Check, is user  log in, and is he try to log in
+        // Check, is user log in, is he try to log in, create account or change language
         if (user == null &&
                 request.getParameter("command") != null &&
                 (!request.getParameter("command").equals("login")
                         && !request.getParameter("command").equals("logout")
-                        && !request.getParameter("command").equals("registration"))) {
+                        && !request.getParameter("command").equals("registration")
+                        && !request.getParameter("command").equals("change-local"))) {
             //Forward to login page
             log.info("User wasn't logged");
             RequestDispatcher dispatcher = request.getRequestDispatcher(Path.PAGE__LOGIN);

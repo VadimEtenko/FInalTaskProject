@@ -1,8 +1,8 @@
-package project.web.command.requested;
+package project.web.command.requestByRoom;
 
 import org.apache.log4j.Logger;
 import project.web.Path;
-import project.db.RequestedDao;
+import project.db.RequestDao;
 import project.db.entity.RequestedForBooking;
 import project.db.entity.User;
 import project.web.command.Command;
@@ -22,14 +22,14 @@ public class ListUserRequestedCommand extends Command {
                           HttpServletResponse response) throws IOException, ServletException {
 
         log.debug("Command starts");
-        RequestedDao requestedDao = new RequestedDao();
+        RequestDao requestDao = new RequestDao();
         HttpSession session = request.getSession();
 
         log.debug("Get user id from session");
         long userId = ((User)session.getAttribute("user")).getId();
 
         List<RequestedForBooking> userRequestedRoomsList =
-                new RequestedDao().findRequestedRoomsByUserId(userId);
+                new RequestDao().findRequestedRoomsByUserId(userId);
 
         log.trace("Found in DB: user's requested rooms List --> " + userRequestedRoomsList);
 

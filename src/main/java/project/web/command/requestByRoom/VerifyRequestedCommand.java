@@ -1,13 +1,9 @@
-package project.web.command.requested;
+package project.web.command.requestByRoom;
 
 import org.apache.log4j.Logger;
-import project.db.NotificationDao;
-import project.db.RoomDao;
-import project.db.RequestedDao;
-import project.db.UserDao;
+import project.db.*;
 import project.db.entity.Notification;
 import project.db.entity.RequestedForBooking;
-import project.db.entity.Room;
 import project.db.entity.User;
 import project.web.command.Command;
 
@@ -25,13 +21,10 @@ public class VerifyRequestedCommand extends Command {
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         log.debug("Command starts");
-        List<RequestedForBooking> requestedRoomsList = new ArrayList<>();
-        RequestedDao requestedDao = new RequestedDao();
-        RoomDao roomDao = new RoomDao();
+        RequestDao requestDao = new RequestDao();
+        BookingDao bookingDao = new BookingDao();
         NotificationDao notificationDao = new NotificationDao();
         UserDao userDao = new UserDao();
-        User user = (User) request.getSession().getAttribute("user");
-
 
         for(String s : request.getParameterValues("requestedId")) {
             log.info("requestedId --> " + s);
@@ -39,12 +32,12 @@ public class VerifyRequestedCommand extends Command {
 
             // get requested room number from jsp by id
             RequestedForBooking requestedForBooking =
-                    requestedDao.findRequestedRoomById(Long.parseLong(s));
+                    requestDao.findRequestedRoomById(Long.parseLong(s));
 
             log.info("Requested witch need to be verified --> " + requestedForBooking);
 
             // create new booked recording
-            roomDao.createBookedRoom(requestedForBooking.getRoomId(),
+            bookingDao.createBookedRoom(requestedForBooking.getRoomId(),
                     requestedForBooking.getUserId());
             log.info("New booked room was created");
 
@@ -56,7 +49,8 @@ public class VerifyRequestedCommand extends Command {
                     log.trace("Found id DB: user witch requested was canceled:" + notVerifiedUsers);
                     notificationDao.createNotification(notVerifiedUsers.getId(),
                             Notification.getMessageCanceled(notVerifiedUsers,
-                                    requestedDao.findRequestedRoomById(Long.parseLong(s))));
+                                    requestDao.findRequestedRoomById(Long.parseLong(s))));
+
                     log.info("Send to user with id " + notVerifiedUsers.getId() + " notification!");
                     log.trace("Notification for user " + notVerifiedUsers.getId() + " was created in DB!");
                 }
@@ -66,10 +60,10 @@ public class VerifyRequestedCommand extends Command {
             log.trace("Found id DB: user witch requested was verified:" + verifiedUser);
             notificationDao.createNotification(verifiedUser.getId(),
                     Notification.getMessageVerified(verifiedUser,
-                            requestedDao.findRequestedRoomById(Long.parseLong(s))));
+                            requestDao.findRequestedRoomById(Long.parseLong(s))));
 
             // delete requested recording from table
-            requestedDao.deleteRequestedByRoomNumber(requestedForBooking.getRoomNumber());
+            requestDao.deleteRequestedByRoomNumber(requestedForBooking.getRoomNumber());
 
             log.info("Old requested with roomId " + s + " was deleted");
         }

@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-public class LocalChangeCommand extends Command{
+public class LocalChangeCommand extends Command {
 
     private static final Logger log = Logger.getLogger(LocalChangeCommand.class);
 
@@ -25,28 +25,35 @@ public class LocalChangeCommand extends Command{
         User newUser = (User) session.getAttribute("user");
         log.trace("Get Attribute user " + newUser);
 
-        newUser.setLocale(request.getParameter("newLocal"));
+        String newLocal = request.getParameter("newLocal");
 
-        log.trace("Set Attribute newLocale" + newUser.getLocale());
+        if (newUser != null) {
+            newUser.setLocale(newLocal);
 
-        userDao.updateUser(newUser);
-        log.trace("Update user");
+            log.trace("Set Attribute newLocale" + newUser.getLocale());
 
-        session.setAttribute("user",newUser);
-        log.trace("Set new session attribute user" + newUser);
+            userDao.updateUser(newUser);
+            log.trace("Update user");
 
-        session.setAttribute("defaultLocale", newUser.getLocale());
-        log.trace("Set new session attribute defaultLocale" + newUser.getLocale());
+            session.setAttribute("user", newUser);
+            log.trace("Set new session attribute user" + newUser);
 
-        Role UserRole = Role.getRole(newUser);
+            session.setAttribute("defaultLocale", newUser.getLocale());
+            log.trace("Set new session attribute defaultLocale" + newUser.getLocale());
 
-        if (UserRole == Role.CLIENT)
-            return Path.COMMAND__LIST_FREE_ROOMS;
 
-        if (UserRole == Role.MANAGER)
-            return Path.COMMAND__LIST_REQUESTED;
+            Role UserRole = Role.getRole(newUser);
 
+            if (UserRole == Role.CLIENT)
+                return Path.COMMAND__LIST_FREE_ROOMS;
+
+            if (UserRole == Role.MANAGER)
+                return Path.COMMAND__LIST_REQUESTED;
+        }
+
+        session.setAttribute("defaultLocale", newLocal);
+        log.trace("Set new session attribute defaultLocale" + newLocal);
         log.debug("Command finished");
-        return Path.PAGE__ERROR_PAGE;
+        return Path.PAGE__LOGIN;
     }
 }

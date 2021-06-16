@@ -4,7 +4,7 @@
 <html>
 
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="utf-8" %>
-<meta http-equiv="Content-Type" content="text/html" charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html" charset="utf-8"/>
 <body>
 <table id="main-container">
     <tr>
@@ -14,7 +14,7 @@
             <form id="login_form" action="controller?command=registration" method="post">
                 <fieldset>
                     <fmt:message key="registration_jsp.label.name" bundle="${rb}"/>
-                    <input type="text" name="name" required pattern="[А-Яа-яЁё]{3,}"
+                    <input type="text" name="name" required pattern="[A-Za-zА-Яа-яЁё]{3,}"
                            title="Must contain at least 2 lat. letters"/>
                 </fieldset>
 
@@ -29,18 +29,20 @@
                     <input name="login" required pattern="[A-Za-z0-9]{3,}"
                            title="Must contain at least 4 lat. letters"/>
                 </fieldset>
-
+                <c:if test="${errorPassword != null}">
+                    <h5>${errorPassword}</h5>
+                </c:if>
                 <fieldset>
                     <fmt:message key="registration_jsp.label.password" bundle="${rb}"/>
                     <input type="password" name="password" autocomplete="off" required minlength="5"
-                           <%--pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])"--%>
+                    <%--pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])"--%>
                            title="Must contain at least one number and one uppercase and lowercase
                            letter, and at least 8 or more characters"/>
                 </fieldset>
 
                 <fieldset>
                     <fmt:message key="registration_jsp.label.second.password" bundle="${rb}"/>
-                    <input type="password" autocomplete="off" required minlength="5"
+                    <input type="password" name="secondPassword" autocomplete="off" required minlength="5"
                     <%--pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])"--%>
                            title="Must contain at least one number and one uppercase and lowercase
                            letter, and at least 8 or more characters"/>

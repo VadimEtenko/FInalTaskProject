@@ -1,3 +1,4 @@
+<%@ page import="project.web.Path" %>
 <%@ include file="head.jspf" %>
 
 <%--===========================================================================
@@ -5,7 +6,6 @@ Header (top area).
 ===========================================================================--%>
 
 <tr>
-    <%--onClick="window.location.reload()--%>
     <td id="header">
         <fmt:setLocale value="${defaultLocale}" scope="session"/>
         <%-- load the bundle (by locale) --%>
@@ -23,7 +23,6 @@ Header (top area).
                     <label>RU / </label>
                     <input type="submit" value="EN"/>
                     <input type="hidden" name="newLocal" value="en"/>
-
                 </c:when>
             </c:choose>
         </form>
@@ -47,6 +46,9 @@ Header (top area).
                         <a href="controller?command=listBooked">
                             <fmt:message key="header_jspf.manager.booked.list" bundle="${rb}"/>
                         </a> &nbsp;
+                        <a href="controller?command=list-requests-wish">
+                            list-requests-wish
+                        </a>
                     </c:when>
 
 
@@ -64,6 +66,12 @@ Header (top area).
                             <fmt:message key="header_jspf.user.href.user-notification-list" bundle="${rb}"/>
                             <notif:count user="${user}"/>
                         </a> &nbsp;
+                        <a href="controller?command=plan-request">
+                            plan-request
+                        </a> &nbsp;
+                        <a href="controller?command=list-offer-to-verify">
+                            Offered to u rooms
+                        </a>
                     </c:when>
                 </c:choose>
             </div>

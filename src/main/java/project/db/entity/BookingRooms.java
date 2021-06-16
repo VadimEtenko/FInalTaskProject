@@ -2,11 +2,16 @@ package project.db.entity;
 
 import project.db.Fields;
 
+import java.time.LocalDate;
+
 public class BookingRooms extends Entity{
 
     private int roomNumber;
     private String userLogin;
     private String status;
+    private LocalDate time_in ;
+    private LocalDate time_out;
+
 
     public long getStatusId() {
         return statusId;
@@ -64,12 +69,30 @@ public class BookingRooms extends Entity{
         this.userLogin = userLogin;
     }
 
+    public LocalDate getTime_in() {
+        return time_in;
+    }
+
+    public void setTime_in(LocalDate time_in) {
+        this.time_in = time_in;
+    }
+
+    public LocalDate getTime_out() {
+        return time_out;
+    }
+
+    public void setTime_out(LocalDate time_out) {
+        this.time_out = time_out;
+    }
+
     @Override
     public String toString() {
         return "BookingRooms[" +
                 "roomNumber=" + roomNumber +
-                ", userLogin='" + userLogin + '\'' +
-                ", status='" + status + '\'' +
+                ", userLogin=" + userLogin+
+                ", status=" + status +
+                ", time_in=" + time_in +
+                ", time_out=" + time_out +
                 ']';
     }
 }

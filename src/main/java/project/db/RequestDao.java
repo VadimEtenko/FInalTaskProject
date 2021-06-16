@@ -6,7 +6,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RequestedDao {
+public class RequestDao {
     private static final String SQL__FIND_ALL_REQUESTED_ROOMS =
             "SELECT requested_rooms.*, users.login, hotel_rooms.number\n" +
                     "FROM requested_rooms, hotel_rooms, users\n" +
@@ -219,14 +219,14 @@ public class RequestedDao {
         public RequestedForBooking mapRow(ResultSet rs) {
             try {
                 RequestedForBooking rfb = new RequestedForBooking();
-                rfb.setId(rs.getLong(Fields.BOOKING_REQUEST_BEAN__BOOKED_ID));
+                rfb.setId(rs.getLong(Fields.BOOKING_REQUEST__BOOKED_ID));
                 try {
-                    rfb.setUserLogin(rs.getString(Fields.BOOKING_REQUEST_BEAN__USER_LOGIN_WHO_BOOKED));
-                    rfb.setRoomNumber(rs.getInt(Fields.BOOKING_REQUEST_BEAN__RESERVED_ROOM_NUMBER));
+                    rfb.setUserLogin(rs.getString(Fields.BOOKING_REQUEST__USER_LOGIN_WHO_BOOKED));
+                    rfb.setRoomNumber(rs.getInt(Fields.BOOKING_REQUEST__RESERVED_ROOM_NUMBER));
                 } catch (SQLException ignored) {
                 }
-                rfb.setRoomId(rs.getLong(Fields.BOOKING_REQUEST_BEAN__RESERVED_ROOM_ID));
-                rfb.setUserId(rs.getLong(Fields.BOOKING_REQUEST_BEAN__USER_ID_WHO_BOOKED));
+                rfb.setRoomId(rs.getLong(Fields.BOOKING_REQUEST__RESERVED_ROOM_ID));
+                rfb.setUserId(rs.getLong(Fields.BOOKING_REQUEST__USER_ID_WHO_BOOKED));
                 return rfb;
             } catch (SQLException e) {
                 throw new IllegalStateException(e);

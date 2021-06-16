@@ -1,5 +1,6 @@
 package project.db;
 
+import project.db.entity.RequestWish;
 import project.db.entity.Room;
 
 import java.sql.*;
@@ -9,10 +10,10 @@ import java.util.List;
 public class RoomDao {
     private static final String SQL__FIND_ALL_BOOKED_ROOMS =
             "SELECT hotel_rooms.id, hotel_rooms.number, class_of_room.class,hotel_rooms.number_of_beds, hotel_rooms.cost\n" +
-                    "FROM hotel_rooms, class_of_room WHERE hotel_rooms.id IN\n" +
-                    "(SELECT room_id FROM booked_rooms)\n" +
-                    "AND\n" +
-                    "hotel_rooms.class_id = class_of_room.id;";
+                    "FROM hotel_rooms, class_of_room " +
+                    "WHERE hotel_rooms.id IN\n" +
+                        "(SELECT room_id FROM booked_rooms)\n" +
+                    "AND hotel_rooms.class_id = class_of_room.id;";
 
     public static final String SQL__FIND_ROOM_BY_ID =
             "SELECT hotel_rooms.id, hotel_rooms.number, class_of_room.class, hotel_rooms.number_of_beds, hotel_rooms.cost\n" +
@@ -22,14 +23,30 @@ public class RoomDao {
 
     private static final String SQL__FIND_ALL_FREE_ROOMS =
             "SELECT hotel_rooms.id, hotel_rooms.number, class_of_room.class,hotel_rooms.number_of_beds, hotel_rooms.cost\n" +
-                    "FROM hotel_rooms, class_of_room WHERE hotel_rooms.id NOT IN\n" +
-                    "(SELECT room_id FROM booked_rooms WHERE status_id != 0)\n" +
-                    "AND\n" +
-                    "hotel_rooms.class_id = class_of_room.id;";
+                    "FROM hotel_rooms, class_of_room " +
+                    "WHERE hotel_rooms.id NOT IN\n" +
+                        "(SELECT room_id FROM booked_rooms WHERE status_id != 0)\n" +
+                    "AND hotel_rooms.class_id = class_of_room.id;";
 
-    private static final String SQL__CREATE_NEW_BOOKING_RECORDS =
-            "INSERT INTO booked_rooms(room_id, user_id, status_id)\n" +
-                    "VALUE (?,?,?);";
+    private static final String SQL__FIND_ALL_FREE_ROOMS_BY_CRITERIA =
+            "SELECT hotel_rooms.id, hotel_rooms.number, class_of_room.class, hotel_rooms.number_of_beds, hotel_rooms.cost\n" +
+                    "FROM hotel_rooms, class_of_room\n" +
+                    "WHERE (hotel_rooms.id NOT IN\n" +
+                    "       (SELECT room_id FROM booked_rooms WHERE status_id != 0)\n" +
+                    "    AND hotel_rooms.class_id = class_of_room.id)\n" +
+                    "AND hotel_rooms.class_id >= ?\n" +
+                    "AND hotel_rooms.number_of_beds >= ?";
+
+    private static final String SQL__FIND_ALL_OFFERED_ROOMS_BY_USER_ID =
+            "SELECT hotel_rooms.id, hotel_rooms.number, class_of_room.class, hotel_rooms.number_of_beds, hotel_rooms.cost\n" +
+                    "FROM hotel_rooms, offers, class_of_room\n" +
+                    "WHERE (hotel_rooms.id IN\n" +
+                    "        (SELECT offers.room_id FROM offers)\n" +
+                    "    AND hotel_rooms.id = offers.room_id)\n" +
+                    "    AND hotel_rooms.class_id = class_of_room.id\n" +
+                    "    AND offers.user_id = ?;";
+
+
 
 
 
@@ -61,7 +78,7 @@ public class RoomDao {
         return allBookedRoomsList;
     }
 
-    public int findBookedRoomNumberById(long roomId) {
+    public int findRoomNumberById(long roomId) {
         Room room = new Room();
         PreparedStatement prStmt = null;
         ResultSet rs = null;
@@ -83,6 +100,30 @@ public class RoomDao {
             DBManager.getInstance().commitAndClose(con);
         }
         return room.getNumber();
+    }
+
+    public Room findRoomById(long roomId) {
+        Room room = null;
+        PreparedStatement prStmt = null;
+        ResultSet rs = null;
+        Connection con = null;
+        try {
+            con = DBManager.getInstance().getConnection();
+            RoomsMapper mapper = new RoomsMapper();
+            prStmt = con.prepareStatement(SQL__FIND_ROOM_BY_ID);
+            prStmt.setLong(1, roomId);
+            rs = prStmt.executeQuery();
+            while (rs.next())
+                room = mapper.mapRow(rs);
+            prStmt.close();
+            rs.close();
+        } catch (SQLException ex) {
+            DBManager.getInstance().rollback(con);
+            ex.printStackTrace();
+        } finally {
+            DBManager.getInstance().commitAndClose(con);
+        }
+        return room;
     }
 
     /**
@@ -113,28 +154,54 @@ public class RoomDao {
         return RoomsList;
     }
 
-    public void createBookedRoom(long roomId, long userId){
-        PreparedStatement preStmt = null;
+    public List<Room> findAllFreeRoomsByCriteria(Long classId, int numberOfBeds) {
+        List<Room> requestWish = new ArrayList<>();
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
         Connection con = null;
         try {
             con = DBManager.getInstance().getConnection();
-            preStmt = con.prepareStatement(SQL__CREATE_NEW_BOOKING_RECORDS);
+            RoomsMapper mapper = new RoomsMapper();
+            stmt = con.prepareStatement(SQL__FIND_ALL_FREE_ROOMS_BY_CRITERIA);
             int indexValue = 1;
-            preStmt.setLong(indexValue++, roomId);
-            preStmt.setLong(indexValue++, userId);
-            preStmt.setInt(indexValue, 1);
-            preStmt.executeUpdate();
-            preStmt.close();
+            stmt.setLong(indexValue++, classId);
+            stmt.setInt(indexValue, numberOfBeds);
+            rs = stmt.executeQuery();
+            while(rs.next())
+                requestWish.add(mapper.mapRow(rs));
+            rs.close();
+            stmt.close();
         } catch (SQLException ex) {
             DBManager.getInstance().rollback(con);
             ex.printStackTrace();
         } finally {
             DBManager.getInstance().commitAndClose(con);
         }
+        return requestWish;
     }
 
-    public void updateBookedRoom(long bookedRoomId,String status){
-
+    public List<Room> getOfferedRoomListByUserId(long user_id){
+        List<Room> RoomsList = new ArrayList<>();
+        PreparedStatement prStmt = null;
+        ResultSet rs = null;
+        Connection con = null;
+        try {
+            con = DBManager.getInstance().getConnection();
+            RoomsMapper mapper = new RoomsMapper();
+            prStmt = con.prepareStatement(SQL__FIND_ALL_OFFERED_ROOMS_BY_USER_ID);
+            prStmt.setLong(1, user_id);
+            rs = prStmt.executeQuery();
+            while (rs.next())
+                RoomsList.add(mapper.mapRow(rs));
+            prStmt.close();
+            rs.close();
+        } catch (SQLException ex) {
+            DBManager.getInstance().rollback(con);
+            ex.printStackTrace();
+        } finally {
+            DBManager.getInstance().commitAndClose(con);
+        }
+        return RoomsList;
     }
 
     /**

@@ -11,7 +11,7 @@
             <%-- CONTENT --%>
 
             <form id="make_order" action="controller" method="post">
-                <input type="hidden" name="command" value="makeRequest"/>
+                <input type="hidden" name="command" value="create-request"/>
                 <input type="submit" value='<fmt:message key="free_room_list_jsp.button.send.apply" bundle="${rb}"/>'/>
 
                 <table id="free_rooms_list_table">
@@ -40,8 +40,6 @@
                 </table>
 
             </form>
-            <h5>${createdSuccessfulMessageLabel}</h5>
-            <h5>${createdUnsuccessfulMessageLabel}</h5>
             <%-- CONTENT --%>
         </td>
     </tr>

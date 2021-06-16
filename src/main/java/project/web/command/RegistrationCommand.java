@@ -11,6 +11,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 
 public class RegistrationCommand extends Command {
@@ -24,9 +26,6 @@ public class RegistrationCommand extends Command {
         log.debug("Command starts");
         UserDao userDao = new UserDao();
         String errorMessage = null;
-
-        System.out.println(request.getCharacterEncoding());
-        System.out.println(request.getParameter("charset"));
 
         String name = new String(request.getParameter("name").
                 getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
@@ -42,36 +41,41 @@ public class RegistrationCommand extends Command {
         String password = request.getParameter("password");
         log.trace("Request parameter: password --> " + password);
 
+        String secondPassword = request.getParameter("secondPassword");
+        log.trace("Request parameter: secondPassword --> " + secondPassword);
+
         String email = request.getParameter("email");
         log.trace("Request parameter: email --> " + email);
 
         String local = request.getParameter("local");
         log.trace("Request parameter: local --> " + local);
 
-        User user = new User(name, surname, login, password, email, 0, local);
-        System.out.println(user);
+        if (!password.equals(secondPassword)) {
+            ResourceBundle rb = ResourceBundle.getBundle("notification", new Locale(local));
 
+            String errorPassword = new String(rb.getString("registration.error.password").
+                    getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
+
+            request.setAttribute("errorPassword", errorPassword);
+            log.trace("Set request parameter errorPassword --> " + errorPassword);
+            return Path.PAGE__REGISTRATION;
+        }
+
+
+        User user = new User(name, surname, login, password, email, 0, local);
+
+        request.removeAttribute("errorPassword");
 
         if (userDao.findUserByLogin(user.getLogin()) != null) {
             errorMessage = "This login already in used";
             request.setAttribute("errorMessage", errorMessage);
             log.error("errorMessage --> " + errorMessage);
             return Path.PAGE__ERROR_PAGE;
-        }else {
+        } else {
             userDao.createNewUser(user);
             log.trace("Insert in DB: new User --> " + user);
         }
         log.debug("Command finished");
         return Path.PAGE__LOGIN;
-    }
-
-    static public String encode(String src, String defpage ,String codepage)
-    {
-        String answer="";
-        try
-        {answer= new String(src.getBytes(defpage), codepage);}
-        //тут бывают ошибки если указаной кодировки не существует
-        catch (Throwable e){answer=src;}
-        return answer;
     }
 }

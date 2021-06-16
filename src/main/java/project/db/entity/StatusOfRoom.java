@@ -1,6 +1,7 @@
 package project.db.entity;
 
 public class StatusOfRoom extends Entity{
+
     private String status;
 
     public String getStatus() {
