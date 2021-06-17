@@ -2,16 +2,16 @@ package project.db.entity;
 
 public class Room extends Entity {
 
-    private Integer number;
+    private int number;
     private String roomClass;
-    private Integer numberOfBeds;
-    private Double cost;
+    private int numberOfBeds;
+    private double cost;
 
-    public Integer getNumber() {
+    public int getNumber() {
         return number;
     }
 
-    public void setNumber(Integer number) {
+    public void setNumber(int number) {
         this.number = number;
     }
 
@@ -23,19 +23,19 @@ public class Room extends Entity {
         this.roomClass = roomClass;
     }
 
-    public Integer getNumberOfBeds() {
+    public int getNumberOfBeds() {
         return numberOfBeds;
     }
 
-    public void setNumberOfBeds(Integer numberOfBeds) {
+    public void setNumberOfBeds(int numberOfBeds) {
         this.numberOfBeds = numberOfBeds;
     }
 
-    public Double getCost() {
+    public double getCost() {
         return cost;
     }
 
-    public void setCost(Double cost) {
+    public void setCost(double cost) {
         this.cost = cost;
     }
 
@@ -47,5 +47,42 @@ public class Room extends Entity {
                 ", cost=" + cost + "];";
     }
 
+    public static class Builder implements BuilderInterface {
+        private Room room;
+
+        public Builder() {
+            room = new Room();
+        }
+
+        public Builder withNumber(int number) {
+            room.number = number;
+            return this;
+        }
+
+        public Builder withRoomClass(String roomClass) {
+            room.roomClass = roomClass;
+            return this;
+        }
+
+        public Builder withNumberOfBeds(int numberOfBeds) {
+            room.numberOfBeds = numberOfBeds;
+            return this;
+        }
+
+        public Builder withCost(double cost) {
+            room.cost = cost;
+            return this;
+        }
+
+        public Builder withId(Long id) {
+            room.setId(id);
+            return this;
+        }
+
+        public Room build() {
+            return room;
+        }
+
+    }
 
 }

@@ -34,7 +34,7 @@ public class Notification extends Entity {
         this.bookedId = bookedId;
     }
 
-    public static String getMessageVerified(User user, RequestedForBooking requested) {
+    public static String getMessageVerified(User user, int roomNumber) {
         ResourceBundle rb = ResourceBundle.getBundle("notification",
                 new Locale(user.getLocale()));
 
@@ -42,13 +42,13 @@ public class Notification extends Entity {
                 new StringBuilder(new String(rb.getString("notification.greeting").getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8));
         sb.append(" ").append(user.getName()).append(" ").append(user.getSurname()).append("! ");
         sb.append(new String(rb.getString("notification.verified.maintext.part1").getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8));
-        sb.append(" ").append(requested.getRoomNumber()).append(" ");
+        sb.append(" ").append(roomNumber).append(" ");
         sb.append(new String(rb.getString("notification.verified.maintext.verified").getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8));
         return sb.toString();
 
     }
 
-    public static String getMessageCanceled(User user, RequestedForBooking requested) {
+    public static String getMessageCanceled(User user, int roomNumber) {
         ResourceBundle rb = ResourceBundle.getBundle("notification",
                 new Locale(user.getLocale()));
 
@@ -56,7 +56,7 @@ public class Notification extends Entity {
                 new StringBuilder(new String(rb.getString("notification.greeting").getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8));
         sb.append(" ").append(user.getName()).append(" ").append(user.getSurname()).append("! ");
         sb.append(new String(rb.getString("notification.verified.maintext.part1").getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8));
-        sb.append(" ").append(requested.getRoomNumber()).append(" ");
+        sb.append(" ").append(roomNumber).append(" ");
         sb.append(new String(rb.getString("notification.verified.maintext.canceled").getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8));;
         return sb.toString();
     }
@@ -69,4 +69,39 @@ public class Notification extends Entity {
                 ", text='" + text + '\'' +
                 ']';
     }
+
+    public static class Builder implements BuilderInterface{
+
+        private Notification notification;
+
+        public Builder() {
+            notification = new Notification();
+        }
+
+        public Builder withUserId(long userId){
+            notification.userId = userId;
+            return this;
+        }
+
+        public Builder withBookedId(long bookedId){
+            notification.bookedId = bookedId;
+            return this;
+        }
+
+        public Builder withText(String text){
+            notification.text = text;
+            return this;
+        }
+
+        public Builder withId(Long id) {
+            notification.setId(id);
+            return this;
+        }
+
+        public Notification build(){
+            return notification;
+        }
+
+    }
+
 }

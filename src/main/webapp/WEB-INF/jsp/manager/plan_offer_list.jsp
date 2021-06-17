@@ -13,10 +13,10 @@
             <table id="wish_table">
                 <thead>
                 <tr>
-                    <td><fmt:message key="find_free_room_list_jsp.label.room.number" bundle="${rb}"/></td>
                     <td><fmt:message key="find_free_room_list_jsp.label.room.class" bundle="${rb}"/></td>
-                    <td><fmt:message key="find_free_room_list_jsp.label.room.beds" bundle="${rb}"/></td>
-                    <td><fmt:message key="find_free_room_list_jsp.label.room.cost" bundle="${rb}"/></td>
+                    <td><fmt:message key="find_free_room_list_jsp.label.room.number" bundle="${rb}"/></td>
+                    <td><fmt:message key="find_free_room_list_jsp.label.date.timein" bundle="${rb}"/></td>
+                    <td><fmt:message key="find_free_room_list_jsp.label.date.timeout" bundle="${rb}"/></td>
                 </tr>
                 </thead>
                 <tr>
@@ -37,10 +37,11 @@
                 <table id="free_rooms_offer_list_table">
                     <thead>
                     <tr>
+                        <td>#</td>
                         <td><fmt:message key="find_free_room_list_jsp.label.room.number" bundle="${rb}"/></td>
                         <td><fmt:message key="find_free_room_list_jsp.label.room.class" bundle="${rb}"/></td>
-                        <td><fmt:message key="find_free_room_list_jsp.label.room.beds" bundle="${rb}"/></td>
-                        <td><fmt:message key="find_free_room_list_jsp.label.room.cost" bundle="${rb}"/></td>
+                        <td><fmt:message key="find_free_room_list_jsp.label.date.timein" bundle="${rb}"/></td>
+                        <td><fmt:message key="find_free_room_list_jsp.label.date.timeout" bundle="${rb}"/></td>
                     </tr>
                     </thead>
                     <c:set var="k" value="0"/>

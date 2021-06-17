@@ -7,14 +7,11 @@ public enum ClassOfRooms{
     DeLuxe,
     Duplex;
 
-
     private String classType;
 
     public String getClassType() {
         return classType;
     }
-
-
 
     public void setClassType(String classType) {
         this.classType = classType;

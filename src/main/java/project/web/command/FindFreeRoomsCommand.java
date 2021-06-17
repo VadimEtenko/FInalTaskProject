@@ -12,4 +12,8 @@ public class FindFreeRoomsCommand extends Command{
     public String execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         return Path.PAGE__FIND_FREE_ROOM_LIST;
     }
+
+    public String getForward(){
+        return Path.PAGE__FIND_FREE_ROOM_LIST;
+    }
 }

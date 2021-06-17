@@ -26,15 +26,15 @@ public class RoomDao {
             "SELECT hotel_rooms.id, hotel_rooms.number, class_of_room.class, hotel_rooms.number_of_beds, hotel_rooms.cost\n" +
                     "FROM hotel_rooms, class_of_room\n" +
                     "WHERE hotel_rooms.id NOT IN\n" +
-                        "(SELECT room_id\n" +
-                        "FROM booked_rooms\n" +
-                        "WHERE status_id != 0\n" +
-                            "AND ((time_out > ?\n" +
-                                "AND time_out < ?)\n" +
-                            "OR\n" +
-                                "(time_in > ?\n" +
-                                    "AND\n" +
-                                "time_in < ?)))\n" +
+                    "(SELECT room_id\n" +
+                    "FROM booked_rooms\n" +
+                    "WHERE status_id != 0\n" +
+                    "AND ((time_out > ?\n" +
+                    "AND time_out < ?)\n" +
+                    "OR\n" +
+                    "(time_in > ?\n" +
+                    "AND\n" +
+                    "time_in < ?)))\n" +
                     "  AND hotel_rooms.class_id = class_of_room.id\n";
 
     private static final String SQL__FIND_ALL_FREE_ROOMS_BY_CRITERIA =
@@ -227,13 +227,13 @@ public class RoomDao {
         @Override
         public Room mapRow(ResultSet rs) {
             try {
-                Room room = new Room();
-                room.setId(rs.getLong(Fields.ENTITY__ID));
-                room.setNumber(rs.getInt(Fields.ROOM__NUMBER));
-                room.setRoomClass(rs.getString(Fields.ROOM__CLASS));
-                room.setNumberOfBeds(rs.getInt(Fields.ROOM__NUMBER_OF_BEDS));
-                room.setCost(rs.getDouble(Fields.ROOM__COST));
-                return room;
+                return new Room.Builder()
+                        .withId(rs.getLong(Fields.ENTITY__ID))
+                        .withNumber(rs.getInt(Fields.ROOM__NUMBER))
+                        .withRoomClass(rs.getString(Fields.ROOM__CLASS))
+                        .withNumberOfBeds(rs.getInt(Fields.ROOM__NUMBER_OF_BEDS))
+                        .withCost(rs.getDouble(Fields.ROOM__COST))
+                        .build();
             } catch (SQLException e) {
                 throw new IllegalStateException(e);
             }

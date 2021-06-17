@@ -25,9 +25,9 @@ public final class Path {
 
     // commands
     public static final String COMMAND__LOGIN = "/controller?command=login";
-    public static final String COMMAND__LIST_REQUESTED = "/controller?command=listRequest";
+    public static final String COMMAND__LIST_REQUESTED = "/controller?command=list-request";
     public static final String COMMAND__LIST_FREE_ROOMS = "/controller?command=list-free-rooms";
-    public static final String COMMAND__LIST_BOOKED_ROOMS = "/controller?command=listBooked";
+    public static final String COMMAND__LIST_BOOKED_ROOMS = "/controller?command=list-booked";
     public static final String COMMAND__USER_NOTIFICATIONS_LIST = "/controller?command=notifications";
     public static final String COMMAND__LIST_REQUEST_WISH = "/controller?command=list-requests-wish";
 

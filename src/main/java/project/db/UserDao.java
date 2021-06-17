@@ -251,16 +251,16 @@ public class UserDao {
         @Override
         public User mapRow(ResultSet rs) {
             try {
-                User user = new User();
-                user.setId(rs.getLong(Fields.ENTITY__ID));
-                user.setName(rs.getString(Fields.USER__NAME));
-                user.setSurname(rs.getString(Fields.USER__SURNAME));
-                user.setLogin(rs.getString(Fields.USER__LOGIN));
-                user.setPassword(rs.getString(Fields.USER__PASSWORD));
-                user.setEmail(rs.getString(Fields.USER__EMAIL));
-                user.setRoleId(rs.getInt(Fields.USER__ROLE_ID));
-                user.setLocale(rs.getString(Fields.USER__LOCAL));
-                return user;
+                return new User.Builder()
+                        .withId(rs.getLong(Fields.ENTITY__ID))
+                        .withName(rs.getString(Fields.USER__NAME))
+                        .withSurname(rs.getString(Fields.USER__SURNAME))
+                        .withLogin(rs.getString(Fields.USER__LOGIN))
+                        .withPassword(rs.getString(Fields.USER__PASSWORD))
+                        .withEmail(rs.getString(Fields.USER__EMAIL))
+                        .withRoleId(rs.getInt(Fields.USER__ROLE_ID))
+                        .withLocale(rs.getString(Fields.USER__LOCAL))
+                        .build();
             } catch (SQLException e) {
                 throw new IllegalStateException(e);
             }

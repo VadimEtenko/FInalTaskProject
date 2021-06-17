@@ -36,5 +36,4 @@
 
 </table>
 </body>
-<!--customTagFile:myTag/-->
 </html>

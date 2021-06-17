@@ -12,6 +12,7 @@ public class BookingRooms extends Entity{
     private String status;
     private LocalDate time_in ;
     private LocalDate time_out;
+    private long statusId;
 
     public static SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
@@ -22,8 +23,6 @@ public class BookingRooms extends Entity{
     public void setStatusId(long statusId) {
         this.statusId = statusId;
     }
-
-    private long statusId;
 
     public String getStatus() {
         return status;
@@ -97,4 +96,65 @@ public class BookingRooms extends Entity{
                 ", time_out=" + time_out +
                 ']';
     }
+
+    public static class Builder implements BuilderInterface{
+        private BookingRooms bookingRooms;
+
+        public Builder() {
+            bookingRooms = new BookingRooms();
+        }
+
+        public Builder withRoomNumber(int roomNumber){
+            bookingRooms.roomNumber = roomNumber;
+            return this;
+        }
+
+        public Builder withUserLogin(String userLogin){
+            bookingRooms.userLogin = userLogin;
+            return this;
+        }
+
+        public Builder withStatus(int status){
+            switch (status){
+                case Fields.BOOKED_ROOM_STATUS__FREE:
+                    bookingRooms.status = "free";
+                    break;
+
+                case Fields.BOOKED_ROOM_STATUS__BOOKED:
+                    bookingRooms.status = "booked";
+                    break;
+
+                case Fields.BOOKED_ROOM_STATUS__OCCUPIED:
+                    bookingRooms.status = "occupied";
+                    break;
+
+                default:
+                    bookingRooms.status = "not available";
+                    break;
+            }
+            bookingRooms.statusId = status;
+            return this;
+        }
+
+        public Builder withTime_in(LocalDate time_in){
+            bookingRooms.time_in = time_in;
+            return this;
+        }
+
+        public Builder withTime_out(LocalDate time_out){
+            bookingRooms.time_out = time_out;
+            return this;
+        }
+
+        public Builder withId(Long id) {
+            bookingRooms.setId(id);
+            return this;
+        }
+
+        public BookingRooms build(){
+            return bookingRooms;
+        }
+
+    }
+
 }

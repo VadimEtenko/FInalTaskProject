@@ -4,10 +4,10 @@
         xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee/web-jsptaglibrary_2_0.xsd">
     <tlib-version>1.0</tlib-version>
     <jsp-version>1.2</jsp-version>
-    <short-name>myTag</short-name>
+    <short-name>count</short-name>
 
     <tag>
-        <name>count</name>
+        <name>notif</name>
         <tag-class>project.web.tags.NotificationCountTag</tag-class>
         <attribute>
             <name>user</name>
@@ -15,5 +15,37 @@
             <rtexprvalue>true</rtexprvalue>
         </attribute>
     </tag>
+
+    <tag>
+        <name>offers</name>
+        <tag-class>project.web.tags.OffersCountTag</tag-class>
+        <attribute>
+            <name>user</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+    </tag>
+
+    <tag>
+        <name>request</name>
+        <tag-class>project.web.tags.RequestCountTag</tag-class>
+        <attribute>
+            <name>user</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+    </tag>
+
+    <tag>
+        <name>requestWish</name>
+        <tag-class>project.web.tags.RequestCountTag</tag-class>
+        <attribute>
+            <name>user</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+    </tag>
+
+
 
 </taglib>

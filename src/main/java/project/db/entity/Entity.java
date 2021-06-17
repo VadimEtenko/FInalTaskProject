@@ -21,4 +21,10 @@ public abstract class Entity implements Serializable {
         this.id = id;
     }
 
+    public interface BuilderInterface{
+
+        BuilderInterface withId(Long id);
+
+    }
+
 }

@@ -80,5 +80,58 @@ public class RequestWish extends Entity{
                 ']';
     }
 
+    public static class Builder implements BuilderInterface{
+        private RequestWish requestWish;
+
+        public Builder() {
+            requestWish = new RequestWish();
+        }
+
+        public Builder withUserNick(String userNick){
+            requestWish.userNick = userNick;
+            return this;
+        }
+
+        public Builder withClass_id(int class_id){
+            requestWish.class_id = class_id;
+            return this;
+        }
+
+        public Builder withRoomClass(String roomClass){
+            requestWish.roomClass = roomClass;
+            return this;
+        }
+
+        public Builder withUser_id(long user_id){
+            requestWish.user_id = user_id;
+            return this;
+        }
+
+        public Builder withNumberOfBeds(int number_of_beds){
+            requestWish.number_of_beds = number_of_beds;
+            return this;
+        }
+
+        public Builder withTime_in(LocalDate timeIn){
+            requestWish.time_in = timeIn;
+            return this;
+        }
+
+        public Builder withTime_out(LocalDate timeOut){
+            requestWish.time_out = timeOut;
+            return this;
+        }
+
+        public Builder withId(Long id) {
+            requestWish.setId(id);
+            return this;
+        }
+
+        public RequestWish build(){
+            return requestWish;
+        }
+
+    }
+
 
 }

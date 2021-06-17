@@ -66,8 +66,8 @@ public class RequestDao {
      */
     public List<RequestedForBooking> findAllRequestedRooms() {
         List<RequestedForBooking> requestedForBookingList = new ArrayList<>();
-        Statement stmt = null;
-        ResultSet rs = null;
+        Statement stmt;
+        ResultSet rs;
         Connection con = null;
         try {
             con = DBManager.getInstance().getConnection();
@@ -76,6 +76,8 @@ public class RequestDao {
             rs = stmt.executeQuery(SQL__FIND_ALL_REQUESTED_ROOMS);
             while (rs.next())
                 requestedForBookingList.add(mapper.mapRow(rs));
+            stmt.close();
+            rs.close();
         } catch (SQLException ex) {
             DBManager.getInstance().rollback(con);
             ex.printStackTrace();
@@ -87,8 +89,8 @@ public class RequestDao {
 
     public List<RequestedForBooking> findRequestedRoomsByUserId(long id) {
         List<RequestedForBooking> requestedForBookingList = new ArrayList<>();
-        PreparedStatement prStmt = null;
-        ResultSet rs = null;
+        PreparedStatement prStmt;
+        ResultSet rs;
         Connection con = null;
         try {
             con = DBManager.getInstance().getConnection();
@@ -110,13 +112,12 @@ public class RequestDao {
     }
 
     public boolean isCreatedRequestRoomByUserIdAndRoomNumber(long id, long roomNumber) {
-        PreparedStatement prStmt = null;
-        ResultSet rs = null;
+        PreparedStatement prStmt;
+        ResultSet rs;
         Connection con = null;
         boolean isCreated = true;
         try {
             con = DBManager.getInstance().getConnection();
-            RequestedRoomsMapper mapper = new RequestedRoomsMapper();
             prStmt = con.prepareStatement(SQL__FIND_REQUESTED_ROOMS_BY_USER_ID_AND_ROOM_NUMBER);
             int indexValue = 1;
             prStmt.setLong(indexValue++, id);
@@ -137,8 +138,8 @@ public class RequestDao {
 
     public RequestedForBooking findRequestedRoomById(long id) {
         RequestedForBooking requestedForBooking = null;
-        PreparedStatement prStmt = null;
-        ResultSet rs = null;
+        PreparedStatement prStmt;
+        ResultSet rs;
         Connection con = null;
         try {
             con = DBManager.getInstance().getConnection();
@@ -160,7 +161,7 @@ public class RequestDao {
     }
 
     public void createRequest(long user_id, long room_id, LocalDate time_in, LocalDate time_out) {
-        PreparedStatement prStmt = null;
+        PreparedStatement prStmt;
         Connection con = null;
         try {
             con = DBManager.getInstance().getConnection();
@@ -181,7 +182,7 @@ public class RequestDao {
     }
 
     public void deleteRequestedByRoomNumber(int roomId) {
-        PreparedStatement prStmt = null;
+        PreparedStatement prStmt;
         Connection con = null;
         try {
             con = DBManager.getInstance().getConnection();
@@ -199,12 +200,13 @@ public class RequestDao {
 
     public void deleteRequestById(long id) {
         Connection con = null;
-        PreparedStatement preparedStatement = null;
+        PreparedStatement prStmt;
         try {
             con = DBManager.getInstance().getConnection();
-            preparedStatement = con.prepareStatement(SQL__DELETE_REQUESTED_BY_ID);
-            preparedStatement.setLong(1, id);
-            preparedStatement.executeUpdate();
+            prStmt = con.prepareStatement(SQL__DELETE_REQUESTED_BY_ID);
+            prStmt.setLong(1, id);
+            prStmt.executeUpdate();
+            prStmt.close();
         } catch (SQLException ex) {
             DBManager.getInstance().rollback(con);
             ex.printStackTrace();
@@ -221,17 +223,18 @@ public class RequestDao {
         @Override
         public RequestedForBooking mapRow(ResultSet rs) {
             try {
-                RequestedForBooking rfb = new RequestedForBooking();
-                rfb.setId(rs.getLong(Fields.BOOKING_REQUEST__BOOKED_ID));
+                RequestedForBooking rfb = new RequestedForBooking.Builder()
+                        .withId(rs.getLong(Fields.BOOKING_REQUEST__BOOKED_ID))
+                        .withUserLogin(rs.getString(Fields.BOOKING_REQUEST__USER_LOGIN_WHO_BOOKED))
+                        .withUserId(rs.getLong(Fields.BOOKING_REQUEST__USER_ID_WHO_BOOKED))
+                        .withRoomId(rs.getLong(Fields.BOOKING_REQUEST__RESERVED_ROOM_ID))
+                        .withTime_in(rs.getDate(Fields.BOOKING_REQUEST__RESERVED_ROOM_TIME_IN).toLocalDate())
+                        .withTime_out(rs.getDate(Fields.BOOKING_REQUEST__RESERVED_ROOM_TIME_OUT).toLocalDate())
+                        .build();
                 try {
                     rfb.setUserLogin(rs.getString(Fields.BOOKING_REQUEST__USER_LOGIN_WHO_BOOKED));
                     rfb.setRoomNumber(rs.getInt(Fields.BOOKING_REQUEST__RESERVED_ROOM_NUMBER));
-                } catch (SQLException ignored) {
-                }
-                rfb.setRoomId(rs.getLong(Fields.BOOKING_REQUEST__RESERVED_ROOM_ID));
-                rfb.setUserId(rs.getLong(Fields.BOOKING_REQUEST__USER_ID_WHO_BOOKED));
-                rfb.setTimeIn(rs.getDate(Fields.BOOKING_REQUEST__RESERVED_ROOM_TIME_IN).toLocalDate());
-                rfb.setTimeOut(rs.getDate(Fields.BOOKING_REQUEST__RESERVED_ROOM_TIME_OUT).toLocalDate());
+                } catch (SQLException ignored) {}
                 return rfb;
             } catch (SQLException e) {
                 throw new IllegalStateException(e);

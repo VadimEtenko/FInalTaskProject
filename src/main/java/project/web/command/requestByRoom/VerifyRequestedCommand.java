@@ -52,7 +52,7 @@ public class VerifyRequestedCommand extends Command {
                                     notVerifiedUsers.getId(),
                                     requestedForBooking.getRoomId()).getId(),
                             Notification.getMessageCanceled(notVerifiedUsers,
-                                    requestDao.findRequestedRoomById(Long.parseLong(s))));
+                                    requestDao.findRequestedRoomById(Long.parseLong(s)).getRoomNumber()));
 
                     log.info("Send to user with id " + notVerifiedUsers.getId() + " notification!");
                     log.trace("Notification for user " + notVerifiedUsers.getId() + " was created in DB!");
@@ -66,7 +66,7 @@ public class VerifyRequestedCommand extends Command {
                             verifiedUser.getId(),
                             requestedForBooking.getRoomId()).getId(),
                     Notification.getMessageVerified(verifiedUser,
-                            requestDao.findRequestedRoomById(Long.parseLong(s))));
+                            requestDao.findRequestedRoomById(Long.parseLong(s)).getRoomNumber()));
 
             // delete requested recording from table
             requestDao.deleteRequestedByRoomNumber(requestedForBooking.getRoomNumber());

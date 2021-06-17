@@ -1,5 +1,7 @@
 package project.db.entity;
 
+import project.db.Fields;
+
 import java.time.LocalDate;
 
 public class RequestedForBooking extends Entity {
@@ -69,5 +71,53 @@ public class RequestedForBooking extends Entity {
                 ", time_in=" + timeIn +
                 ", time_out=" + timeOut +
                 ']';
+    }
+
+    public static class Builder implements BuilderInterface{
+        private RequestedForBooking requestedForBooking;
+
+        public Builder() {
+            requestedForBooking = new RequestedForBooking();
+        }
+
+        public Builder withUserLogin(String userLogin){
+            requestedForBooking.userLogin = userLogin;
+            return this;
+        }
+
+        public Builder withRoomNumber(int roomNumber){
+            requestedForBooking.roomNumber = roomNumber;
+            return this;
+        }
+
+        public Builder withUserId(long userId){
+            requestedForBooking.userId = userId;
+            return this;
+        }
+
+        public Builder withRoomId(long roomId){
+            requestedForBooking.roomId = roomId;
+            return this;
+        }
+
+        public Builder withTime_in(LocalDate timeIn){
+            requestedForBooking.timeIn = timeIn;
+            return this;
+        }
+
+        public Builder withTime_out(LocalDate timeOut){
+            requestedForBooking.timeOut = timeOut;
+            return this;
+        }
+
+        public Builder withId(Long id) {
+            requestedForBooking.setId(id);
+            return this;
+        }
+
+        public RequestedForBooking build(){
+            return requestedForBooking;
+        }
+
     }
 }

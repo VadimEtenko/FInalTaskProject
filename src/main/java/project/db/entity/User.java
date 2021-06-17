@@ -1,5 +1,7 @@
 package project.db.entity;
 
+import java.time.LocalDate;
+
 public class User extends Entity{
 
     private String name;
@@ -92,5 +94,58 @@ public class User extends Entity{
         ", local=" + locale +
         "];";
 	}
+
+    public static class Builder implements BuilderInterface{
+        private User user;
+
+        public Builder() {
+            user = new User();
+        }
+
+        public Builder withName(String name){
+            user.name = name;
+            return this;
+        }
+
+        public Builder withSurname(String surname){
+            user.surname = surname;
+            return this;
+        }
+
+        public Builder withLogin(String login){
+            user.login = login;
+            return this;
+        }
+
+        public Builder withPassword(String password){
+            user.password = password;
+            return this;
+        }
+
+        public Builder withEmail(String email){
+            user.email = email;
+            return this;
+        }
+
+        public Builder withRoleId(int roleId) {
+            user.roleId = roleId;
+            return this;
+        }
+
+        public Builder withLocale(String locale){
+            user.locale = locale;
+            return this;
+        }
+
+        public Builder withId(Long id) {
+            user.setId(id);
+            return this;
+        }
+
+        public User build(){
+            return user;
+        }
+
+    }
 }
 

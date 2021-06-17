@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
+import project.web.Path;
 
 /**
  * Main servlet controller.
@@ -34,11 +35,14 @@ public class Controller extends HttpServlet {
     private void startController(HttpServletRequest request,
                                  HttpServletResponse response) throws IOException, ServletException {
         //try {
+
             log.debug("Controller starts");
 
             // extract command name from the request
             String commandName = request.getParameter("command");
             log.trace("Request parameter: command --> " + commandName);
+
+            System.out.println("make command" + commandName);
 
             // obtain command object by its name
             Command command = CommandContainer.get(commandName);
@@ -52,6 +56,7 @@ public class Controller extends HttpServlet {
             if (forward != null) {
                 log.debug("Controller finished, now go to forward address --> " + forward);
                 request.getSession().setAttribute("title", commandName);
+                request.setAttribute("forward", forward);
                 RequestDispatcher dispatcher = request.getRequestDispatcher(forward);
                 dispatcher.forward(request, response);
             }

@@ -195,12 +195,12 @@ public class BookingDao {
         @Override
         public BookingRooms mapRow(ResultSet rs) {
             try {
-                BookingRooms bookingRooms = new BookingRooms();
-                bookingRooms.setId(rs.getLong(Fields.ENTITY__ID));
-                bookingRooms.setRoomNumber(rs.getInt(Fields.ROOM__NUMBER));
-                bookingRooms.setUserLogin(rs.getString(Fields.USER__LOGIN));
-                bookingRooms.setStatus(rs.getInt(Fields.BOOKED_ROOM_STATUS));;
-                return bookingRooms;
+                return new BookingRooms.Builder()
+                        .withId(rs.getLong(Fields.ENTITY__ID))
+                        .withRoomNumber(rs.getInt(Fields.ROOM__NUMBER))
+                        .withUserLogin(rs.getString(Fields.USER__LOGIN))
+                        .withStatus(rs.getInt(Fields.BOOKED_ROOM_STATUS))
+                        .build();
             } catch (SQLException e) {
                 throw new IllegalStateException(e);
             }

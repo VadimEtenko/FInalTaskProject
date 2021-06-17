@@ -1,6 +1,7 @@
 package project.web.command.requesteWish;
 
 import project.db.OffersDao;
+import project.db.RequestWishDao;
 import project.web.Path;
 import project.web.command.Command;
 
@@ -13,8 +14,11 @@ public class CreateOfferCommand extends Command {
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         long userId = Long.parseLong(request.getParameter("userId"));
-        long roomId = Long.parseLong(request.getParameter("suitableRoomId"));
-        new OffersDao().createOffer(userId,roomId);
+        for(String suitableRoomIdString : request.getParameterValues("suitableRoomId")) {
+            long roomId = Long.parseLong(suitableRoomIdString);
+            new OffersDao().createOffer(userId, roomId);
+        }
+        new RequestWishDao().deleteRequestWishByIdUserId(userId);
         return Path.COMMAND__LIST_REQUEST_WISH;
     }
 }

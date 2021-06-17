@@ -14,11 +14,10 @@ import java.sql.Date;
 import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.List;
 
 public class ListFreeRoomsCommand extends Command {
-
-    private static final long serialVersionUID = 7732286214029478505L;
 
     private static final Logger log = Logger.getLogger(ListFreeRoomsCommand.class);
 
@@ -32,15 +31,36 @@ public class ListFreeRoomsCommand extends Command {
         try {
             time_in = new Date(BookingRooms.sdf.parse(request.getParameter("time_in")).getTime());
             time_out = new Date(BookingRooms.sdf.parse(request.getParameter("time_out")).getTime());
-        }catch(ParseException e){
+        } catch (ParseException e) {
             e.printStackTrace();
         }
+
+
         // get free room list list
-        List<Room> freeRoomsList = new RoomDao().findFreeRooms(time_in,time_out);
+        List<Room> freeRoomsList = new RoomDao().findFreeRooms(time_in, time_out);
         log.trace("Found in DB: freeRoomsList --> " + freeRoomsList);
 
         // sort menu by number (lambda)
-        freeRoomsList.sort((r1, r2) -> (int) (r1.getNumber() - r2.getNumber()));
+        String filterType;
+        if(request.getParameter("type-filter") == null)
+            filterType = "cost";
+        else
+            filterType = request.getParameter("type-filter");
+
+        switch (filterType) {
+            case "cost":
+                freeRoomsList.sort((r1, r2) -> (int) (r1.getCost() - r2.getCost()));
+                break;
+            case "beds":
+                freeRoomsList.sort(Comparator.comparingInt(Room::getNumberOfBeds));
+                break;
+            case "class":
+                freeRoomsList.sort(Comparator.comparing(Room::getRoomClass));
+                break;
+            default:
+                freeRoomsList.sort((r1, r2) -> (int) (r1.getId() - r2.getId()));
+        }
+        System.out.println("\n After sorting \n" + freeRoomsList);
 
         // put free rooms list to the request
         request.setAttribute("freeRoomsList", freeRoomsList);
@@ -51,8 +71,6 @@ public class ListFreeRoomsCommand extends Command {
 
         request.setAttribute("time_out", time_out);
         log.trace("Set the request attribute: time_out --> " + time_out);
-
-
 
         log.debug("Command finished");
         return Path.PAGE__FREE_ROOM_LIST;

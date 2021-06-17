@@ -42,12 +42,14 @@ Header (top area).
                     <c:when test="${userRole.name == 'manager' }">
                         <a href="controller?command=list-request">
                             <fmt:message key="header_jspf.manager.request.list" bundle="${rb}"/>
+                            <count:request user="${user}"/>
                         </a> &nbsp;
                         <a href="controller?command=list-booked">
                             <fmt:message key="header_jspf.manager.booked.list" bundle="${rb}"/>
                         </a> &nbsp;
                         <a href="controller?command=list-requests-wish">
                             <fmt:message key="header_jspf.manager.wish.list" bundle="${rb}"/>
+                            <count:requestWish user="${user}"/>
                         </a>
                     </c:when>
 
@@ -64,13 +66,14 @@ Header (top area).
                         </a> &nbsp;
                         <a href="controller?command=notifications">
                             <fmt:message key="header_jspf.user.href.user-notification-list" bundle="${rb}"/>
-                            <notif:count user="${user}"/>
+                            <count:notif user="${user}"/>
                         </a> &nbsp;
                         <a href="controller?command=plan-request">
                             <fmt:message key="header_jspf.user.href.plan-request" bundle="${rb}"/>
                         </a> &nbsp;
                         <a href="controller?command=list-offer-to-verify">
                             <fmt:message key="header_jspf.user.href.offered-to-user-rooms" bundle="${rb}"/>
+                            <count:offers user="${user}"/>
                         </a>
                     </c:when>
                 </c:choose>

@@ -84,7 +84,7 @@ public class RequestWishDao {
         return requestWish;
     }
 
-    public void deleteRequestWishByIdUserId(long user_id){
+    public void deleteRequestWishByIdUserId(long user_id) {
         PreparedStatement prStmt = null;
         Connection con = null;
         try {
@@ -158,17 +158,17 @@ public class RequestWishDao {
         @Override
         public RequestWish mapRow(ResultSet rs) {
             try {
-                RequestWish rw = new RequestWish();
-                rw.setId(rs.getLong(Fields.BOOKING_REQUEST__BOOKED_ID));
-                rw.setUser_id(rs.getLong(Fields.REQUEST_WISHED__USER_ID_WHO_WISHED));
-                rw.setClass_id(rs.getLong(Fields.REQUEST_WISHED__WISHED_CLASS_ID));
+                RequestWish rw = new RequestWish.Builder()
+                        .withId(rs.getLong(Fields.BOOKING_REQUEST__BOOKED_ID))
+                        .withUser_id(rs.getLong(Fields.REQUEST_WISHED__USER_ID_WHO_WISHED))
+                        .withUser_id(rs.getLong(Fields.REQUEST_WISHED__WISHED_CLASS_ID))
+                        .withNumberOfBeds(rs.getInt(Fields.REQUEST_WISHED__WISHED_NUMBER_OF_BEDS))
+                        .withTime_in(rs.getDate(Fields.REQUEST_WISHED__WISHED_TIME_IN).toLocalDate())
+                        .withTime_out(rs.getDate(Fields.REQUEST_WISHED__WISHED_TIME_OUT).toLocalDate())
+                        .build();
                 try {
                     rw.setUserNick(rs.getString(Fields.USER__LOGIN));
-                } catch (SQLException ignored) {
-                }
-                rw.setNumber_of_beds(rs.getInt(Fields.REQUEST_WISHED__WISHED_NUMBER_OF_BEDS));
-                rw.setTime_in(rs.getDate(Fields.REQUEST_WISHED__WISHED_TIME_IN).toLocalDate());
-                rw.setTime_out(rs.getDate(Fields.REQUEST_WISHED__WISHED_TIME_OUT).toLocalDate());
+                } catch (SQLException ignored) {}
                 return rw;
             } catch (SQLException e) {
                 throw new IllegalStateException(e);

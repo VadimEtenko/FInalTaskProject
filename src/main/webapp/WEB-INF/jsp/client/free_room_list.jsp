@@ -10,10 +10,34 @@
     <tr>
         <td class="content">
             <%-- CONTENT --%>
+            <form  action="controller" method="post">
+                <input type="hidden" name="command" value="list-free-rooms"/>
+                <input type="hidden" name="type-filter" value="cost">
+                <input type="hidden" name="time_in" value="${time_in}">
+                <input type="hidden" name="time_out" value="${time_out}">
+                <input type="submit" value='Cost'/>
+            </form>
+
+            <form  action="controller" method="post">
+                <input type="hidden" name="command" value="list-free-rooms"/>
+                <input type="hidden" name="type-filter" value="beds">
+                <input type="hidden" name="time_in" value="${time_in}">
+                <input type="hidden" name="time_out" value="${time_out}">
+                <input type="submit" value='beds'/>
+            </form>
+
+            <form  action="controller" method="post">
+                <input type="hidden" name="command" value="list-free-rooms"/>
+                <input type="hidden" name="type-filter" value="class">
+                <input type="hidden" name="time_in" value="${time_in}">
+                <input type="hidden" name="time_out" value="${time_out}">
+                <input type="submit" value='class'/>
+            </form>
 
             <form id="make_order" action="controller" method="post">
                 <input type="hidden" name="command" value="create-request"/>
-                <input type="submit" value='<fmt:message key="find_free_room_list_jsp.button.send.apply" bundle="${rb}"/>'/>
+                <input type="submit"
+                       value='<fmt:message key="find_free_room_list_jsp.button.send.apply" bundle="${rb}"/>'/>
                 <br>
                 <table id="date_table">
                     <thead>
@@ -23,8 +47,10 @@
                     </tr>
                     </thead>
                     <tr>
-                        <td><input type="date" name="time_in" value="${time_in}" min="<%= LocalDate.now() %>" required></td>
-                        <td><input type="date" name="time_out" value="${time_out}" min="<%= LocalDate.now().plusDays(1) %>" required></td>
+                        <td><input type="date" name="time_in" value="${time_in}" min="<%= LocalDate.now() %>" required>
+                        </td>
+                        <td><input type="date" name="time_out" value="${time_out}"
+                                   min="<%= LocalDate.now().plusDays(1) %>" required></td>
                     </tr>
                 </table>
                 <br>

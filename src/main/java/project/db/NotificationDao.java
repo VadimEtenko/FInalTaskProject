@@ -143,12 +143,13 @@ public class NotificationDao {
         @Override
         public Notification mapRow(ResultSet rs) {
             try {
-                Notification notification = new Notification();
-                notification.setId(rs.getLong(Fields.ENTITY__ID));
-                notification.setUserId(rs.getLong(Fields.NOTIFICATION__USER_ID));
-                notification.setBookedId(rs.getLong(Fields.NOTIFICATION__BOOKED_ID));
-                notification.setText(rs.getString(Fields.NOTIFICATION__TEXT));
-                return notification;
+
+                return new Notification.Builder()
+                        .withId(rs.getLong(Fields.ENTITY__ID))
+                        .withUserId(rs.getLong(Fields.NOTIFICATION__USER_ID))
+                        .withBookedId(rs.getLong(Fields.NOTIFICATION__BOOKED_ID))
+                        .withText(rs.getString(Fields.NOTIFICATION__TEXT))
+                        .build();
             } catch (SQLException e) {
                 throw new IllegalStateException(e);
             }
