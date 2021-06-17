@@ -1,6 +1,11 @@
 package project.db.entity;
 
-import java.time.LocalDate;
+/**
+ *
+ * Entity of user
+ *
+ * @author V.Etenko
+ */
 
 public class User extends Entity{
 
@@ -11,21 +16,6 @@ public class User extends Entity{
     private String email;
     private int roleId;
     private String locale;
-
-    public User(String name, String surname, String login,
-                String password, String email, int roleId, String locale) {
-        this.name = name;
-        this.surname = surname;
-        this.login = login;
-        this.password = password;
-        this.email = email;
-        this.roleId = roleId;
-        this.locale = locale;
-    }
-
-    public User(){
-
-    }
 
     public String getName() {
         return name;

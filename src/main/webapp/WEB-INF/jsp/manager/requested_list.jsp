@@ -1,5 +1,5 @@
 <%@ include file="../../jspf/directive/taglib.jspf" %>
-<%@ include file="../../jspf/header.jspf"%>
+<%@ include file="../../jspf/header.jspf" %>
 <html>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <c:set var="title" value="Menu" scope="page"/>
@@ -16,14 +16,14 @@
 
                 <table id="list_menu_table">
                     <thead>
-                        <tr>
-                            <td>#</td>
-                            <td><fmt:message key="requested_list_jsp.label.room.number" bundle="${rb}"/></td>
-                            <td><fmt:message key="requested_list_jsp.label.user" bundle="${rb}"/></td>
-                            <td><fmt:message key="requested_list_jsp.label.timein" bundle="${rb}"/></td>
-                            <td><fmt:message key="requested_list_jsp.label.timeout" bundle="${rb}"/></td>
-                            <td><fmt:message key="requested_list_jsp.label.ok" bundle="${rb}"/></td>
-                        </tr>
+                    <tr>
+                        <td>#</td>
+                        <td><fmt:message key="requested_list_jsp.label.room.number" bundle="${rb}"/></td>
+                        <td><fmt:message key="requested_list_jsp.label.user" bundle="${rb}"/></td>
+                        <td><fmt:message key="requested_list_jsp.label.timein" bundle="${rb}"/></td>
+                        <td><fmt:message key="requested_list_jsp.label.timeout" bundle="${rb}"/></td>
+                        <td><fmt:message key="requested_list_jsp.label.ok" bundle="${rb}"/></td>
+                    </tr>
                     </thead>
 
                     <c:set var="k" value="0"/>
@@ -44,7 +44,7 @@
         </td>
     </tr>
 
-<customTagFile:myTagFooter/>
+    <customTagFile:myTagFooter/>
 
 </table>
 </body>

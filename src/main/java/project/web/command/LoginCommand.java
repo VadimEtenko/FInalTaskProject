@@ -33,8 +33,8 @@ public class LoginCommand extends Command {
         log.trace("Request parameter: login --> " + login);
 
         String password = request.getParameter("password");
+        log.trace("Request parameter: password --> " + password);
 
-        // error handler
         String errorMessage = null;
         String forward = Path.PAGE__ERROR_PAGE;
 
@@ -47,10 +47,12 @@ public class LoginCommand extends Command {
 
         User user = new UserDao().findUserByLogin(login);;
 
+        //First find user by login, then by email
         if(user == null){
             log.trace("Didn't find in DB user by login, try to find by email");
             user = new UserDao().findUserByEmail(login);
         }
+
         if (user == null || !password.equals(user.getPassword())) {
             errorMessage = "Cannot find user with such login/email/password";
             request.setAttribute("errorMessage", errorMessage);
@@ -72,10 +74,9 @@ public class LoginCommand extends Command {
 
             session.setAttribute("userRole", userRole);
             log.trace("Set the session attribute: userRole --> " + userRole);
-
             log.info("User " + user + " logged as " + userRole.toString().toLowerCase());
 
-            // work with i18n
+
             String userLocal = user.getLocale();
             log.trace("userLocal --> " + userLocal);
 

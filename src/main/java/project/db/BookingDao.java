@@ -44,12 +44,17 @@ public class BookingDao {
     public static final String SQL__DELETE_FREE_BOOKED_ROOMS =
             "DELETE FROM booked_rooms WHERE status_id = 0";
 
-
     private static final String SQL__CREATE_NEW_BOOKING_RECORDS =
             "INSERT INTO booked_rooms(room_id, user_id, status_id, time_in, time_out, time_creating, is_paid)\n" +
                     "VALUE (?,?,?,?,?,CURRENT_DATE,?);";
 
 
+
+    /**
+     * Returns all records of non-free rooms
+     *
+     * @return list of all reserved rooms
+     */
 
     public List<BookingRooms> findAllBookingRecords() {
         List<BookingRooms> allBookingRecordsList = new ArrayList<>();
@@ -69,6 +74,15 @@ public class BookingDao {
         }
         return allBookingRecordsList;
     }
+
+
+    /**
+     * Finds a room record
+     *
+     * @param id
+     *      Database record number
+     * @return Record about the reserved room by id in the database
+     */
 
     public BookingRooms findBookingRecordsById(long id) {
         BookingRooms bookingRecordst = new BookingRooms();
@@ -94,8 +108,16 @@ public class BookingDao {
     }
 
 
+    /**
+     * Changes the status of the room in the record
+     *
+     * @param idBooked
+     *      Database record number
+     * @param bookedStatusId
+     *      New room status
+     */
 
-    public void editBookingRecords(long idBooked, long bookedStatusId) {
+    public void editBookingRecordsStatus(long idBooked, long bookedStatusId) {
         Connection con = null;
         try {
             con = DBManager.getInstance().getConnection();
@@ -113,6 +135,11 @@ public class BookingDao {
         }
     }
 
+
+    /**
+     * Deletes records with free rooms
+     */
+
     public void deleteFreeReservation(){
         Connection con = null;
         try {
@@ -126,6 +153,16 @@ public class BookingDao {
             DBManager.getInstance().commitAndClose(con);
         }
     }
+
+
+    /**
+     * Creates a booked room record for user
+     *
+     * @param roomId
+     *      Database room's number
+     * @param userId
+     *      Database user's number
+     */
 
     public void createBookedRoom(long roomId, long userId){
         Connection con = null;
@@ -150,7 +187,18 @@ public class BookingDao {
         }
     }
 
-    public BookingRooms findBookingRecordsByUserIdAndRoomId(long userId, long roomId){
+
+    /**
+     * Finds a room record
+     *
+     * @param userId
+     *      Database user's number
+     * @param roomId
+     *      Database room's number
+     * @return
+     *      Entity of room
+     */
+    public BookingRooms findBookingRecordByUserIdAndRoomId(long userId, long roomId){
         BookingRooms bookingRecordst = new BookingRooms();
         Connection con = null;
         try {
@@ -174,6 +222,13 @@ public class BookingDao {
         return bookingRecordst;
     }
 
+
+    /**
+     * Changes the payment record to true for the record
+     *
+     * @param notificationId
+     *      Notification number in the database
+     */
     public void makePaidByNotificationId(long notificationId){
         Connection con = null;
         try {
@@ -190,6 +245,10 @@ public class BookingDao {
         }
     }
 
+
+    /**
+     * Extracts a booking record from the result set row.
+     */
     private static class BookingMapper implements EntityMapper<BookingRooms> {
 
         @Override

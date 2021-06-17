@@ -4,6 +4,14 @@ import java.nio.charset.StandardCharsets;
 import java.util.ResourceBundle;
 import java.util.Locale;
 
+/**
+ *  The entity that users will receive
+ *  when reviewing their applications
+ *
+ * @author V. Etenko
+ *
+ */
+
 public class Notification extends Entity {
 
     long userId;
@@ -34,6 +42,15 @@ public class Notification extends Entity {
         this.bookedId = bookedId;
     }
 
+
+    /**
+     * @param user
+     *          the entity of the user who will receive the message
+     * @param roomNumber
+     *          the number of the room the user wanted to book
+     * @return Application approval message
+     */
+
     public static String getMessageVerified(User user, int roomNumber) {
         ResourceBundle rb = ResourceBundle.getBundle("notification",
                 new Locale(user.getLocale()));
@@ -45,8 +62,16 @@ public class Notification extends Entity {
         sb.append(" ").append(roomNumber).append(" ");
         sb.append(new String(rb.getString("notification.verified.maintext.verified").getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8));
         return sb.toString();
-
     }
+
+
+    /**
+     * @param user
+     *          the entity of the user who will receive the message
+     * @param roomNumber
+     *          the number of the room the user wanted to book
+     * @return Application rejection message
+     */
 
     public static String getMessageCanceled(User user, int roomNumber) {
         ResourceBundle rb = ResourceBundle.getBundle("notification",
@@ -69,6 +94,10 @@ public class Notification extends Entity {
                 ", text='" + text + '\'' +
                 ']';
     }
+
+    /**
+     * Builder for this class
+     */
 
     public static class Builder implements BuilderInterface{
 

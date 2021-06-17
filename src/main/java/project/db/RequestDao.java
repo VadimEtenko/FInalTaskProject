@@ -59,8 +59,8 @@ public class RequestDao {
     public static final String SQL__DELETE_REQUESTED_BY_ID =
             "DELETE FROM requested_rooms WHERE id = ?";
 
+
     /**
-     * Returns all applications for booking rooms.
      *
      * @return List of applications for booking rooms entities.
      */
@@ -87,7 +87,19 @@ public class RequestDao {
         return requestedForBookingList;
     }
 
-    public List<RequestedForBooking> findRequestedRoomsByUserId(long id) {
+
+    /**
+     * Finds all reservation requests from the user
+     *
+     * @param userId
+     *      user id in database
+     * @return
+     *      List of request for booking entities
+     *      (not created by wishes)
+     *
+     */
+
+    public List<RequestedForBooking> findRequestedRoomsByUserId(long userId) {
         List<RequestedForBooking> requestedForBookingList = new ArrayList<>();
         PreparedStatement prStmt;
         ResultSet rs;
@@ -96,7 +108,7 @@ public class RequestDao {
             con = DBManager.getInstance().getConnection();
             RequestedRoomsMapper mapper = new RequestedRoomsMapper();
             prStmt = con.prepareStatement(SQL__FIND_REQUESTED_ROOMS_BY_USER_ID);
-            prStmt.setLong(1, id);
+            prStmt.setLong(1, userId);
             rs = prStmt.executeQuery();
             while (rs.next())
                 requestedForBookingList.add(mapper.mapRow(rs));
@@ -111,7 +123,17 @@ public class RequestDao {
         return requestedForBookingList;
     }
 
-    public boolean isCreatedRequestRoomByUserIdAndRoomNumber(long id, long roomNumber) {
+
+    /**
+     *
+     * @param userId
+     *      user id in database
+     * @param roomNumber
+     *      number of room
+     * @return
+     */
+
+    public boolean isCreatedRequestRoomByUserIdAndRoomNumber(long userId, long roomNumber) {
         PreparedStatement prStmt;
         ResultSet rs;
         Connection con = null;
@@ -120,7 +142,7 @@ public class RequestDao {
             con = DBManager.getInstance().getConnection();
             prStmt = con.prepareStatement(SQL__FIND_REQUESTED_ROOMS_BY_USER_ID_AND_ROOM_NUMBER);
             int indexValue = 1;
-            prStmt.setLong(indexValue++, id);
+            prStmt.setLong(indexValue++, userId);
             prStmt.setLong(indexValue, roomNumber);
             rs = prStmt.executeQuery();
             if (rs.next())
@@ -136,7 +158,16 @@ public class RequestDao {
         return isCreated;
     }
 
-    public RequestedForBooking findRequestedRoomById(long id) {
+
+    /**
+     *
+     * @param roomId
+     *      room id in database
+     * @return
+     *      request entity
+     */
+
+    public RequestedForBooking findRequestedRoomById(long roomId) {
         RequestedForBooking requestedForBooking = null;
         PreparedStatement prStmt;
         ResultSet rs;
@@ -145,7 +176,7 @@ public class RequestDao {
             con = DBManager.getInstance().getConnection();
             RequestedRoomsMapper mapper = new RequestedRoomsMapper();
             prStmt = con.prepareStatement(SQL__FIND_REQUESTED_ROOM_BY_ID);
-            prStmt.setLong(1, id);
+            prStmt.setLong(1, roomId);
             rs = prStmt.executeQuery();
             if (rs.next())
                 requestedForBooking = mapper.mapRow(rs);
@@ -159,6 +190,20 @@ public class RequestDao {
         }
         return requestedForBooking;
     }
+
+    /**
+     *
+     * Creates a new request record in the database
+     *
+     * @param user_id
+     *      user id in database
+     * @param room_id
+     *      room id in database
+     * @param time_in
+     *      The date on which the user is expected to check in
+     * @param time_out
+     *      The date on which the user is expected to leave.
+     */
 
     public void createRequest(long user_id, long room_id, LocalDate time_in, LocalDate time_out) {
         PreparedStatement prStmt;
@@ -181,6 +226,13 @@ public class RequestDao {
         }
     }
 
+
+    /**
+     * delete request record
+     *
+     * @param roomId
+     *      room id in database
+     */
     public void deleteRequestedByRoomNumber(int roomId) {
         PreparedStatement prStmt;
         Connection con = null;
@@ -198,6 +250,13 @@ public class RequestDao {
         }
     }
 
+
+    /**
+     * delete request record
+     *
+     * @param id
+     *      request id in database
+     */
     public void deleteRequestById(long id) {
         Connection con = null;
         PreparedStatement prStmt;

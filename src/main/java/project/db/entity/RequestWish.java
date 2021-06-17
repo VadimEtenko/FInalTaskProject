@@ -2,6 +2,15 @@ package project.db.entity;
 
 import java.time.LocalDate;
 
+/**
+ *
+ * An entity representing a user's request
+ * to find a room according to his wishes
+ *
+ * @author V. Etenko
+ *
+ */
+
 public class RequestWish extends Entity{
 
     private long class_id;

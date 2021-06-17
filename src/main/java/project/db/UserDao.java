@@ -12,8 +12,6 @@ import java.util.List;
 
 public class UserDao {
 
-    private static final Logger log = Logger.getLogger(UserDao.class);
-
     private static final String SQL__FIND_USER_BY_ID =
             "SELECT * FROM users WHERE id=?";
 
@@ -48,8 +46,10 @@ public class UserDao {
     /**
      * Returns a user with the given identifier.
      *
-     * @param id User identifier.
-     * @return User entity.
+     * @param id
+     *      User identifier.
+     * @return
+     *      User entity.
      */
     public User findUser(Long id) {
         User user = null;
@@ -80,8 +80,10 @@ public class UserDao {
     /**
      * Returns a user with the given login.
      *
-     * @param login User login.
-     * @return User entity.
+     * @param login
+     *      User login.
+     * @return
+     *      User entity.
      */
     public User findUserByLogin(String login) {
         User user = null;
@@ -109,6 +111,15 @@ public class UserDao {
         return user;
     }
 
+
+    /**
+     *
+     * @param email
+     *      String email of user
+     * @return
+     *      user entity registered on this email
+     */
+
     public User findUserByEmail(String email) {
         User user = null;
         PreparedStatement prStmt = null;
@@ -134,6 +145,14 @@ public class UserDao {
         }
         return user;
     }
+
+
+    /**
+     * @param requestedId
+     *      request record id in database
+     * @return
+     *      user entity
+     */
 
     public User findUsersByRequestedId(long requestedId){
         User user = null;
@@ -161,6 +180,15 @@ public class UserDao {
         return user;
     }
 
+
+    /**
+     *
+     * @param requestedRoomId
+     *      requested room record in database
+     * @return
+     *      list of user entities
+     */
+
     public List<User> findUsersByRequestedRoomId(long requestedRoomId){
         List<User> usersList = new ArrayList<>();
         PreparedStatement prStmt = null;
@@ -187,6 +215,13 @@ public class UserDao {
         return usersList;
     }
 
+    /**
+     * insert new user record in database
+     *
+     * @param user
+     *      user entities
+     *
+     */
 
     public void createNewUser(User user) {
         PreparedStatement prStmt;
@@ -217,7 +252,6 @@ public class UserDao {
      * Update user.
      *
      * @param user user to update.
-     * @throws SQLException
      */
     public void updateUser(User user) {
         Connection con = null;

@@ -20,12 +20,12 @@ public class DeleteRequestedCommand extends Command {
 
         // obtain booked-id and status-id from jsp
         for (String s : request.getParameterValues("bookedId")) {
-                long bookedId = Long.parseLong(s);
-                log.info("Request parameter: bookedId --> " + bookedId);
+            long bookedId = Long.parseLong(s);
+            log.info("Request parameter: bookedId --> " + bookedId);
 
-                new RequestDao().deleteRequestById(bookedId);
-                log.info("Record was deleted");
-            }
+            new RequestDao().deleteRequestById(bookedId);
+            log.info("Record was deleted");
+        }
 
         log.debug("Command finished");
         return Path.COMMAND__LIST_FREE_ROOMS;

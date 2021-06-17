@@ -17,7 +17,7 @@ public class OffersCountTag extends TagSupport {
         JspWriter out = pageContext.getOut();
         try {
             int count = new OffersDao().findOffersCountByUserId(user.getId());
-            if(count>0)
+            if (count > 0)
                 out.print(" (" + count + ")");
         } catch (IOException e) {
             e.printStackTrace();

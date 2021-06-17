@@ -5,6 +5,13 @@ import project.db.Fields;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 
+/**
+ *  Entity of records with reserved rooms
+ *
+ * @author V. Etenko
+ *
+ */
+
 public class BookingRooms extends Entity{
 
     private int roomNumber;
@@ -28,9 +35,14 @@ public class BookingRooms extends Entity{
         return status;
     }
 
-    public void setStatus(int status) {
 
-        switch (status){
+    /**
+     * @param statusId
+     *      status id according to the database
+     */
+
+    public void setStatus(int statusId) {
+        switch (statusId){
             case Fields.BOOKED_ROOM_STATUS__FREE:
                 this.status = "free";
                 break;
@@ -47,7 +59,7 @@ public class BookingRooms extends Entity{
                 this.status = "not available";
                 break;
         }
-        setStatusId(status);
+        setStatusId(statusId);
     }
 
     public void setStatus(String status){

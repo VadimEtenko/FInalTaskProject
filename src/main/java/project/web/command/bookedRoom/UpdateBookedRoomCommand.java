@@ -20,18 +20,17 @@ public class UpdateBookedRoomCommand extends Command {
 
         // obtain booked-id and status-id from jsp
         long bookedId = Long.parseLong(request.getParameter("booked-id"));
-        long statusId = Long.parseLong(request.getParameter("status-id"));
+        log.trace("Request parameter: bookedId --> " + bookedId);
 
-        log.info("Request parameter: bookedId --> " + bookedId);
-        log.info("Request parameter: statusId --> " + statusId);
+        long statusId = Long.parseLong(request.getParameter("status-id"));
+        log.trace("Request parameter: statusId --> " + statusId);
 
         BookingDao bookingDao = new BookingDao();
-        bookingDao.editBookingRecords(bookedId, statusId);
-        log.info("Record was updated");
+        bookingDao.editBookingRecordsStatus(bookedId, statusId);
+        log.trace("Booking record " + bookedId + " was updated to " + statusId + "status");
 
         bookingDao.deleteFreeReservation();
-        log.info("Free records was deleted");
-
+        log.trace("Free records was deleted");
 
         log.debug("Command finished, req");
         return Path.COMMAND__LIST_BOOKED_ROOMS;

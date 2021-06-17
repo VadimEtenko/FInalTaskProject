@@ -1,6 +1,7 @@
 package project.web.command;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -10,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 import project.web.Path;
+
 
 /**
  * Main servlet controller.
@@ -34,7 +36,7 @@ public class Controller extends HttpServlet {
      */
     private void startController(HttpServletRequest request,
                                  HttpServletResponse response) throws IOException, ServletException {
-        //try {
+        try {
 
             log.debug("Controller starts");
 
@@ -60,16 +62,13 @@ public class Controller extends HttpServlet {
                 RequestDispatcher dispatcher = request.getRequestDispatcher(forward);
                 dispatcher.forward(request, response);
             }
-            /*
-        }catch (Exception e){
+        } catch (Exception e) {
             String errorMessage = "Oops... Smth get wrong";
             request.setAttribute("errorMessage", errorMessage);
             log.error("errorMessage --> " + Arrays.toString(e.getStackTrace()) + " ");
             RequestDispatcher dispatcher = request.getRequestDispatcher(Path.PAGE__ERROR_PAGE);
             dispatcher.forward(request, response);
         }
-
-             */
 
 
     }

@@ -11,8 +11,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 public class VerifyRequestedCommand extends Command {
 
@@ -21,19 +19,18 @@ public class VerifyRequestedCommand extends Command {
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         log.debug("Command starts");
+
         RequestDao requestDao = new RequestDao();
         BookingDao bookingDao = new BookingDao();
         NotificationDao notificationDao = new NotificationDao();
         UserDao userDao = new UserDao();
 
-        for(String s : request.getParameterValues("requestedId")) {
+        for (String s : request.getParameterValues("requestedId")) {
             log.info("requestedId --> " + s);
-
 
             // get requested room number from jsp by id
             RequestedForBooking requestedForBooking =
                     requestDao.findRequestedRoomById(Long.parseLong(s));
-
             log.info("Requested witch need to be verified --> " + requestedForBooking);
 
             // create new booked recording
@@ -41,14 +38,17 @@ public class VerifyRequestedCommand extends Command {
                     requestedForBooking.getUserId());
             log.info("New booked room was created");
 
-
             User verifiedUser = userDao.findUsersByRequestedId(requestedForBooking.getId());
+            log.info("Found user who create a request: " + verifiedUser);
 
-            for (User notVerifiedUsers : userDao.findUsersByRequestedRoomId(requestedForBooking.getRoomId())){
-                if(!notVerifiedUsers.getId().equals(verifiedUser.getId())) {
+            //Search for all users, who want to booked this room
+            for (User notVerifiedUsers : userDao.findUsersByRequestedRoomId(requestedForBooking.getRoomId())) {
+                if (!notVerifiedUsers.getId().equals(verifiedUser.getId())) {
                     log.trace("Found id DB: user witch requested was canceled:" + notVerifiedUsers);
+
+                    //crete notification by user id, booked record wich was canceled and text
                     notificationDao.createNotification(notVerifiedUsers.getId(),
-                            bookingDao.findBookingRecordsByUserIdAndRoomId(
+                            bookingDao.findBookingRecordByUserIdAndRoomId(
                                     notVerifiedUsers.getId(),
                                     requestedForBooking.getRoomId()).getId(),
                             Notification.getMessageCanceled(notVerifiedUsers,
@@ -62,7 +62,7 @@ public class VerifyRequestedCommand extends Command {
 
             log.trace("Found id DB: user witch requested was verified:" + verifiedUser);
             notificationDao.createNotification(verifiedUser.getId(),
-                    bookingDao.findBookingRecordsByUserIdAndRoomId(
+                    bookingDao.findBookingRecordByUserIdAndRoomId(
                             verifiedUser.getId(),
                             requestedForBooking.getRoomId()).getId(),
                     Notification.getMessageVerified(verifiedUser,
@@ -70,11 +70,10 @@ public class VerifyRequestedCommand extends Command {
 
             // delete requested recording from table
             requestDao.deleteRequestedByRoomNumber(requestedForBooking.getRoomNumber());
-
             log.info("Old requested with roomId " + s + " was deleted");
         }
 
         log.debug("Command finished");
-        return new ListRequestedCommand().execute(request,response);
+        return new ListRequestedCommand().execute(request, response);
     }
 }

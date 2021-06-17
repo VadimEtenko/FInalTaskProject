@@ -26,17 +26,21 @@ public class CreateRequestCommand extends Command {
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException {
-
         log.debug("Command starts");
+
         RequestDao requestDao = new RequestDao();
         RoomDao roomDao = new RoomDao();
-        HttpSession session = request.getSession();
-        String forward = Path.PAGE__FIND_FREE_ROOM_LIST;
 
-        long userId = ((User) session.getAttribute("user")).getId();
+
+        String forward = Path.PAGE__FIND_FREE_ROOM_LIST;
+        log.info("Set first forward:" + Path.PAGE__FIND_FREE_ROOM_LIST);
+
+        long userId = ((User) request.getSession().getAttribute("user")).getId();
+        log.trace("Get session attribute's parameter --> " + userId);
         log.info("Command was called by user id --> " + userId);
 
-        if(request.getParameterValues("roomId") == null){
+        //check is user
+        if (request.getParameterValues("roomId") == null) {
             String errorMessage = "You must choose at list one room";
             request.setAttribute("errorMessage", errorMessage);
             log.error("errorMessage --> " + errorMessage);
@@ -53,6 +57,7 @@ public class CreateRequestCommand extends Command {
 
             LocalDate time_in = null;
             LocalDate time_out = null;
+
             try {
                 time_in = new Date(BookingRooms.sdf.parse(request.getParameter("time_in")).getTime()).toLocalDate();
                 time_out = new Date(BookingRooms.sdf.parse(request.getParameter("time_out")).getTime()).toLocalDate();
@@ -69,7 +74,7 @@ public class CreateRequestCommand extends Command {
                 return Path.PAGE__ERROR_PAGE;
             }
 
-
+            //check is user already creat request for this room
             if (requestDao.isCreatedRequestRoomByUserIdAndRoomNumber(userId, roomId)) {
                 requestDao.createRequest(userId, roomId, time_in, time_out);
                 log.info("Request for room " + roomNumber + " created");
@@ -81,7 +86,6 @@ public class CreateRequestCommand extends Command {
                 forward = Path.PAGE__ERROR_PAGE;
             }
         }
-
         log.debug("Command finished");
         return forward;
     }

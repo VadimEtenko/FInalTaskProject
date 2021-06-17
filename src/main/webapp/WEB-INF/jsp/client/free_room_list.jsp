@@ -10,7 +10,8 @@
     <tr>
         <td class="content">
             <%-- CONTENT --%>
-            <form  action="controller" method="post">
+            <%-- Filter switcher --%>
+            <form action="controller" method="post">
                 <input type="hidden" name="command" value="list-free-rooms"/>
                 <input type="hidden" name="type-filter" value="cost">
                 <input type="hidden" name="time_in" value="${time_in}">
@@ -18,7 +19,7 @@
                 <input type="submit" value='Cost'/>
             </form>
 
-            <form  action="controller" method="post">
+            <form action="controller" method="post">
                 <input type="hidden" name="command" value="list-free-rooms"/>
                 <input type="hidden" name="type-filter" value="beds">
                 <input type="hidden" name="time_in" value="${time_in}">
@@ -26,13 +27,15 @@
                 <input type="submit" value='beds'/>
             </form>
 
-            <form  action="controller" method="post">
+            <form action="controller" method="post">
                 <input type="hidden" name="command" value="list-free-rooms"/>
                 <input type="hidden" name="type-filter" value="class">
                 <input type="hidden" name="time_in" value="${time_in}">
                 <input type="hidden" name="time_out" value="${time_out}">
                 <input type="submit" value='class'/>
             </form>
+            <%-- /Filter switcher --%>
+
 
             <form id="make_order" action="controller" method="post">
                 <input type="hidden" name="command" value="create-request"/>

@@ -29,6 +29,7 @@ public class LogoutCommand extends Command {
 		HttpSession session = request.getSession(false);
 		if (session != null)
 			session.invalidate();
+		log.trace("Session was destroyed");
 
 		log.debug("Command finished");
 		return Path.PAGE__LOGIN;

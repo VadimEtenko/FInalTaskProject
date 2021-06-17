@@ -15,9 +15,6 @@ public class NotificationDao {
     public static final String SQL__FIND_NOTIFICATIONS_BY_USER_ID =
             "SELECT * FROM users_notifications WHERE user_id = ?";
 
-    public static final String SQL__FIND_NOTIFICATIONS_BY_ID =
-            "SELECT * FROM users_notifications WHERE id = ?";
-
     private static final String SQL__CREATE_NOTIFICATION =
             "INSERT INTO users_notifications(user_id, booked_id, text) " +
                     "VALUE (?,?,?)";
@@ -25,6 +22,12 @@ public class NotificationDao {
     public static final String SQL__DELETE_NOTIFICATION_BY_ID =
             "DELETE FROM users_notifications WHERE id = ?";
 
+
+    /**
+     * @param userId
+     *      user id in the database
+     * @return List of user's notifications
+     */
     public List<Notification> findNotificationsByUserId(Long userId){
         List<Notification> notificationList = new ArrayList<>();
         PreparedStatement prStmt = null;
@@ -49,6 +52,17 @@ public class NotificationDao {
         return notificationList;
     }
 
+
+    /**
+     * Creates a message for the user in the database
+     *
+     * @param userId
+     *      user's id in the database
+     * @param bookedId
+     *      booking record id in the database
+     * @param text
+     *      The text that will be in the notification
+     */
     public void createNotification(long userId, long bookedId, String text){
         PreparedStatement prStmt = null;
         Connection con = null;
@@ -69,7 +83,16 @@ public class NotificationDao {
         }
     }
 
-    public int findNotificationsCountByUserId(long id){
+
+    /**
+     *
+     * @param userId
+     *      user's id in the database
+     * @return
+     *      number of notifications found
+     */
+
+    public int findNotificationsCountByUserId(long userId){
         int count = 0;
         PreparedStatement prStmt = null;
         ResultSet rs = null;
@@ -78,7 +101,7 @@ public class NotificationDao {
             con = DBManager.getInstance().getConnection();
             NotificationRoomsMapper mapper = new NotificationRoomsMapper();
             prStmt = con.prepareStatement(SQL__FIND_NOTIFICATIONS_BY_USER_ID);
-            prStmt.setLong(1, id);
+            prStmt.setLong(1, userId);
             rs = prStmt.executeQuery();
             while(rs.next())
                 count++;
@@ -93,29 +116,11 @@ public class NotificationDao {
         return count;
     }
 
-    public Notification findNotificationById(long id){
-        Notification notification = null;
-        PreparedStatement prStmt = null;
-        ResultSet rs = null;
-        Connection con = null;
-        try {
-            con = DBManager.getInstance().getConnection();
-            NotificationRoomsMapper mapper = new NotificationRoomsMapper();
-            prStmt = con.prepareStatement(SQL__FIND_NOTIFICATIONS_BY_ID);
-            prStmt.setLong(1, id);
-            rs = prStmt.executeQuery();
-            if (rs.next())
-                notification = mapper.mapRow(rs);
-            rs.close();
-            prStmt.close();
-        } catch (SQLException ex) {
-            DBManager.getInstance().rollback(con);
-            ex.printStackTrace();
-        } finally {
-            DBManager.getInstance().commitAndClose(con);
-        }
-        return notification;
-    }
+
+    /**
+     * @param id
+     *      notification's number in database
+     */
 
     public void deleteNotificationById(long id){
         PreparedStatement prStmt = null;

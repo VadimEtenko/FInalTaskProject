@@ -17,7 +17,7 @@ public class RequestCountTag extends TagSupport {
         JspWriter out = pageContext.getOut();
         try {
             int count = new RequestDao().findAllRequestedRooms().size();
-            if(count>0)
+            if (count > 0)
                 out.print(" (" + count + ")");
         } catch (IOException e) {
             e.printStackTrace();

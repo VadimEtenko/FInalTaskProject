@@ -18,6 +18,11 @@ public class LocalFilter implements Filter {
         defaultLocale = "en";
     }
 
+    @Override
+    public void destroy() {
+        log.debug("LocalFilter destroyed!");
+    }
+
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain next)
             throws IOException, ServletException {
         log.debug("Local filter starts");

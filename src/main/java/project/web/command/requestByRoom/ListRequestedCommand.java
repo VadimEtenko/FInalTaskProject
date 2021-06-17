@@ -27,8 +27,8 @@ public class ListRequestedCommand extends Command {
                 new RequestDao().findAllRequestedRooms();
         log.trace("Found in DB: requested rooms List --> " + requestedRoomsList);
 
-        // sort menu by number (lambda)
         requestedRoomsList.sort((a1, a2) -> (int) (a1.getId() - a2.getId()));
+        log.info("List was sorted by requested record id");
 
         // put free rooms list to the request
         request.setAttribute("requestedRoomsList", requestedRoomsList);

@@ -84,6 +84,15 @@ public class RoomDao {
         return allBookedRoomsList;
     }
 
+
+    /**
+     *
+     * @param roomId
+     *      room id in database
+     * @return
+     *      room number in hotel
+     */
+
     public int findRoomNumberById(long roomId) {
         Room room = new Room();
         PreparedStatement prStmt = null;
@@ -107,6 +116,15 @@ public class RoomDao {
         }
         return room.getNumber();
     }
+
+
+    /**
+     *
+     * @param roomId
+     *      room id in database
+     * @return
+     *      room entity
+     */
 
     public Room findRoomById(long roomId) {
         Room room = null;
@@ -169,6 +187,16 @@ public class RoomDao {
         return RoomsList;
     }
 
+
+    /**
+     * @param classId
+     *      class of rooms entity id in database
+     * @param numberOfBeds
+     *      count of beds
+     * @return
+     *      list of free rooms entities is suitable for enough
+     */
+
     public List<Room> findAllFreeRoomsByCriteria(Long classId, int numberOfBeds) {
         List<Room> requestWish = new ArrayList<>();
         PreparedStatement stmt = null;
@@ -195,7 +223,17 @@ public class RoomDao {
         return requestWish;
     }
 
-    public List<Room> getOfferedRoomListByUserId(long user_id) {
+
+    /**
+     * Find a list of rooms, offered to the user according to his wishes
+     *
+     * @param userId
+     *      user id in database
+     * @return
+     *      list of rooms entities
+     */
+
+    public List<Room> getOfferedRoomListByUserId(long userId) {
         List<Room> RoomsList = new ArrayList<>();
         PreparedStatement prStmt = null;
         ResultSet rs = null;
@@ -204,7 +242,7 @@ public class RoomDao {
             con = DBManager.getInstance().getConnection();
             RoomsMapper mapper = new RoomsMapper();
             prStmt = con.prepareStatement(SQL__FIND_ALL_OFFERED_ROOMS_BY_USER_ID);
-            prStmt.setLong(1, user_id);
+            prStmt.setLong(1, userId);
             rs = prStmt.executeQuery();
             while (rs.next())
                 RoomsList.add(mapper.mapRow(rs));

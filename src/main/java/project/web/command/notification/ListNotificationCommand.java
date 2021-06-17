@@ -22,9 +22,10 @@ public class ListNotificationCommand extends Command {
     @Override
     public String execute(HttpServletRequest request,
                           HttpServletResponse response) throws IOException, ServletException {
-
         log.debug("Command starts");
+
         User user = (User) request.getSession().getAttribute("user");
+        log.trace("Get session attribute user: " + user);
 
         // get user's notification list
         List<Notification> notificationList =
@@ -33,6 +34,7 @@ public class ListNotificationCommand extends Command {
 
         // sort notifications by number (lambda)
         notificationList.sort((r1, r2) -> (int) (r1.getId() - r2.getId()));
+        log.trace("List was sorted by notifications id");
 
         // put notification list to the request
         request.setAttribute("notificationList", notificationList);

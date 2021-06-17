@@ -14,9 +14,6 @@ public class LoginFilter implements Filter {
 
     private static final Logger log = Logger.getLogger(LoginFilter.class);
 
-    public LoginFilter() {
-    }
-
     @Override
     public void init(FilterConfig fConfig) {
         log.debug("LoginFilter initialized!");
@@ -35,8 +32,8 @@ public class LoginFilter implements Filter {
         HttpServletRequest req = (HttpServletRequest) request;
         HttpSession session = req.getSession();
 
-        log.debug("Try to get User parametr from session");
-        User user = (User)session.getAttribute("user");
+        log.debug("Try to get User parameter from session");
+        User user = (User) session.getAttribute("user");
 
         // Check, is user log in, is he try to log in, create account or change language
         if (user == null &&

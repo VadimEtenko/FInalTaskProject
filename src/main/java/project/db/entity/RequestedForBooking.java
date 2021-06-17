@@ -1,8 +1,15 @@
 package project.db.entity;
 
-import project.db.Fields;
-
 import java.time.LocalDate;
+
+
+/**
+ * The entity of the user's
+ * request to reserve a room
+ *
+ * @author V.Etenko
+ *
+ */
 
 public class RequestedForBooking extends Entity {
     

@@ -1,5 +1,12 @@
 package project.db.entity;
 
+/**
+ * Entity room from hotel database
+ *
+ * @author V. Etenko
+ *
+ */
+
 public class Room extends Entity {
 
     private int number;

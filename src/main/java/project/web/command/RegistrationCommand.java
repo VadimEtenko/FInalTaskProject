@@ -52,6 +52,7 @@ public class RegistrationCommand extends Command {
 
         if (!password.equals(secondPassword)) {
             ResourceBundle rb = ResourceBundle.getBundle("notification", new Locale(local));
+            log.info("First and second password aren't equals");
 
             String errorPassword = new String(rb.getString("registration.error.password").
                     getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
@@ -61,9 +62,15 @@ public class RegistrationCommand extends Command {
             return Path.PAGE__REGISTRATION;
         }
 
-
-        User user = new User(name, surname, login, password, email, 0, local);
-
+        User user = new User.Builder()
+                .withName(name)
+                .withSurname(surname)
+                .withLogin(login)
+                .withPassword(password)
+                .withEmail(email)
+                .withRoleId(0)
+                .withLocale(local)
+                .build();
         request.removeAttribute("errorPassword");
 
         if (userDao.findUserByLogin(user.getLogin()) != null) {

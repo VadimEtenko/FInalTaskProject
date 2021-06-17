@@ -12,8 +12,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.Date;
 import java.text.ParseException;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
 
@@ -24,13 +22,15 @@ public class ListFreeRoomsCommand extends Command {
     @Override
     public String execute(HttpServletRequest request,
                           HttpServletResponse response) throws IOException, ServletException {
-
         log.debug("Command starts");
+
         Date time_in = null;
         Date time_out = null;
         try {
             time_in = new Date(BookingRooms.sdf.parse(request.getParameter("time_in")).getTime());
+            log.trace("Get request parameter time_in " + time_in);
             time_out = new Date(BookingRooms.sdf.parse(request.getParameter("time_out")).getTime());
+            log.trace("Get request parameter time_out " + time_out);
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -40,12 +40,13 @@ public class ListFreeRoomsCommand extends Command {
         List<Room> freeRoomsList = new RoomDao().findFreeRooms(time_in, time_out);
         log.trace("Found in DB: freeRoomsList --> " + freeRoomsList);
 
-        // sort menu by number (lambda)
+
         String filterType;
-        if(request.getParameter("type-filter") == null)
+        if (request.getParameter("type-filter") == null)
             filterType = "cost";
         else
             filterType = request.getParameter("type-filter");
+        log.trace("Get request parameter type-filter --> " + filterType);
 
         switch (filterType) {
             case "cost":
@@ -60,7 +61,7 @@ public class ListFreeRoomsCommand extends Command {
             default:
                 freeRoomsList.sort((r1, r2) -> (int) (r1.getId() - r2.getId()));
         }
-        System.out.println("\n After sorting \n" + freeRoomsList);
+        log.trace("List was sorted by got type-filter");
 
         // put free rooms list to the request
         request.setAttribute("freeRoomsList", freeRoomsList);

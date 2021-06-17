@@ -27,7 +27,7 @@ public class CommandContainer {
 		commands.put("logout", new LogoutCommand());
 		commands.put("registration", new RegistrationCommand());
 		commands.put("change-local", new LocalChangeCommand());
-		//commands.put("noCommand", new NoCommand());
+		commands.put("noCommand", new NoCommand());
 
 		// manager's commands
 		commands.put("find-free-rooms", new FindFreeRoomsCommand());

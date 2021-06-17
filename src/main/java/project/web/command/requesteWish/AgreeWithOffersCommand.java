@@ -2,8 +2,6 @@ package project.web.command.requesteWish;
 
 import project.db.*;
 import project.db.entity.Notification;
-import project.db.entity.RequestWish;
-import project.db.entity.RequestedForBooking;
 import project.db.entity.User;
 import project.web.Path;
 import project.web.command.Command;
@@ -32,7 +30,7 @@ public class AgreeWithOffersCommand extends Command {
         bookingDao.createBookedRoom(userId, roomId);
 
         notificationDao.createNotification(userId,
-                bookingDao.findBookingRecordsByUserIdAndRoomId
+                bookingDao.findBookingRecordByUserIdAndRoomId
                         (user.getId(),roomId).getId(),
                 Notification.getMessageVerified(user,
                         new RoomDao().findRoomNumberById(roomId)));

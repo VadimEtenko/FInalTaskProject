@@ -1,20 +1,16 @@
 package project.db.entity;
 
+/**
+ *  The enum entity of room classes
+ *
+ * @author V. Etenko
+ *
+ */
 
 public enum ClassOfRooms{
     JuniorSuite,
     Suite,
     DeLuxe,
     Duplex;
-
-    private String classType;
-
-    public String getClassType() {
-        return classType;
-    }
-
-    public void setClassType(String classType) {
-        this.classType = classType;
-    }
 
 }

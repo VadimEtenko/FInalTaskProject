@@ -20,21 +20,19 @@ public class ListUserRequestedCommand extends Command {
     @Override
     public String execute(HttpServletRequest request,
                           HttpServletResponse response) throws IOException, ServletException {
-
         log.debug("Command starts");
-        RequestDao requestDao = new RequestDao();
         HttpSession session = request.getSession();
 
-        log.debug("Get user id from session");
-        long userId = ((User)session.getAttribute("user")).getId();
+        long userId = ((User) session.getAttribute("user")).getId();
+        log.debug("Got user id from session");
 
         List<RequestedForBooking> userRequestedRoomsList =
                 new RequestDao().findRequestedRoomsByUserId(userId);
-
         log.trace("Found in DB: user's requested rooms List --> " + userRequestedRoomsList);
 
-        // sort menu by number (lambda)
+
         userRequestedRoomsList.sort((a1, a2) -> (int) (a1.getRoomNumber() - a2.getRoomNumber()));
+        log.info("List was sorted by room numbers");
 
         // put free rooms list to the request
         request.setAttribute("userRequestedRoomsList", userRequestedRoomsList);

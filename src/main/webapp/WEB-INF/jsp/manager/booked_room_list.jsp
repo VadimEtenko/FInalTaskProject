@@ -33,7 +33,8 @@
                             <td><c:out value="${k}"/></td>
                             <td>${booking.roomNumber}</td>
                             <td>${booking.userLogin}</td>
-                            <td><fmt:message key="booked_room_list_jsp.select.room.status.${booking.status}" bundle="${rb}"/></td>
+                            <td><fmt:message key="booked_room_list_jsp.select.room.status.${booking.status}"
+                                             bundle="${rb}"/></td>
                             <td>
                                 <a href="controller?command=update-booked-list&booked-id=${booking.id}">
                                     <fmt:message key="booked_room_list_jsp.button.edit" bundle="${rb}"/>

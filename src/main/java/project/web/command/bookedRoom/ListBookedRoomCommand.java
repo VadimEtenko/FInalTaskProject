@@ -20,13 +20,12 @@ public class ListBookedRoomCommand extends Command {
     public String execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         log.debug("Command starts");
 
-        List<BookingRooms> bookedRoomsList;
-
         BookingDao bookingDao = new BookingDao();
-        bookedRoomsList = bookingDao.findAllBookingRecords();
+        List<BookingRooms> bookedRoomsList = bookingDao.findAllBookingRecords();
         log.trace("Found in DB: bookedRoomsList --> " + bookedRoomsList);
 
         bookedRoomsList.sort((r1, r2) -> (int) (r1.getRoomNumber() - r2.getRoomNumber()));
+        log.info("Sorted List by rrom number");
 
         request.setAttribute("bookedRoomsList", bookedRoomsList);
         log.debug("Command finished");

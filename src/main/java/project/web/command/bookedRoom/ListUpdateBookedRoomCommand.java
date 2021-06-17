@@ -18,15 +18,16 @@ public class ListUpdateBookedRoomCommand extends Command {
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         log.debug("Command starts");
-
         BookingDao bookingDao = new BookingDao();
+
         BookingRooms bookedRooms = bookingDao.findBookingRecordsById(
                 Long.parseLong(request.getParameter("booked-id")));
         log.trace("Found in DB: bookedRooms --> " + bookedRooms);
 
         request.setAttribute("bookedRooms", bookedRooms);
+        log.trace("Set request attribute bookedRooms: " + bookedRooms);
 
         log.debug("Command finished");
-        return Path.PAGE__UPDATE_BOOKED_ROOM ;
+        return Path.PAGE__UPDATE_BOOKED_ROOM;
     }
 }

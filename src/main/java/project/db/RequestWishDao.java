@@ -38,17 +38,32 @@ public class RequestWishDao {
     private static final String SQL__DELETE_REQUEST_BY_USER_ID =
             "DELETE FROM request_wish WHERE user_id = ?";
 
-    public void createRequestWish(long user_id, long class_id,
-                                  int number_of_beds, LocalDate time_in, LocalDate time_out) {
+
+    /**
+     * Create request by wishes record on database
+     *
+     * @param userId
+     *      user id in database
+     * @param classId
+     *      class of rooms id in database
+     * @param numberOfBeds
+     *      wished number of beds
+     * @param time_in
+     *      User's desired check-in time
+     * @param time_out
+     *      Desired check-out time for the user
+     */
+    public void createRequestWish(long userId, long classId,
+                                  int numberOfBeds, LocalDate time_in, LocalDate time_out) {
         PreparedStatement prStmt = null;
         Connection con = null;
         try {
             con = DBManager.getInstance().getConnection();
             prStmt = con.prepareStatement(SQL__CREATE_REQUEST);
             int indexValue = 1;
-            prStmt.setLong(indexValue++, user_id);
-            prStmt.setLong(indexValue++, class_id);
-            prStmt.setInt(indexValue++, number_of_beds);
+            prStmt.setLong(indexValue++, userId);
+            prStmt.setLong(indexValue++, classId);
+            prStmt.setInt(indexValue++, numberOfBeds);
             prStmt.setDate(indexValue++, Date.valueOf(time_in));
             prStmt.setDate(indexValue, Date.valueOf(time_out));
             prStmt.executeUpdate();
@@ -60,6 +75,12 @@ public class RequestWishDao {
             DBManager.getInstance().commitAndClose(con);
         }
     }
+
+
+    /**
+     * @return
+     *      List of all entities of request by wishes
+     */
 
     public List<RequestWish> findAllRequestWish() {
         List<RequestWish> requestWish = new ArrayList<>();
@@ -84,13 +105,21 @@ public class RequestWishDao {
         return requestWish;
     }
 
-    public void deleteRequestWishByIdUserId(long user_id) {
+
+    /**
+     * Delete request by wishes record in database
+     *
+     * @param userId
+     *      user id in database
+     */
+
+    public void deleteRequestWishByIdUserId(long userId) {
         PreparedStatement prStmt = null;
         Connection con = null;
         try {
             con = DBManager.getInstance().getConnection();
             prStmt = con.prepareStatement(SQL__DELETE_REQUEST_BY_USER_ID);
-            prStmt.setLong(1, user_id);
+            prStmt.setLong(1, userId);
             prStmt.executeUpdate();
             prStmt.close();
         } catch (SQLException ex) {
@@ -101,6 +130,14 @@ public class RequestWishDao {
         }
     }
 
+
+    /**
+     *
+     * @param id
+     *      request by wishes id record in database
+     * @return
+     *      request by wishes entity
+     */
 
     public RequestWish findRequestWishById(Long id) {
         RequestWish requestWish = null;
@@ -126,7 +163,16 @@ public class RequestWishDao {
         return requestWish;
     }
 
-    public List<RequestWish> findRequestWishByUserId(Long iser_id) {
+
+    /**
+     *
+     * @param userId
+     *      user id in database
+     * @return
+     *      list of request by wishes entities
+     */
+
+    public List<RequestWish> findRequestWishByUserId(Long userId) {
         List<RequestWish> requestWishList = new ArrayList<>();
         PreparedStatement prStmt = null;
         ResultSet rs = null;
@@ -135,7 +181,7 @@ public class RequestWishDao {
             con = DBManager.getInstance().getConnection();
             RequestedWishMapper mapper = new RequestedWishMapper();
             prStmt = con.prepareStatement(SQL__FIND_REQUEST_BY_USER_ID);
-            prStmt.setLong(1, iser_id);
+            prStmt.setLong(1, userId);
             rs = prStmt.executeQuery();
             while (rs.next())
                 requestWishList.add(mapper.mapRow(rs));

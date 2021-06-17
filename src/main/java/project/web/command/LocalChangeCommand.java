@@ -23,9 +23,10 @@ public class LocalChangeCommand extends Command {
         UserDao userDao = new UserDao();
 
         User newUser = (User) session.getAttribute("user");
-        log.trace("Get Attribute user " + newUser);
+        log.trace("Get attribute user " + newUser);
 
         String newLocal = request.getParameter("newLocal");
+        log.trace("Get attribute newLocal " + newLocal);
 
         if (newUser != null) {
             newUser.setLocale(newLocal);
@@ -44,6 +45,7 @@ public class LocalChangeCommand extends Command {
 
             Role UserRole = Role.getRole(newUser);
 
+            log.debug("Command finish");
             if (UserRole == Role.CLIENT)
                 return Path.COMMAND__LIST_FREE_ROOMS;
 
@@ -52,6 +54,7 @@ public class LocalChangeCommand extends Command {
         }
 
         session.setAttribute("defaultLocale", newLocal);
+        log.info("Attribute locale wasn't find, set new local: " + newLocal);
         log.trace("Set new session attribute defaultLocale" + newLocal);
         log.debug("Command finished");
         return Path.PAGE__LOGIN;

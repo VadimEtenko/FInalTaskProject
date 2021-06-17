@@ -15,7 +15,8 @@
 
             <form id="make_order" action="controller" method="post">
                 <input type="hidden" name="command" value="create-plan-request"/>
-                <input type="submit" value='<fmt:message key="find_free_room_list_jsp.button.send.apply" bundle="${rb}"/>'/>
+                <input type="submit"
+                       value='<fmt:message key="find_free_room_list_jsp.button.send.apply" bundle="${rb}"/>'/>
 
                 <table id="free_rooms_list_table">
                     <thead>

@@ -5,15 +5,20 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 
 <body>
-<table id="main-container">
 
+<%--  Form with 2 calendars for finding free rooms by date --%>
+
+<table id="main-container">
     <tr>
         <td class="content">
             <%-- CONTENT --%>
             <form id="make_order" action="controller" method="post">
                 <input type="hidden" name="command" value="list-free-rooms"/>
-                <input type="submit" value='<fmt:message key="find_free_room_list_jsp.label.send.find" bundle="${rb}"/>'/>
+                <input type="submit"
+                       value='<fmt:message key="find_free_room_list_jsp.label.send.find" bundle="${rb}"/>'/>
+
                 <br>
+
                 <table id="date_table">
                     <thead>
                     <tr>
@@ -27,6 +32,7 @@
                     </tr>
                 </table>
             </form>
+            <%-- /CONTENT --%>
         </td>
     </tr>
 </table>

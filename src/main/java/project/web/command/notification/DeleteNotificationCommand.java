@@ -33,8 +33,6 @@ public class DeleteNotificationCommand extends Command {
         notificationDao.deleteNotificationById(notificationId);
         log.trace("Notification was deleted");
 
-
-
         log.debug("Command finished");
         return Path.COMMAND__USER_NOTIFICATIONS_LIST;
     }
