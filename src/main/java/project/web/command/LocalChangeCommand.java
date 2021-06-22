@@ -20,7 +20,6 @@ public class LocalChangeCommand extends Command {
     public String execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         log.debug("Command starts");
         HttpSession session = request.getSession();
-        UserDao userDao = new UserDao();
 
         User newUser = (User) session.getAttribute("user");
         log.trace("Get attribute user " + newUser);
@@ -33,9 +32,6 @@ public class LocalChangeCommand extends Command {
 
             log.trace("Set Attribute newLocale" + newUser.getLocale());
 
-            userDao.updateUser(newUser);
-            log.trace("Update user");
-
             session.setAttribute("user", newUser);
             log.trace("Set new session attribute user" + newUser);
 
@@ -47,7 +43,7 @@ public class LocalChangeCommand extends Command {
 
             log.debug("Command finish");
             if (UserRole == Role.CLIENT)
-                return Path.COMMAND__LIST_FREE_ROOMS;
+                return Path.PAGE__FIND_FREE_ROOM_LIST;
 
             if (UserRole == Role.MANAGER)
                 return Path.COMMAND__LIST_REQUESTED;

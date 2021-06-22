@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.Date;
 import java.text.ParseException;
+import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
 
@@ -24,15 +25,28 @@ public class ListFreeRoomsCommand extends Command {
                           HttpServletResponse response) throws IOException, ServletException {
         log.debug("Command starts");
 
-        Date time_in = null;
-        Date time_out = null;
+        LocalDate time_in = null;
+        LocalDate time_out = null;
         try {
-            time_in = new Date(BookingRooms.sdf.parse(request.getParameter("time_in")).getTime());
+            time_in = new Date(BookingRooms.sdf.parse(request.getParameter("time_in")).getTime()).toLocalDate();
             log.trace("Get request parameter time_in " + time_in);
-            time_out = new Date(BookingRooms.sdf.parse(request.getParameter("time_out")).getTime());
+
+            time_out = new Date(BookingRooms.sdf.parse(request.getParameter("time_out")).getTime()).toLocalDate();
             log.trace("Get request parameter time_out " + time_out);
         } catch (ParseException e) {
             e.printStackTrace();
+            String errorMessage = "The entered date is incorrect";
+            request.setAttribute("errorMessage", errorMessage);
+            log.error("errorMessage --> " + errorMessage);
+            return Path.PAGE__ERROR_PAGE;
+        }
+
+        //check, is the arrival date greater than the departure date
+        if (time_in.isAfter(time_out)) {
+            String errorMessage = "The entered date is incorrect";
+            request.setAttribute("errorMessage", errorMessage);
+            log.error("errorMessage --> " + errorMessage);
+            return Path.PAGE__ERROR_PAGE;
         }
 
 
@@ -42,10 +56,11 @@ public class ListFreeRoomsCommand extends Command {
 
 
         String filterType;
-        if (request.getParameter("type-filter") == null)
-            filterType = "cost";
-        else
+
+        if (request.getParameter("type-filter") != null)
             filterType = request.getParameter("type-filter");
+        else
+            filterType = "cost";
         log.trace("Get request parameter type-filter --> " + filterType);
 
         switch (filterType) {
@@ -61,7 +76,7 @@ public class ListFreeRoomsCommand extends Command {
             default:
                 freeRoomsList.sort((r1, r2) -> (int) (r1.getId() - r2.getId()));
         }
-        log.trace("List was sorted by got type-filter");
+        log.trace("List was sorted by got type-filter: " + filterType);
 
         // put free rooms list to the request
         request.setAttribute("freeRoomsList", freeRoomsList);

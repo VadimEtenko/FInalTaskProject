@@ -1,8 +1,8 @@
-<%@ include file="../../jspf/directive/taglib.jspf" %>
 <%@ include file="../../jspf/header.jspf" %>
+<c:set var="title" value="Booked rooms"/>
+<%@ include file="../../jspf/head.jspf" %>
 <html>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<c:set var="title" value="Menu" scope="page"/>
 
 
 <body>
@@ -35,6 +35,8 @@
                             <td>${booking.userLogin}</td>
                             <td><fmt:message key="booked_room_list_jsp.select.room.status.${booking.status}"
                                              bundle="${rb}"/></td>
+                            <td>${booking.time_in}</td>
+                            <td>${booking.time_out}</td>
                             <td>
                                 <a href="controller?command=update-booked-list&booked-id=${booking.id}">
                                     <fmt:message key="booked_room_list_jsp.button.edit" bundle="${rb}"/>

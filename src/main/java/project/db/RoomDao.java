@@ -3,8 +3,8 @@ package project.db;
 import project.db.entity.Room;
 
 import java.sql.*;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,16 +26,14 @@ public class RoomDao {
             "SELECT hotel_rooms.id, hotel_rooms.number, class_of_room.class, hotel_rooms.number_of_beds, hotel_rooms.cost\n" +
                     "FROM hotel_rooms, class_of_room\n" +
                     "WHERE hotel_rooms.id NOT IN\n" +
-                    "(SELECT room_id\n" +
-                    "FROM booked_rooms\n" +
-                    "WHERE status_id != 0\n" +
-                    "AND ((time_out > ?\n" +
-                    "AND time_out < ?)\n" +
-                    "OR\n" +
-                    "(time_in > ?\n" +
-                    "AND\n" +
-                    "time_in < ?)))\n" +
-                    "  AND hotel_rooms.class_id = class_of_room.id\n";
+                        "(SELECT room_id\n" +
+                        "FROM booked_rooms\n" +
+                        "WHERE status_id != 0 AND " +
+                        "(time_out >= ? AND time_in <= ?) OR" +
+                        "(time_in >= ? AND time_out <= ?) OR" +
+                        "(time_in <= ? AND time_out >= ?) OR" +
+                        "(time_in <= ? AND time_out >= ?)) AND " +
+                    "hotel_rooms.class_id = class_of_room.id\n";
 
     private static final String SQL__FIND_ALL_FREE_ROOMS_BY_CRITERIA =
             "SELECT hotel_rooms.id, hotel_rooms.number, class_of_room.class, hotel_rooms.number_of_beds, hotel_rooms.cost\n" +
@@ -85,38 +83,6 @@ public class RoomDao {
     }
 
 
-    /**
-     *
-     * @param roomId
-     *      room id in database
-     * @return
-     *      room number in hotel
-     */
-
-    public int findRoomNumberById(long roomId) {
-        Room room = new Room();
-        PreparedStatement prStmt = null;
-        ResultSet rs = null;
-        Connection con = null;
-        try {
-            con = DBManager.getInstance().getConnection();
-            RoomsMapper mapper = new RoomsMapper();
-            prStmt = con.prepareStatement(SQL__FIND_ROOM_BY_ID);
-            prStmt.setLong(1, roomId);
-            rs = prStmt.executeQuery();
-            while (rs.next())
-                room = mapper.mapRow(rs);
-            prStmt.close();
-            rs.close();
-        } catch (SQLException ex) {
-            DBManager.getInstance().rollback(con);
-            ex.printStackTrace();
-        } finally {
-            DBManager.getInstance().commitAndClose(con);
-        }
-        return room.getNumber();
-    }
-
 
     /**
      *
@@ -155,7 +121,7 @@ public class RoomDao {
      *
      * @return List of free room entities.
      */
-    public List<Room> findFreeRooms(Date time_in, Date time_out) {
+    public List<Room> findFreeRooms(LocalDate time_in, LocalDate time_out) {
         List<Room> RoomsList = new ArrayList<>();
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -172,7 +138,11 @@ public class RoomDao {
             stmt.setString(indexValue++, sdf.format(start));
             stmt.setString(indexValue++, sdf.format(end));
             stmt.setString(indexValue++, sdf.format(start));
-            stmt.setString(indexValue, sdf.format(end));
+            stmt.setString(indexValue++, sdf.format(end));
+            stmt.setString(indexValue++, sdf.format(end));
+            stmt.setString(indexValue++, sdf.format(end));
+            stmt.setString(indexValue++, sdf.format(start));
+            stmt.setString(indexValue, sdf.format(start));
             rs = stmt.executeQuery();
             while (rs.next())
                 RoomsList.add(mapper.mapRow(rs));
@@ -233,7 +203,7 @@ public class RoomDao {
      *      list of rooms entities
      */
 
-    public List<Room> getOfferedRoomListByUserId(long userId) {
+    public List<Room> getOfferedRoomsByUserId(long userId) {
         List<Room> RoomsList = new ArrayList<>();
         PreparedStatement prStmt = null;
         ResultSet rs = null;

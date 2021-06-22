@@ -56,9 +56,10 @@ public class BookingRooms extends Entity{
                 break;
 
             default:
-                this.status = "not available";
+                this.status = "notavailable";
                 break;
         }
+
         setStatusId(statusId);
     }
 
@@ -141,7 +142,7 @@ public class BookingRooms extends Entity{
                     break;
 
                 default:
-                    bookingRooms.status = "not available";
+                    bookingRooms.status = "notavailable";
                     break;
             }
             bookingRooms.statusId = status;

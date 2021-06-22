@@ -1,6 +1,5 @@
 package project.web.tags;
 
-import project.db.OffersDao;
 import project.db.RequestWishDao;
 import project.db.entity.User;
 
@@ -17,7 +16,7 @@ public class RequestWishCountTag extends TagSupport {
     public int doStartTag() throws JspException {
         JspWriter out = pageContext.getOut();
         try {
-            int count = new RequestWishDao().findRequestWishByUserId(user.getId()).size();
+            int count = new RequestWishDao().findAllRequestWish().size();
             if (count > 0)
                 out.print(" (" + count + ")");
         } catch (IOException e) {

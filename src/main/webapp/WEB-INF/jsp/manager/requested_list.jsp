@@ -1,8 +1,9 @@
-<%@ include file="../../jspf/directive/taglib.jspf" %>
 <%@ include file="../../jspf/header.jspf" %>
+<c:set var="title" value="Request"/>
+<%@ include file="../../jspf/head.jspf" %>
+
 <html>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<c:set var="title" value="Menu" scope="page"/>
 
 <body>
 <table id="main-container">

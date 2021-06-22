@@ -1,16 +1,18 @@
-<%@ include file="../../jspf/directive/taglib.jspf" %>
 <%@ include file="../../jspf/header.jspf" %>
+<c:set var="title" value="Free rooms"/>
+<%@ include file="../../jspf/head.jspf" %>
+
+
 <html>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 
 <body>
-<table id="notification-main">
-
+<table id="main-container">
     <tr>
         <td class="content">
             <%-- CONTENT --%>
 
-            <table id="nitification_list_table">
+            <table id="notification_list_table">
                 <thead>
                 <tr>
                     <td>#</td>
@@ -36,9 +38,9 @@
                     </tr>
                 </c:forEach>
             </table>
-
             <%-- CONTENT --%>
         </td>
     </tr>
 </table>
 </body>
+</html>

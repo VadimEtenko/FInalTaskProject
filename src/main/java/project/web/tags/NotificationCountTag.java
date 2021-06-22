@@ -17,7 +17,7 @@ public class NotificationCountTag extends TagSupport {
     public int doStartTag() throws JspException {
         JspWriter out = pageContext.getOut();
         try {
-            int count = new NotificationDao().findNotificationsCountByUserId(user.getId());
+            int count = new NotificationDao().findNotificationsByUserId(user.getId()).size();
             if (count > 0)
                 out.print(" (" + count + ")");
         } catch (IOException e) {

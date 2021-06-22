@@ -1,16 +1,18 @@
 <%@ page import="java.time.LocalDate" %>
-<%@ include file="../../jspf/directive/taglib.jspf" %>
 <%@ include file="../../jspf/header.jspf" %>
+<c:set var="title" value="Free rooms"/>
+<%@ include file="../../jspf/head.jspf" %>
+
 <html>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 
 <body>
 <table id="main-container">
-
     <tr>
         <td class="content">
             <%-- CONTENT --%>
-            <form  action="controller" method="post">
+            <%-- Filter switcher --%>
+            <form action="controller" method="post">
                 <input type="hidden" name="command" value="list-free-rooms"/>
                 <input type="hidden" name="type-filter" value="cost">
                 <input type="hidden" name="time_in" value="${time_in}">
@@ -18,7 +20,7 @@
                 <input type="submit" value='Cost'/>
             </form>
 
-            <form  action="controller" method="post">
+            <form action="controller" method="post">
                 <input type="hidden" name="command" value="list-free-rooms"/>
                 <input type="hidden" name="type-filter" value="beds">
                 <input type="hidden" name="time_in" value="${time_in}">
@@ -26,16 +28,21 @@
                 <input type="submit" value='beds'/>
             </form>
 
-            <form  action="controller" method="post">
+            <form action="controller" method="post">
                 <input type="hidden" name="command" value="list-free-rooms"/>
                 <input type="hidden" name="type-filter" value="class">
                 <input type="hidden" name="time_in" value="${time_in}">
                 <input type="hidden" name="time_out" value="${time_out}">
                 <input type="submit" value='class'/>
             </form>
+            <%-- /Filter switcher --%>
+
 
             <form id="make_order" action="controller" method="post">
                 <input type="hidden" name="command" value="create-request"/>
+                <input type="hidden" name="time_in" value="${time_in}"/>
+                <input type="hidden" name="time_out" value="${time_out}"/>
+
                 <input type="submit"
                        value='<fmt:message key="find_free_room_list_jsp.button.send.apply" bundle="${rb}"/>'/>
                 <br>
@@ -46,12 +53,6 @@
                         <td><fmt:message key="find_free_room_list_jsp.label.date.timeout" bundle="${rb}"/></td>
                     </tr>
                     </thead>
-                    <tr>
-                        <td><input type="date" name="time_in" value="${time_in}" min="<%= LocalDate.now() %>" required>
-                        </td>
-                        <td><input type="date" name="time_out" value="${time_out}"
-                                   min="<%= LocalDate.now().plusDays(1) %>" required></td>
-                    </tr>
                 </table>
                 <br>
                 <table id="free_rooms_list_table">
@@ -73,7 +74,7 @@
                             <td>${room.number}</td>
                             <td>${room.roomClass}</td>
                             <td>${room.numberOfBeds}</td>
-                            <td><c:out value="${room.cost * (time_out - time_in)}"/> </td>
+                            <td>${room.cost}</td>
                             <td><input type="checkbox" name="roomId" value="${room.id}"/></td>
                         </tr>
                     </c:forEach>

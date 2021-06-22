@@ -1,10 +1,10 @@
-<%@ include file="WEB-INF/jspf/directive/taglib.jspf" %>
-<c:set var="title" value="Registration"/>
 <%@ include file="WEB-INF/jspf/header.jspf" %>
+<c:set var="title" value="Registration"/>
+<%@ include file="WEB-INF/jspf/head.jspf" %>
+
 <html>
 
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="utf-8" %>
-<meta http-equiv="Content-Type" content="text/html" charset="utf-8"/>
 <body>
 <table id="main-container">
     <tr>
@@ -66,12 +66,10 @@
                 <%-- Local --%>
                 <fieldset>
                     <fmt:message key="registration_jsp.label.country" bundle="${rb}"/>
-                    <p>
-                        <select size="1" name="local">
-                            <option selected value="ru">Russian</option>
-                            <option value="en">England</option>
-                        </select>
-                    </p>
+                    <select size="1" name="local">
+                        <option selected value="ru">Russian</option>
+                        <option value="en">England</option>
+                    </select>
                 </fieldset>
 
                 <input type="submit" value="<fmt:message key="registration_jsp.button.registration" bundle="${rb}"/>"/>

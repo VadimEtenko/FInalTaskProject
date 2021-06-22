@@ -25,11 +25,13 @@ public final class Fields {
     public static final String ROOM__NUMBER_OF_BEDS= "number_of_beds";
     public static final String ROOM__COST= "cost";
 
-    public static final String BOOKED_ROOM_STATUS = "status_id";
+    public static final String BOOKED_ROOM__STATUS = "status_id";
     public static final int BOOKED_ROOM_STATUS__FREE = 0;
     public static final int BOOKED_ROOM_STATUS__BOOKED = 1;
     public static final int BOOKED_ROOM_STATUS__OCCUPIED = 2;
     public static final int BOOKED_ROOM_STATUS__NOT_AVAILABLE = 3;
+    public static final String BOOKED_ROOM__TIME_IN = "time_in";
+    public static final String BOOKED_ROOM__TIME_OUT = "time_out";
 
     public static final String NOTIFICATION__USER_ID = "user_id";
     public static final String NOTIFICATION__BOOKED_ID = "booked_id";
@@ -48,5 +50,11 @@ public final class Fields {
     public static final String REQUEST_WISHED__WISHED_NUMBER_OF_BEDS = "number_of_beds";
     public static final String REQUEST_WISHED__WISHED_TIME_IN = "time_in";
     public static final String REQUEST_WISHED__WISHED_TIME_OUT = "time_out";
+    public static final String REQUEST_WISHED__USER_LOGIN_WHO_WISHED = "login";
+
+    public static final String OFFER__USER_ID = "user_id";
+    public static final String OFFER__ROOM_ID = "room_id";
+    public static final String OFFER__TIME_IN = "time_in";
+    public static final String OFFER__TIME_OUT = "time_out";
 
 }

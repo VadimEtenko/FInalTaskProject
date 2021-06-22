@@ -28,6 +28,6 @@ public class DeleteRequestedCommand extends Command {
         }
 
         log.debug("Command finished");
-        return Path.COMMAND__LIST_FREE_ROOMS;
+        return Path.PAGE__FIND_FREE_ROOM_LIST;
     }
 }

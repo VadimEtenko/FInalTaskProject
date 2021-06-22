@@ -7,12 +7,10 @@ import project.db.entity.BookingRooms;
 import project.db.entity.User;
 import project.web.Path;
 import project.web.command.Command;
-import project.web.command.ListFreeRoomsCommand;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.sql.Date;
 import java.text.ParseException;
@@ -52,7 +50,7 @@ public class CreateRequestCommand extends Command {
             long roomId = Long.parseLong(roomIsString);
             log.trace("Get parameter roomIdParam --> " + roomId);
 
-            int roomNumber = roomDao.findRoomNumberById(roomId);
+            int roomNumber = roomDao.findRoomById(roomId).getNumber();
             log.trace("Found in DB: room number with id + " + roomId + " --> " + roomNumber);
 
             LocalDate time_in = null;

@@ -1,5 +1,6 @@
-<%@ include file="../../jspf/directive/taglib.jspf" %>
 <%@ include file="../../jspf/header.jspf" %>
+<c:set var="title" value="Make an offer"/>
+<%@ include file="../../jspf/head.jspf" %>
 <html>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 
@@ -33,6 +34,9 @@
             <form action="controller" method="post">
                 <input type="hidden" name="command" value="create-offer">
                 <input type="hidden" name="userId" value="${wish.user_id}"/>
+                <input type="hidden" name="time_in" value="${wish.time_in}"/>
+                <input type="hidden" name="time_out" value="${wish.time_out}"/>
+
                 <input type="submit" value="Offer"/>
                 <table id="free_rooms_offer_list_table">
                     <thead>

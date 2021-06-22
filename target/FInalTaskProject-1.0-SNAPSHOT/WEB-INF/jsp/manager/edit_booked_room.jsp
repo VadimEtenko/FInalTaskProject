@@ -1,8 +1,9 @@
-<%@ include file="../../jspf/directive/taglib.jspf" %>
 <%@ include file="../../jspf/header.jspf" %>
+<c:set var="title" value="Booked rooms"/>
+<%@ include file="../../jspf/head.jspf" %>
 <html>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<c:set var="title" value="Menu" scope="page"/>
+
 
 
 <body>
@@ -26,21 +27,20 @@
                         <td>${bookedRooms.userLogin}</td>
                         <td>
                             <select name="status-id">
-                                <option value="0" <c:if test="${bookedRooms.statusId==0}"><c:out
-                                        value="selected"/></c:if>>
+                                <option value="0" <c:if test="${bookedRooms.statusId==0}"><c:out value="selected"/></c:if>>
                                     <fmt:message key="booked_room_list_jsp.select.room.status.free"
                                                  bundle="${rb}"/></option>
-                                <option value="1" <c:if test="${bookedRooms.statusId==1}"><c:out
-                                        value="selected"/></c:if>>
+
+                                <option value="1" <c:if test="${bookedRooms.statusId==1}"><c:out value="selected"/></c:if>>
                                     <fmt:message key="booked_room_list_jsp.select.room.status.booked"
                                                  bundle="${rb}"/></option>
-                                <option value="2" <c:if test="${bookedRooms.statusId==2}"><c:out
-                                        value="selected"/></c:if>>
+                         
+                                <option value="2" <c:if test="${bookedRooms.statusId==2}"><c:out value="selected"/></c:if>>
                                     <fmt:message key="booked_room_list_jsp.select.room.status.occupied"
                                                  bundle="${rb}"/></option>
-                                <option value="3" <c:if test="${bookedRooms.statusId==3}"><c:out
-                                        value="select"/></c:if>>
-                                    <fmt:message key="booked_room_list_jsp.select.room.status.notavaliable"
+
+                                <option value="3" <c:if test="${bookedRooms.statusId==3}"><c:out value="select"/></c:if>>
+                                    <fmt:message key="booked_room_list_jsp.select.room.status.notavailable"
                                                  bundle="${rb}"/></option>
                             </select>
                         </td>

@@ -29,14 +29,15 @@ public class RequestDao {
                     "AND requested_rooms.id = ?;";
 
     private static final String SQL__FIND_REQUESTED_ROOMS_BY_USER_ID =
-            "SELECT requested_rooms.*,  users.login, hotel_rooms.number\n" +
-                    "FROM requested_rooms, hotel_rooms, users " +
+            "SELECT requested_rooms.*, users.login, hotel_rooms.number\n" +
+                    "FROM requested_rooms, hotel_rooms, users\n" +
                     "WHERE (hotel_rooms.id IN\n" +
                         "(SELECT requested_rooms.room_id FROM requested_rooms)\n" +
                         "AND hotel_rooms.id = requested_rooms.room_id)\n" +
                     "AND (users.id IN\n" +
-                        "(SELECT requested_rooms.user_id FROM requested_rooms))\n" +
-                    "AND requested_rooms.user_id = ?";
+                        "(SELECT requested_rooms.user_id FROM requested_rooms)\n" +
+                        "AND users.id = ?)\n" +
+                    "AND requested_rooms.user_id = users.id\n";
 
     private static final String SQL__FIND_REQUESTED_ROOMS_BY_USER_ID_AND_ROOM_NUMBER =
             "SELECT requested_rooms.*,  users.login, hotel_rooms.number\n" +

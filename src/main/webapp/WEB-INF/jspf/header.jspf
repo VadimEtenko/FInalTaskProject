@@ -1,20 +1,23 @@
-<%@ page import="project.web.Path" %>
-<%@ include file="head.jspf" %>
+<%@ include file="directive/taglib.jspf" %>
 
 <%--===========================================================================
 Header (top area). 
 ===========================================================================--%>
+<link rel="stylesheet" type="text/css" href="style/st4.css"/>
 
-<tr>
-    <td id="header">
-        <%-- set local --%>
-        <fmt:setLocale value="${defaultLocale}" scope="session"/>
-        <%-- load the bundle (by locale) --%>
-        <fmt:setBundle var="rb" basename="lang"/>
+<div id="header">
 
 
-        <%-- Language switcher --%>
-        <form id="change-local" action="controller" method="post">
+    <%-- set local --%>
+    <fmt:setLocale value="${defaultLocale}" scope="session"/>
+    <%-- load the bundle (by locale) --%>
+    <fmt:setBundle var="rb" basename="lang"/>
+
+
+    <%-- Language switcher --%>
+
+    <form id="localForm" action="controller" method="post">
+        <div id="leftLocal">
             <input type="hidden" name="command" value="change-local"/>
             <c:choose>
                 <c:when test="${defaultLocale == 'en'}">
@@ -28,91 +31,91 @@ Header (top area).
                     <input type="hidden" name="newLocal" value="en"/>
                 </c:when>
             </c:choose>
-        </form>
+        </div>
+    </form>
 
 
-        <c:if test="${not empty user}">
-            <%--===========================================================================
-            This is the user menu.
-            ===========================================================================--%>
-            <div id="leftHeader">
+    <c:if test="${not empty user}">
+        <%--===========================================================================
+        This is the user menu.
+        ===========================================================================--%>
+        <div id="leftHeader">
 
-                <c:choose>
-                    <%--===========================================================================
-                    This way we define the manager menu.
-                    ===========================================================================--%>
-                    <c:when test="${userRole.name == 'manager' }">
-                        <a href="controller?command=list-request">
-                            <fmt:message key="header_jspf.manager.request.list" bundle="${rb}"/>
-                            <count:request user="${user}"/>
-                        </a> &nbsp;
-                        <a href="controller?command=list-booked">
-                            <fmt:message key="header_jspf.manager.booked.list" bundle="${rb}"/>
-                        </a> &nbsp;
-                        <a href="controller?command=list-requests-wish">
-                            <fmt:message key="header_jspf.manager.wish.list" bundle="${rb}"/>
-                            <count:requestWish user="${user}"/>
-                        </a>
-                    </c:when>
+            <c:choose>
+                <%--===========================================================================
+                This way we define the manager menu.
+                ===========================================================================--%>
+                <c:when test="${userRole.name == 'manager' }">
+                    <a href="controller?command=list-request">
+                        <fmt:message key="header_jspf.manager.request.list" bundle="${rb}"/>
+                        <count:request user="${user}"/>
+                    </a> &nbsp;
+                    <a href="controller?command=list-booked">
+                        <fmt:message key="header_jspf.manager.booked.list" bundle="${rb}"/>
+                    </a> &nbsp;
+                    <a href="controller?command=list-requests-wish">
+                        <fmt:message key="header_jspf.manager.wish.list" bundle="${rb}"/>
+                        <count:requestWish user="${user}"/>
+                    </a>
+                </c:when>
 
-                    <%--===========================================================================
-                    This way we define the client menu.
-                    ===========================================================================--%>
-                    <c:when test="${userRole.name == 'client'}">
-                        <a href="controller?command=find-free-rooms">
-                            <fmt:message key="header_jspf.user.href.create-order" bundle="${rb}"/>
-                        </a> &nbsp;
-                        <a href="controller?command=list-user-requested">
-                            <fmt:message key="header_jspf.user.href.user-order-list" bundle="${rb}"/>
-                        </a> &nbsp;
-                        <a href="controller?command=notifications">
-                            <fmt:message key="header_jspf.user.href.user-notification-list" bundle="${rb}"/>
-                            <count:notif user="${user}"/>
-                        </a> &nbsp;
-                        <a href="controller?command=plan-request">
-                            <fmt:message key="header_jspf.user.href.plan-request" bundle="${rb}"/>
-                        </a> &nbsp;
-                        <a href="controller?command=list-offer-to-verify">
-                            <fmt:message key="header_jspf.user.href.offered-to-user-rooms" bundle="${rb}"/>
-                            <count:offers user="${user}"/>
-                        </a>
-                    </c:when>
-                </c:choose>
-            </div>
+                <%--===========================================================================
+                This way we define the client menu.
+                ===========================================================================--%>
+                <c:when test="${userRole.name == 'client'}">
+                    <a href="controller?command=find-free-rooms">
+                        <fmt:message key="header_jspf.user.href.create-order" bundle="${rb}"/>
+                    </a> &nbsp;
+                    <a href="controller?command=list-user-requested">
+                        <fmt:message key="header_jspf.user.href.user-order-list" bundle="${rb}"/>
+                    </a> &nbsp;
+                    <a href="controller?command=notifications">
+                        <fmt:message key="header_jspf.user.href.user-notification-list" bundle="${rb}"/>
+                        <count:notif user="${user}"/>
+                    </a> &nbsp;
+                    <a href="controller?command=plan-request">
+                        <fmt:message key="header_jspf.user.href.plan-request" bundle="${rb}"/>
+                    </a> &nbsp;
+                    <a href="controller?command=list-offer-to-verify">
+                        <fmt:message key="header_jspf.user.href.offered-to-user-rooms" bundle="${rb}"/>
+                        <count:offers user="${user}"/>
+                    </a>
+                </c:when>
+            </c:choose>
+        </div>
 
-            <%--===========================================================================
-            This way we define the menu located at the right of header.
-            ===========================================================================--%>
-            <div id="rightHeader">
+        <%--===========================================================================
+        This way we define the menu located at the right of header.
+        ===========================================================================--%>
+        <div id="rightHeader">
 
-                    <%--===========================================================================
-                    Type user name if the user object is presented in the current session.
-                    ===========================================================================--%>
-                <c:out value="${user.name} ${user.surname}"/>
+                <%--===========================================================================
+                Type user name if the user object is presented in the current session.
+                ===========================================================================--%>
+            <c:out value="${user.name} ${user.surname}"/>
 
-                    <%--===========================================================================
-                    Type user role name if the user object is presented in the current session.
-                    ===========================================================================--%>
-                <c:if test="${not empty userRole}">
-                    (<fmt:message key="${userRole.name}" bundle="${rb}"/>)
-                </c:if>
+                <%--===========================================================================
+                Type user role name if the user object is presented in the current session.
+                ===========================================================================--%>
+            <c:if test="${not empty userRole}">
+                (<fmt:message key="${userRole.name}" bundle="${rb}"/>)
+            </c:if>
 
-                    <%--===========================================================================
-                    Type link to logout
-                    ===========================================================================--%>
-                <a href="controller?command=logout">
-                    <fmt:message key="header_jspf.link.logout" bundle="${rb}"/>
-                </a>
-            </div>
-        </c:if>
+                <%--===========================================================================
+                Type link to logout
+                ===========================================================================--%>
+            <a href="controller?command=logout">
+                <fmt:message key="header_jspf.link.logout" bundle="${rb}"/>
+            </a>
+        </div>
+    </c:if>
 
-        <c:if test="${empty user and title ne 'Login'}">
-            <div id="rightHeader">
-                <a href="login.jsp">
-                    <fmt:message key="header_jspf.link.login" bundle="${rb}"/>
-                </a>
-            </div>
-        </c:if>
-    </td>
-</tr>
+    <c:if test="${empty user and title ne 'Login'}">
+        <div id="rightHeader">
+            <a href="login.jsp">
+                <fmt:message key="header_jspf.link.login" bundle="${rb}"/>
+            </a>
+        </div>
+    </c:if>
+</div>
 

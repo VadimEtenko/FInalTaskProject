@@ -35,6 +35,7 @@ public class RequestWish extends Entity{
 
     public void setClass_id(long class_id) {
         this.class_id = class_id;
+        System.out.println(class_id);
         setRoomClass(ClassOfRooms.values()[(int)class_id-1].name());
     }
 
@@ -80,7 +81,7 @@ public class RequestWish extends Entity{
 
     @Override
     public String toString() {
-        return "RequestWish[{]" +
+        return "RequestWish[" +
                 "class_id=" + class_id +
                 ", roomClass='" + roomClass + '\'' +
                 ", number_of_beds=" + number_of_beds +
@@ -101,8 +102,10 @@ public class RequestWish extends Entity{
             return this;
         }
 
-        public Builder withClass_id(int class_id){
+        public Builder withClass_id(long class_id){
             requestWish.class_id = class_id;
+            // set room class by number of enum parameter
+            withRoomClass(ClassOfRooms.values()[(int)class_id-1].name());
             return this;
         }
 

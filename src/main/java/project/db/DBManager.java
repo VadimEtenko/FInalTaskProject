@@ -9,8 +9,6 @@ import java.sql.SQLException;
 /**
  * DB manager. Works with MySQL .
  * Only the required DAO methods are defined!
- *
- *
  */
 
 public class DBManager {
@@ -31,26 +29,33 @@ public class DBManager {
         return instance;
     }
 
+
     /**
      * Returns a DB connection getting by DriverManager.
+     *
      * @return A DB connection.
      */
     public Connection getConnection() throws SQLException {
+        String url = "jdbc:mysql://localhost:3306/hotel?useSSL=false&characterEncoding=UTF-8";
+        String user = "root";
+        String password = "password";
+        Connection connection;
+
         try {
             Class.forName("com.mysql.jdbc.Driver");
-        }catch(ClassNotFoundException e){
-            e.printStackTrace();
+        }catch(ClassNotFoundException ex){
+            log.error("Can't connect to database error: " + ex);
         }
-        Connection conn = DriverManager.getConnection(
-                "jdbc:mysql://localhost:3306/hotel?useSSL=false&characterEncoding=UTF-8","root","password");
-        conn.setAutoCommit(false);
-        return conn;
-    }
+        connection = DriverManager.getConnection(url, user, password);
+        connection.setAutoCommit(false);
 
+        return connection;
+    }
 
 
     /**
      * Commits and close the given connection.
+     *
      * @param con
      *            Connection to be committed and closed.
      */
@@ -62,6 +67,7 @@ public class DBManager {
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
+            log.error("Can't commit and close connection error: " + ex);
         }
     }
 
@@ -79,6 +85,7 @@ public class DBManager {
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
+            log.error("Can't rollback transaction error: " + ex);
         }
     }
 

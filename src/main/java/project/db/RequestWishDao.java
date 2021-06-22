@@ -8,18 +8,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RequestWishDao {
-    private static final String SQL__CREATE_REQUEST =
+    private static final String SQL__CREATE_REQUEST_WISH =
             "INSERT INTO request_wish (user_id, class_id, number_of_beds, time_in, time_out) " +
                     "VALUE (?,?,?,?,?)";
 
-    private static final String SQL__FIND_ALL_REQUEST =
+    private static final String SQL__FIND_ALL_REQUEST_WISH =
             "SELECT request_wish.*, users.login\n" +
                     "FROM request_wish, users\n" +
                     "WHERE (users.id IN\n" +
                     "(SELECT request_wish.user_id FROM request_wish))\n" +
                     "AND users.id = request_wish.user_id";
 
-    private static final String SQL__FIND_REQUEST_BY_ID =
+    private static final String SQL__FIND_REQUEST_WISH_BY_ID =
             "SELECT request_wish.*, users.login\n" +
                     "FROM request_wish, users\n" +
                     "WHERE (users.id IN\n" +
@@ -27,7 +27,7 @@ public class RequestWishDao {
                     "AND users.id = request_wish.user_id\n" +
                     " AND request_wish.id = ?";
 
-    private static final String SQL__FIND_REQUEST_BY_USER_ID =
+    private static final String SQL__FIND_REQUEST_WISH_BY_USER_ID =
             "SELECT request_wish.*, users.login\n" +
                     "FROM request_wish, users\n" +
                     "WHERE (users.id IN\n" +
@@ -35,7 +35,7 @@ public class RequestWishDao {
                     "AND users.id = request_wish.user_id\n" +
                     " AND request_wish.user_id = ?";
 
-    private static final String SQL__DELETE_REQUEST_BY_USER_ID =
+    private static final String SQL__DELETE_REQUEST_WISH_BY_USER_ID =
             "DELETE FROM request_wish WHERE user_id = ?";
 
 
@@ -59,7 +59,7 @@ public class RequestWishDao {
         Connection con = null;
         try {
             con = DBManager.getInstance().getConnection();
-            prStmt = con.prepareStatement(SQL__CREATE_REQUEST);
+            prStmt = con.prepareStatement(SQL__CREATE_REQUEST_WISH);
             int indexValue = 1;
             prStmt.setLong(indexValue++, userId);
             prStmt.setLong(indexValue++, classId);
@@ -91,7 +91,7 @@ public class RequestWishDao {
             con = DBManager.getInstance().getConnection();
             RequestedWishMapper mapper = new RequestedWishMapper();
             stmt = con.createStatement();
-            rs = stmt.executeQuery(SQL__FIND_ALL_REQUEST);
+            rs = stmt.executeQuery(SQL__FIND_ALL_REQUEST_WISH);
             while (rs.next())
                 requestWish.add(mapper.mapRow(rs));
             rs.close();
@@ -118,7 +118,7 @@ public class RequestWishDao {
         Connection con = null;
         try {
             con = DBManager.getInstance().getConnection();
-            prStmt = con.prepareStatement(SQL__DELETE_REQUEST_BY_USER_ID);
+            prStmt = con.prepareStatement(SQL__DELETE_REQUEST_WISH_BY_USER_ID);
             prStmt.setLong(1, userId);
             prStmt.executeUpdate();
             prStmt.close();
@@ -147,7 +147,7 @@ public class RequestWishDao {
         try {
             con = DBManager.getInstance().getConnection();
             RequestedWishMapper mapper = new RequestedWishMapper();
-            prStmt = con.prepareStatement(SQL__FIND_REQUEST_BY_ID);
+            prStmt = con.prepareStatement(SQL__FIND_REQUEST_WISH_BY_ID);
             prStmt.setLong(1, id);
             rs = prStmt.executeQuery();
             if (rs.next())
@@ -180,7 +180,7 @@ public class RequestWishDao {
         try {
             con = DBManager.getInstance().getConnection();
             RequestedWishMapper mapper = new RequestedWishMapper();
-            prStmt = con.prepareStatement(SQL__FIND_REQUEST_BY_USER_ID);
+            prStmt = con.prepareStatement(SQL__FIND_REQUEST_WISH_BY_USER_ID);
             prStmt.setLong(1, userId);
             rs = prStmt.executeQuery();
             while (rs.next())
@@ -207,7 +207,8 @@ public class RequestWishDao {
                 RequestWish rw = new RequestWish.Builder()
                         .withId(rs.getLong(Fields.BOOKING_REQUEST__BOOKED_ID))
                         .withUser_id(rs.getLong(Fields.REQUEST_WISHED__USER_ID_WHO_WISHED))
-                        .withUser_id(rs.getLong(Fields.REQUEST_WISHED__WISHED_CLASS_ID))
+                        .withClass_id(rs.getLong(Fields.REQUEST_WISHED__WISHED_CLASS_ID))
+                        .withUserNick(rs.getString(Fields.REQUEST_WISHED__USER_LOGIN_WHO_WISHED))
                         .withNumberOfBeds(rs.getInt(Fields.REQUEST_WISHED__WISHED_NUMBER_OF_BEDS))
                         .withTime_in(rs.getDate(Fields.REQUEST_WISHED__WISHED_TIME_IN).toLocalDate())
                         .withTime_out(rs.getDate(Fields.REQUEST_WISHED__WISHED_TIME_OUT).toLocalDate())

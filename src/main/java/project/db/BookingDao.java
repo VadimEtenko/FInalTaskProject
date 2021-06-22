@@ -3,6 +3,7 @@ package project.db;
 import project.db.entity.BookingRooms;
 
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,11 +19,22 @@ public class BookingDao {
                     "(SELECT booked_rooms.user_id FROM booked_rooms)\n" +
                     "AND  users.id = booked_rooms.user_id)";
 
-    public static final String SQL__UPDATE_RESERVATION_BY_ID =
+    public static final String SQL__UPDATE_RESERVATION_STATUS_BY_ID =
             "UPDATE booked_rooms SET status_id = ? WHERE id = ?";
 
     public static final String SQL__FIND_BOOKED_BY_USER_ID_AND_BOOKED_ID =
-            "SELECT * FROM booked_rooms WHERE user_id = ? AND room_id= ?";
+            "SELECT booked_rooms.id, users.login, hotel_rooms.number, booked_rooms.status_id, booked_rooms.time_in, booked_rooms.time_out\n" +
+            "FROM booked_rooms, hotel_rooms, users\n" +
+            "WHERE (hotel_rooms.id IN\n" +
+            "       (SELECT booked_rooms.room_id FROM booked_rooms)\n" +
+            "    AND hotel_rooms.id = booked_rooms.room_id)\n" +
+            "  AND (users.id IN\n" +
+            "       (SELECT booked_rooms.user_id FROM booked_rooms)\n" +
+            "    AND users.id = booked_rooms.user_id)\n" +
+            "AND\n" +
+            "    booked_rooms.user_id = ?\n" +
+            "AND \n" +
+            "      room_id = ?";
 
     public static final String SQL_PAY_BY_NOTIFICATION_ID =
             "UPDATE booked_rooms SET booked_rooms.is_paid = true\n" +
@@ -46,7 +58,7 @@ public class BookingDao {
 
     private static final String SQL__CREATE_NEW_BOOKING_RECORDS =
             "INSERT INTO booked_rooms(room_id, user_id, status_id, time_in, time_out, time_creating, is_paid)\n" +
-                    "VALUE (?,?,?,?,?,CURRENT_DATE,?);";
+                    "VALUE (?,?,?,?,?,CURRENT_DATE,?)";
 
 
 
@@ -122,7 +134,7 @@ public class BookingDao {
         try {
             con = DBManager.getInstance().getConnection();
             PreparedStatement prStmt =
-                    con.prepareStatement(SQL__UPDATE_RESERVATION_BY_ID);
+                    con.prepareStatement(SQL__UPDATE_RESERVATION_STATUS_BY_ID);
             int indexValue = 1;
             prStmt.setLong(indexValue++, bookedStatusId);
             prStmt.setLong(indexValue, idBooked);
@@ -159,12 +171,12 @@ public class BookingDao {
      * Creates a booked room record for user
      *
      * @param roomId
-     *      Database room's number
+     *      Database room's id
      * @param userId
-     *      Database user's number
+     *      Database user's id
      */
 
-    public void createBookedRoom(long roomId, long userId){
+    public void createBookedRoom(long roomId, long userId, LocalDate time_in, LocalDate time_out){
         Connection con = null;
         try {
             con = DBManager.getInstance().getConnection();
@@ -174,8 +186,8 @@ public class BookingDao {
             preStmt.setLong(indexValue++, roomId);
             preStmt.setLong(indexValue++, userId);
             preStmt.setInt(indexValue++, 1);
-            preStmt.setDate(indexValue++, new Date(3423));
-            preStmt.setDate(indexValue++, new Date(23423));
+            preStmt.setDate(indexValue++, Date.valueOf(time_in));
+            preStmt.setDate(indexValue++, Date.valueOf(time_out));
             preStmt.setBoolean(indexValue, false);
             preStmt.executeUpdate();
             preStmt.close();
@@ -192,14 +204,14 @@ public class BookingDao {
      * Finds a room record
      *
      * @param userId
-     *      Database user's number
+     *      Database user's id
      * @param roomId
-     *      Database room's number
+     *      Database room's id
      * @return
      *      Entity of room
      */
     public BookingRooms findBookingRecordByUserIdAndRoomId(long userId, long roomId){
-        BookingRooms bookingRecordst = new BookingRooms();
+        BookingRooms bookingRecords = new BookingRooms();
         Connection con = null;
         try {
             con = DBManager.getInstance().getConnection();
@@ -210,16 +222,16 @@ public class BookingDao {
             prStmt.setLong(2, roomId);
             ResultSet rs = prStmt.executeQuery();
             if (rs.next())
-                bookingRecordst = mapper.mapRow(rs);
+                bookingRecords = mapper.mapRow(rs);
             rs.close();
-            con.close();
+            prStmt.close();
         } catch (SQLException ex) {
             DBManager.getInstance().rollback(con);
             ex.printStackTrace();
         } finally {
             DBManager.getInstance().commitAndClose(con);
         }
-        return bookingRecordst;
+        return bookingRecords;
     }
 
 
@@ -227,7 +239,7 @@ public class BookingDao {
      * Changes the payment record to true for the record
      *
      * @param notificationId
-     *      Notification number in the database
+     *      Notification id in the database
      */
     public void makePaidByNotificationId(long notificationId){
         Connection con = null;
@@ -254,12 +266,18 @@ public class BookingDao {
         @Override
         public BookingRooms mapRow(ResultSet rs) {
             try {
-                return new BookingRooms.Builder()
+                BookingRooms br = new BookingRooms.Builder()
                         .withId(rs.getLong(Fields.ENTITY__ID))
                         .withRoomNumber(rs.getInt(Fields.ROOM__NUMBER))
                         .withUserLogin(rs.getString(Fields.USER__LOGIN))
-                        .withStatus(rs.getInt(Fields.BOOKED_ROOM_STATUS))
+                        .withStatus(rs.getInt(Fields.BOOKED_ROOM__STATUS))
                         .build();
+                try{
+                    br.setTime_in(rs.getDate(Fields.BOOKED_ROOM__TIME_IN).toLocalDate());
+                    br.setTime_out(rs.getDate(Fields.BOOKED_ROOM__TIME_OUT).toLocalDate());
+                }catch (Exception ignored){}
+                
+                return br;
             } catch (SQLException e) {
                 throw new IllegalStateException(e);
             }

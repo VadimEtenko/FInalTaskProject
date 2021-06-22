@@ -1,11 +1,10 @@
 package project.db.entity;
 
 /**
- *  Enum entity of types of roles
+ *  Enum entity of roles types
  *  of registered users
  *
  * @author V. Etenko
- *
  */
 
 public enum Role {

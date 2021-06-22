@@ -85,39 +85,6 @@ public class NotificationDao {
 
 
     /**
-     *
-     * @param userId
-     *      user's id in the database
-     * @return
-     *      number of notifications found
-     */
-
-    public int findNotificationsCountByUserId(long userId){
-        int count = 0;
-        PreparedStatement prStmt = null;
-        ResultSet rs = null;
-        Connection con = null;
-        try {
-            con = DBManager.getInstance().getConnection();
-            NotificationRoomsMapper mapper = new NotificationRoomsMapper();
-            prStmt = con.prepareStatement(SQL__FIND_NOTIFICATIONS_BY_USER_ID);
-            prStmt.setLong(1, userId);
-            rs = prStmt.executeQuery();
-            while(rs.next())
-                count++;
-            rs.close();
-            prStmt.close();
-        } catch (SQLException ex) {
-            DBManager.getInstance().rollback(con);
-            ex.printStackTrace();
-        } finally {
-            DBManager.getInstance().commitAndClose(con);
-        }
-        return count;
-    }
-
-
-    /**
      * @param id
      *      notification's number in database
      */

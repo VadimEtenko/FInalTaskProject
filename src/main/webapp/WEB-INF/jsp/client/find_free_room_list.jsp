@@ -1,11 +1,12 @@
 <%@ page import="java.time.LocalDate" %>
-<%@ include file="../../jspf/directive/taglib.jspf" %>
 <%@ include file="../../jspf/header.jspf" %>
+<c:set var="title" value="Find free rooms"/>
+<%@ include file="../../jspf/head.jspf" %>
+
 <html>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 
 <body>
-
 <%--  Form with 2 calendars for finding free rooms by date --%>
 
 <table id="main-container">
@@ -17,8 +18,7 @@
                 <input type="submit"
                        value='<fmt:message key="find_free_room_list_jsp.label.send.find" bundle="${rb}"/>'/>
 
-                <br>
-
+                <br/>
                 <table id="date_table">
                     <thead>
                     <tr>

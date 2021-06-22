@@ -31,10 +31,9 @@ public class LocalFilter implements Filter {
         HttpSession session = req.getSession();
 
         if (null == session.getAttribute("defaultLocale")) {
-            log.debug("Session's attribute DefaultLocale isn't initialized");
+            log.debug("Session's attribute DefaultLocale isn't initialized, set: " + defaultLocale);
             session.setAttribute("defaultLocale", defaultLocale);
         }
-
         log.debug("Local filter finish");
         next.doFilter(request, response);
     }

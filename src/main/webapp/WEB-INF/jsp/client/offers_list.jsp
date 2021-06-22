@@ -1,11 +1,12 @@
-<%@ include file="../../jspf/directive/taglib.jspf" %>
 <%@ include file="../../jspf/header.jspf" %>
+<c:set var="title" value="Offers"/>
+<%@ include file="../../jspf/head.jspf" %>
+
 <html>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 
 <body>
 <table id="main-container">
-
     <tr>
         <td class="content">
             <%-- CONTENT --%>
@@ -57,7 +58,6 @@
                         <td>
                             <form action="controller" method="post">
                                 <input type="hidden" name="command" value="apply-offer">
-                                <input type="hidden" name="userId" value="${user.id}"/>
                                 <input type="hidden" name="offeredRoomId" value="${room.id}"/>
                                 <input type="submit" value="Agree"/>
                             </form>
@@ -65,7 +65,7 @@
                     </tr>
                 </c:forEach>
             </table>
-
+                <%-- /CONTENT --%>
         </td>
     </tr>
 </table>

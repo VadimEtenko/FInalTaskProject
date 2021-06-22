@@ -24,7 +24,7 @@ public class ListOffersToVerifyCommand extends Command {
         List<RequestWish> userWishesList = rwd.findRequestWishByUserId(user.getId());
         request.setAttribute("userWishesList",userWishesList);
 
-        List<Room> offeredRoomsList = new RoomDao().getOfferedRoomListByUserId(user.getId());
+        List<Room> offeredRoomsList = new RoomDao().getOfferedRoomsByUserId(user.getId());
         request.setAttribute("offeredRoomsList", offeredRoomsList);
 
         return Path.PAGE__VERIFY_OFFERS;

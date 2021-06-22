@@ -30,7 +30,7 @@ public class CreateRequestWishCommand extends Command {
         RequestWishDao requestWishDao = new RequestWishDao();
 
         LocalDate time_in;
-        LocalDate time_out = null;
+        LocalDate time_out;
         try {
             time_in = new Date(BookingRooms.sdf.parse(request.getParameter("time_in")).getTime()).toLocalDate();
             time_out = new Date(BookingRooms.sdf.parse(request.getParameter("time_out")).getTime()).toLocalDate();
@@ -49,10 +49,12 @@ public class CreateRequestWishCommand extends Command {
 
         long classId = Long.parseLong(request.getParameter("classId"));
         int numberOfBeds = Integer.parseInt(request.getParameter("numberOfBeds"));
-        Long userId = ((User) request.getSession().getAttribute("user")).getId();
+        long userId = ((User) request.getSession().getAttribute("user")).getId();
 
         requestWishDao.createRequestWish(userId, classId, numberOfBeds, time_in, time_out);
+        log.trace("Request by wish was created: " + userId + " " +
+                classId + " " + numberOfBeds + " " + time_in + " " + time_out);
 
-        return Path.COMMAND__LIST_FREE_ROOMS;
+        return Path.PAGE__FIND_FREE_ROOM_LIST;
     }
 }

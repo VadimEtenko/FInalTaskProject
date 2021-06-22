@@ -36,15 +36,12 @@ public class Controller extends HttpServlet {
      */
     private void startController(HttpServletRequest request,
                                  HttpServletResponse response) throws IOException, ServletException {
-        try {
-
+        //try {
             log.debug("Controller starts");
 
             // extract command name from the request
             String commandName = request.getParameter("command");
             log.trace("Request parameter: command --> " + commandName);
-
-            System.out.println("make command" + commandName);
 
             // obtain command object by its name
             Command command = CommandContainer.get(commandName);
@@ -57,11 +54,10 @@ public class Controller extends HttpServlet {
             // if the forward address is not null go to the address
             if (forward != null) {
                 log.debug("Controller finished, now go to forward address --> " + forward);
-                request.getSession().setAttribute("title", commandName);
-                request.setAttribute("forward", forward);
                 RequestDispatcher dispatcher = request.getRequestDispatcher(forward);
                 dispatcher.forward(request, response);
             }
+            /*
         } catch (Exception e) {
             String errorMessage = "Oops... Smth get wrong";
             request.setAttribute("errorMessage", errorMessage);
@@ -70,7 +66,6 @@ public class Controller extends HttpServlet {
             dispatcher.forward(request, response);
         }
 
-
+             */
     }
-
 }

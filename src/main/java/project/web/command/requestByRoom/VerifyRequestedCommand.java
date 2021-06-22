@@ -35,10 +35,12 @@ public class VerifyRequestedCommand extends Command {
 
             // create new booked recording
             bookingDao.createBookedRoom(requestedForBooking.getRoomId(),
-                    requestedForBooking.getUserId());
+                    requestedForBooking.getUserId(),
+                    requestedForBooking.getTimeIn(),
+                    requestedForBooking.getTimeOut());
             log.info("New booked room was created");
 
-            User verifiedUser = userDao.findUsersByRequestedId(requestedForBooking.getId());
+            User verifiedUser = userDao.findUserByRequestedId(requestedForBooking.getId());
             log.info("Found user who create a request: " + verifiedUser);
 
             //Search for all users, who want to booked this room

@@ -1,8 +1,8 @@
-<%@ page import="java.text.SimpleDateFormat" %>
-<%@ page import="java.time.LocalDateTime" %>
 <%@ page import="java.time.LocalDate" %>
-<%@ include file="../../jspf/directive/taglib.jspf" %>
 <%@ include file="../../jspf/header.jspf" %>
+<c:set var="title" value="Preparing a request"/>
+<%@ include file="../../jspf/head.jspf" %>
+
 <html>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 

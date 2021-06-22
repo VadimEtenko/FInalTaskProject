@@ -1,6 +1,5 @@
 package project.db;
 
-import org.apache.log4j.Logger;
 import project.db.entity.User;
 
 import java.sql.Connection;
@@ -21,9 +20,8 @@ public class UserDao {
     private static final String SQL__FIND_USER_BY_EMAIL =
             "SELECT * FROM users WHERE email=?";
 
-    private static final String SQL_UPDATE_USER =
-            "UPDATE users SET password=?, name=?, surname=?, login=?, email=?, local=?" +
-                    "	WHERE id=?";
+    private static final String SQL__DELETE_USER_BY_LOGIN =
+            "DELETE FROM users WHERE login = ?";
 
     private static final String SQL__FIND_USER_BY_REQUESTED_ROOM_ID =
             "SELECT users.*\n" +
@@ -32,7 +30,7 @@ public class UserDao {
                     "WHERE users.id = requested_rooms.user_id\n" +
                     "  AND requested_rooms.room_id = ?";
 
-    private static final String SQL__FIND_USER_BY_REQUESTED_ID  =
+    private static final String SQL__FIND_USER_BY_REQUESTED_ID =
             "SELECT users.*\n" +
                     "FROM users,\n" +
                     "     requested_rooms\n" +
@@ -43,13 +41,12 @@ public class UserDao {
             "INSERT INTO users(name, surname, login, password, email, role_id, local)" +
                     "VALUE (?,?,?,?,?,0,?)";
 
+
     /**
      * Returns a user with the given identifier.
      *
-     * @param id
-     *      User identifier.
-     * @return
-     *      User entity.
+     * @param id User identifier.
+     * @return User entity.
      */
     public User findUser(Long id) {
         User user = null;
@@ -80,10 +77,8 @@ public class UserDao {
     /**
      * Returns a user with the given login.
      *
-     * @param login
-     *      User login.
-     * @return
-     *      User entity.
+     * @param login User login.
+     * @return User entity.
      */
     public User findUserByLogin(String login) {
         User user = null;
@@ -113,11 +108,8 @@ public class UserDao {
 
 
     /**
-     *
-     * @param email
-     *      String email of user
-     * @return
-     *      user entity registered on this email
+     * @param email String email of user
+     * @return user entity registered on this email
      */
 
     public User findUserByEmail(String email) {
@@ -148,13 +140,11 @@ public class UserDao {
 
 
     /**
-     * @param requestedId
-     *      request record id in database
-     * @return
-     *      user entity
+     * @param requestedId request record id in database
+     * @return user entity
      */
 
-    public User findUsersByRequestedId(long requestedId){
+    public User findUserByRequestedId(long requestedId) {
         User user = null;
         PreparedStatement prStmt = null;
         ResultSet rs = null;
@@ -166,7 +156,7 @@ public class UserDao {
             prStmt.setLong(1, requestedId);
             rs = prStmt.executeQuery();
             if (rs.next())
-                user =  mapper.mapRow(rs);
+                user = mapper.mapRow(rs);
             rs.close();
             prStmt.close();
         } catch (SQLException ex) {
@@ -182,14 +172,11 @@ public class UserDao {
 
 
     /**
-     *
-     * @param requestedRoomId
-     *      requested room record in database
-     * @return
-     *      list of user entities
+     * @param requestedRoomId requested room record in database
+     * @return list of user entities
      */
 
-    public List<User> findUsersByRequestedRoomId(long requestedRoomId){
+    public List<User> findUsersByRequestedRoomId(long requestedRoomId) {
         List<User> usersList = new ArrayList<>();
         PreparedStatement prStmt = null;
         ResultSet rs = null;
@@ -218,9 +205,7 @@ public class UserDao {
     /**
      * insert new user record in database
      *
-     * @param user
-     *      user entities
-     *
+     * @param user user entities
      */
 
     public void createNewUser(User user) {
@@ -247,28 +232,16 @@ public class UserDao {
         }
     }
 
-
-    /**
-     * Update user.
-     *
-     * @param user user to update.
-     */
-    public void updateUser(User user) {
+    public void deleteUserByLogin(String login) {
+        PreparedStatement prStmt;
         Connection con = null;
         try {
             con = DBManager.getInstance().getConnection();
-            PreparedStatement prStmt = con.prepareStatement(SQL_UPDATE_USER);
-            int indexParam = 1;
-            prStmt.setString(indexParam++, user.getPassword());
-            prStmt.setString(indexParam++, user.getName());
-            prStmt.setString(indexParam++, user.getSurname());
-            prStmt.setString(indexParam++, user.getLogin());
-            prStmt.setString(indexParam++, user.getEmail());
-            prStmt.setString(indexParam++, user.getLocale());
-            prStmt.setLong(indexParam, user.getId());
+            prStmt = con.prepareStatement(SQL__DELETE_USER_BY_LOGIN);
+            prStmt.setString(1, login);
             prStmt.executeUpdate();
             prStmt.close();
-        }catch (SQLException ex){
+        } catch (SQLException ex) {
             DBManager.getInstance().rollback(con);
             ex.printStackTrace();
         } finally {

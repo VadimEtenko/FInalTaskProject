@@ -1,8 +1,10 @@
-<%@ include file="../../jspf/directive/taglib.jspf" %>
 <%@ include file="../../jspf/header.jspf" %>
+<c:set var="title" value="Your requestes"/>
+<%@ include file="../../jspf/head.jspf" %>
+
 <html>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<c:set var="title" value="Menu" scope="page"/>
+
 
 <body>
 <table id="main-container">
@@ -14,7 +16,7 @@
                 <input type="hidden" name="command" value="delete-reservation"/>
                 <input type="submit" value='<fmt:message key="requested_list_jsp.button.delete" bundle="${rb}"/>'/>
 
-                <table id="list_menu_table">
+                <table>
                     <thead>
                     <tr>
                         <td>#</td>
@@ -37,8 +39,5 @@
             <%-- CONTENT --%>
         </td>
     </tr>
-
-    <customTagFile:myTagFooter/>
-
 </table>
 </body>

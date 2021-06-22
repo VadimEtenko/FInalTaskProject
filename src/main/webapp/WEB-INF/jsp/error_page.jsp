@@ -1,7 +1,8 @@
 <%@ page isErrorPage="true" %>
-<%@ include file="../jspf/directive/taglib.jspf" %>
-<c:set var="title" value="Error" scope="page"/>
 <%@ include file="../jspf/header.jspf" %>
+<c:set var="title" value="Error" scope="page"/>
+<%@ include file="../jspf/head.jspf" %>
+
 <html>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 

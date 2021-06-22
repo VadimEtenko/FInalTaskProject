@@ -1,13 +1,10 @@
-<%@ include file="directive/taglib.jspf" %>
-
 <head>
 	<title>
 		${title}
 	</title>
-<%--=========================================================================== 
-If you define http-equiv attribute, set the content type and the charset the same
-as you set them in a page directive.
+
+<%--===========================================================================
+Bind CSS document.
 ===========================================================================--%>
-
-
+	<link rel="stylesheet" type="text/css" href="style/st4.css"/>
 </head>
