@@ -55,10 +55,11 @@ public class CreateRequestCommand extends Command {
 
             LocalDate time_in = null;
             LocalDate time_out = null;
-
             try {
                 time_in = new Date(BookingRooms.sdf.parse(request.getParameter("time_in")).getTime()).toLocalDate();
+                log.trace("Get request parameter time_in: " + time_in);
                 time_out = new Date(BookingRooms.sdf.parse(request.getParameter("time_out")).getTime()).toLocalDate();
+                log.trace("Get request parameter time_out: " + time_out);
                 if (time_in.isAfter(time_out)) {
                     String errorMessage = "The entered date is incorrect";
                     request.setAttribute("errorMessage", errorMessage);
@@ -71,6 +72,7 @@ public class CreateRequestCommand extends Command {
                 log.error("errorMessage --> " + errorMessage);
                 return Path.PAGE__ERROR_PAGE;
             }
+
 
             //check is user already creat request for this room
             if (requestDao.isCreatedRequestRoomByUserIdAndRoomNumber(userId, roomId)) {

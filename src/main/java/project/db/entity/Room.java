@@ -54,6 +54,11 @@ public class Room extends Entity {
                 ", cost=" + cost + "];";
     }
 
+
+    /**
+     * Builder
+     */
+
     public static class Builder implements BuilderInterface {
         private Room room;
 

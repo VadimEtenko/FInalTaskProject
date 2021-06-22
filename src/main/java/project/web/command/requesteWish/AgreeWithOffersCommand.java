@@ -19,25 +19,38 @@ public class AgreeWithOffersCommand extends Command {
 
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+        log.debug("Command started");
+
         BookingDao bookingDao = new BookingDao();
         OffersDao offersDao = new OffersDao();
-        User user = (User)request.getSession().getAttribute("user");
         NotificationDao notificationDao = new NotificationDao();
 
-        new RequestWishDao().deleteRequestWishByIdUserId(user.getId());
-        long roomId = Long.parseLong(request.getParameter("offeredRoomId"));
+        User user = (User)request.getSession().getAttribute("user");
+        log.trace("Get session attribute user: " + user);
 
+        new RequestWishDao().deleteRequestWishByIdUserId(user.getId());
+        log.trace("Delete from database desire of user with id:" + user.getId());
+
+        long roomId = Long.parseLong(request.getParameter("offeredRoomId"));
+        log.trace("Get request parameter offeredRoomId: " + roomId);
+
+        //we take only 1 entry, since all dates are the same for offers
         Offer offer = offersDao.findOffersByUserId(user.getId()).get(0);
+        log.trace("Find in database rooms offered to this user: " + offer);
+
         offersDao.deleteOffersByUserId(user.getId());
+        log.trace("Removed all offers to user from database");
 
         bookingDao.createBookedRoom(roomId,user.getId(), offer.getTime_in(), offer.getTime_out());
+        log.trace("Created new booked room");
 
         notificationDao.createNotification(user.getId(),
                 bookingDao.findBookingRecordByUserIdAndRoomId(user.getId(),roomId).getId(),
                 Notification.getMessageVerified(user,
                         new RoomDao().findRoomById(roomId).getNumber()));
+        log.trace("Created new notification for this user");
 
-
+        log.debug("Command finished");
         return Path.PAGE__FIND_FREE_ROOM_LIST;
     }
 }

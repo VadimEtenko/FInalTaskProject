@@ -12,7 +12,7 @@
             <%-- CONTENT --%>
             <form id="login_form" action="controller?command=login" method="post">
                 <fieldset>
-                    <fmt:message key="login_jsp.label.nikname" bundle="${rb}"/>
+                    <fmt:message key="login_jsp.label.nickname" bundle="${rb}"/>
                     <input name="login"/><br/>
                 </fieldset>
                 <br/>
@@ -23,7 +23,7 @@
                 </fieldset>
                 <br/>
 
-                <input type="submit" value='<fmt:message key="login_jsp.button.login" bundle="${rb}"/>!'>
+                <input type="submit" value='<fmt:message key="login_jsp.button.log_in" bundle="${rb}"/>!'>
             </form>
 
             <form action="registration.jsp">

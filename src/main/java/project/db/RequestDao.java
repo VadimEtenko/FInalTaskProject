@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RequestDao {
+
     private static final String SQL__FIND_ALL_REQUESTED_ROOMS =
             "SELECT requested_rooms.*, users.login, hotel_rooms.number\n" +
                     "FROM requested_rooms, hotel_rooms, users\n" +
@@ -97,7 +98,6 @@ public class RequestDao {
      * @return
      *      List of request for booking entities
      *      (not created by wishes)
-     *
      */
 
     public List<RequestedForBooking> findRequestedRoomsByUserId(long userId) {
@@ -126,12 +126,15 @@ public class RequestDao {
 
 
     /**
+     * Checking for the existence of a similar claim
      *
      * @param userId
      *      user id in database
      * @param roomNumber
      *      number of room
      * @return
+     *      true - if the user has already submitted a request for this room <br/>
+     *      false - if there is no such request yet
      */
 
     public boolean isCreatedRequestRoomByUserIdAndRoomNumber(long userId, long roomNumber) {
@@ -161,6 +164,7 @@ public class RequestDao {
 
 
     /**
+     * find requested room by id in database
      *
      * @param roomId
      *      room id in database

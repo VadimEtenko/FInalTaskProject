@@ -19,6 +19,10 @@ public class NotificationDao {
             "INSERT INTO users_notifications(user_id, booked_id, text) " +
                     "VALUE (?,?,?)";
 
+    private static final String SQL__CREATE_NOTIFICATION_WITHOUT_BOOKED =
+            "INSERT INTO users_notifications(user_id, text) " +
+                    "VALUE (?,?)";
+
     public static final String SQL__DELETE_NOTIFICATION_BY_ID =
             "DELETE FROM users_notifications WHERE id = ?";
 
@@ -85,6 +89,36 @@ public class NotificationDao {
 
 
     /**
+     * Creates a message for the user in the database
+     *
+     * @param userId
+     *      user's id in the database
+     * @param text
+     *      The text that will be in the notification
+     */
+    public void createNotification(long userId, String text){
+        PreparedStatement prStmt = null;
+        Connection con = null;
+        try {
+            con = DBManager.getInstance().getConnection();
+            prStmt = con.prepareStatement(SQL__CREATE_NOTIFICATION_WITHOUT_BOOKED);
+            int indexValue = 1;
+            prStmt.setLong(indexValue++, userId);
+            prStmt.setString(indexValue, text);
+            prStmt.executeUpdate();
+            prStmt.close();
+        } catch (SQLException ex) {
+            DBManager.getInstance().rollback(con);
+            ex.printStackTrace();
+        } finally {
+            DBManager.getInstance().commitAndClose(con);
+        }
+    }
+
+
+    /**
+     * delete notification by id in database
+     *
      * @param id
      *      notification's number in database
      */

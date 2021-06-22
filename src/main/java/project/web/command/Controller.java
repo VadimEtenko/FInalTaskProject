@@ -57,7 +57,7 @@ public class Controller extends HttpServlet {
                 RequestDispatcher dispatcher = request.getRequestDispatcher(forward);
                 dispatcher.forward(request, response);
             }
-            /*
+/*
         } catch (Exception e) {
             String errorMessage = "Oops... Smth get wrong";
             request.setAttribute("errorMessage", errorMessage);
@@ -66,6 +66,6 @@ public class Controller extends HttpServlet {
             dispatcher.forward(request, response);
         }
 
-             */
+ */
     }
 }

@@ -90,6 +90,11 @@ public class RequestWish extends Entity{
                 ']';
     }
 
+
+    /**
+     * Builder
+     */
+
     public static class Builder implements BuilderInterface{
         private RequestWish requestWish;
 

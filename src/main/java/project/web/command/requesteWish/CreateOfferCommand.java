@@ -22,23 +22,33 @@ public class CreateOfferCommand extends Command {
 
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+        log.debug("Command started");
+
+        OffersDao offersDao = new OffersDao();
         long userId = Long.parseLong(request.getParameter("userId"));
+        log.trace("Get request parameter userId: " + userId);
+
         LocalDate time_in = null;
         LocalDate time_out = null;
-
         try {
             time_in = new Date(BookingRooms.sdf.parse(request.getParameter("time_in")).getTime()).toLocalDate();
+            log.trace("Get request parameter time_in: " + time_in);
             time_out = new Date(BookingRooms.sdf.parse(request.getParameter("time_out")).getTime()).toLocalDate();
-        }catch(ParseException e){
+            log.trace("Get request parameter time_out: " + time_out);
+        } catch (ParseException e) {
             String errorMessage = "Oops.. Smth get wrong";
             request.setAttribute("errorMessage", errorMessage);
             log.error("errorMessage --> " + errorMessage);
         }
 
-        for(String suitableRoomIdString : request.getParameterValues("suitableRoomId")) {
+        for (String suitableRoomIdString : request.getParameterValues("suitableRoomId")) {
             long roomId = Long.parseLong(suitableRoomIdString);
-            new OffersDao().createOffer(userId, roomId, time_in, time_out);
+            log.trace("Get request parameter roomId: " + roomId);
+            offersDao.createOffer(userId, roomId, time_in, time_out);
+            log.trace("Create in database offer for user");
         }
+
+        log.debug("Command finished");
         return Path.COMMAND__LIST_REQUEST_WISH;
     }
 }

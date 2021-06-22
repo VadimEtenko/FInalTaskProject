@@ -92,7 +92,7 @@ public class BookingDao {
      * Finds a room record
      *
      * @param id
-     *      Database record number
+     *      Database record id
      * @return Record about the reserved room by id in the database
      */
 
@@ -124,9 +124,9 @@ public class BookingDao {
      * Changes the status of the room in the record
      *
      * @param idBooked
-     *      Database record number
+     *      Database record id
      * @param bookedStatusId
-     *      New room status
+     *      New room's status
      */
 
     public void editBookingRecordsStatus(long idBooked, long bookedStatusId) {
@@ -276,7 +276,7 @@ public class BookingDao {
                     br.setTime_in(rs.getDate(Fields.BOOKED_ROOM__TIME_IN).toLocalDate());
                     br.setTime_out(rs.getDate(Fields.BOOKED_ROOM__TIME_OUT).toLocalDate());
                 }catch (Exception ignored){}
-                
+
                 return br;
             } catch (SQLException e) {
                 throw new IllegalStateException(e);

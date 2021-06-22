@@ -35,8 +35,14 @@ public class UserDaoTesting {
 
     @Test
     public void testGetUserByReRequest(){
-        List<RequestedForBooking> requestRoom = requestDao.findAllRequestedRooms();
-        RequestedForBooking rdb = requestRoom.get(0);
+        List<RequestedForBooking> requestsRoom = requestDao.findAllRequestedRooms();
+        RequestedForBooking rdb = null;
+        for(RequestedForBooking rfb : requestsRoom)
+            if (rfb.getRoomNumber() == 1) {
+                rdb = rfb;
+                break;
+            }
+
         equalsUsers(userDao.findUserByRequestedId(rdb.getId()),
             userDao.findUsersByRequestedRoomId(1).get(0));
     }

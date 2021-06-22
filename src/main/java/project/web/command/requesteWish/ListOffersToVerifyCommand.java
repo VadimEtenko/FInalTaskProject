@@ -1,5 +1,6 @@
 package project.web.command.requesteWish;
 
+import org.apache.log4j.Logger;
 import project.db.RequestWishDao;
 import project.db.RoomDao;
 import project.db.entity.RequestWish;
@@ -16,17 +17,29 @@ import java.util.List;
 
 public class ListOffersToVerifyCommand extends Command {
 
+    private static final Logger log = Logger.getLogger(ListOffersToVerifyCommand.class);
+
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        User user = (User)request.getSession().getAttribute("user");
+        log.debug("Command started");
         RequestWishDao rwd = new RequestWishDao();
 
+        User user = (User) request.getSession().getAttribute("user");
+        log.trace("Get session attribute user: " + user);
+
         List<RequestWish> userWishesList = rwd.findRequestWishByUserId(user.getId());
-        request.setAttribute("userWishesList",userWishesList);
+        log.trace("Find in database request wish list by user id: " + userWishesList);
+
+        request.setAttribute("userWishesList", userWishesList);
+        log.trace("Set session attribute userWishesList: " + userWishesList);
 
         List<Room> offeredRoomsList = new RoomDao().getOfferedRoomsByUserId(user.getId());
-        request.setAttribute("offeredRoomsList", offeredRoomsList);
+        log.trace("Find in database offered rooms: " + offeredRoomsList);
 
+        request.setAttribute("offeredRoomsList", offeredRoomsList);
+        log.trace("Set request attribute offeredRoomsList: " + offeredRoomsList);
+
+        log.debug("Command finished");
         return Path.PAGE__VERIFY_OFFERS;
     }
 }

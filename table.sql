@@ -36,7 +36,7 @@ CREATE TABLE `booked_rooms` (
   CONSTRAINT `booked_rooms_ibfk_1` FOREIGN KEY (`room_id`) REFERENCES `hotel_rooms` (`id`),
   CONSTRAINT `booked_rooms_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
   CONSTRAINT `booked_rooms_ibfk_3` FOREIGN KEY (`status_id`) REFERENCES `status_of_room` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=54 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=92 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 /*Data for the table `booked_rooms` */
 
@@ -71,19 +71,27 @@ CREATE TABLE `hotel_rooms` (
   PRIMARY KEY (`id`),
   KEY `class_id` (`class_id`),
   CONSTRAINT `hotel_rooms_ibfk_1` FOREIGN KEY (`class_id`) REFERENCES `class_of_room` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 /*Data for the table `hotel_rooms` */
 
 insert  into `hotel_rooms`(`id`,`number`,`class_id`,`number_of_beds`,`cost`) values 
-(1,1,1,2,500.00),
-(2,2,1,4,750.00),
-(3,3,2,2,1000.00),
-(4,4,2,4,1250.00),
-(5,5,3,2,1500.00),
-(6,6,3,4,1750.00),
-(7,7,4,2,2000.00),
-(8,8,4,4,2250.00);
+(1,1,1,1,500.00),
+(2,2,1,2,750.00),
+(3,3,1,3,1000.00),
+(4,4,1,4,1250.00),
+(5,5,2,1,1500.00),
+(6,6,2,2,1750.00),
+(7,7,2,3,2000.00),
+(8,8,2,4,2250.00),
+(9,9,3,1,2500.00),
+(10,10,3,2,2750.00),
+(11,11,3,3,3000.00),
+(12,12,3,4,3250.00),
+(13,13,4,1,3500.00),
+(14,14,4,2,3750.00),
+(15,15,4,3,4000.00),
+(16,16,4,4,4250.00);
 
 /*Table structure for table `offers` */
 
@@ -93,12 +101,14 @@ CREATE TABLE `offers` (
   `id` int NOT NULL AUTO_INCREMENT,
   `user_id` int NOT NULL,
   `room_id` int NOT NULL,
+  `time_in` date NOT NULL,
+  `time_out` date NOT NULL,
   PRIMARY KEY (`id`),
   KEY `room_id` (`room_id`),
   KEY `user_id` (`user_id`),
   CONSTRAINT `offers_ibfk_1` FOREIGN KEY (`room_id`) REFERENCES `hotel_rooms` (`id`),
   CONSTRAINT `offers_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=87 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 /*Data for the table `offers` */
 
@@ -118,7 +128,7 @@ CREATE TABLE `request_wish` (
   KEY `user_id` (`user_id`),
   CONSTRAINT `request_wish_ibfk_1` FOREIGN KEY (`class_id`) REFERENCES `class_of_room` (`id`),
   CONSTRAINT `request_wish_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=62 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 /*Data for the table `request_wish` */
 
@@ -137,7 +147,7 @@ CREATE TABLE `requested_rooms` (
   KEY `room_id` (`room_id`),
   CONSTRAINT `requested_rooms_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
   CONSTRAINT `requested_rooms_ibfk_2` FOREIGN KEY (`room_id`) REFERENCES `hotel_rooms` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=62 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=114 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 /*Data for the table `requested_rooms` */
 
@@ -191,7 +201,7 @@ CREATE TABLE `users` (
   PRIMARY KEY (`id`),
   KEY `role_id` (`role_id`),
   CONSTRAINT `users_ibfk_1` FOREIGN KEY (`role_id`) REFERENCES `roles` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=56 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=62 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 /*Data for the table `users` */
 
@@ -199,7 +209,8 @@ insert  into `users`(`id`,`name`,`surname`,`login`,`password`,`email`,`role_id`,
 (0,'Ivan','Ivanov','Ivan228','password','email@mail.com',1,'ru'),
 (2,'Fidele','Hooff','F_H','1234','em@mail.com',0,'ru'),
 (3,'Jim','Johns','JJ','4321','@gmail.com',0,'ru'),
-(54,'Никиточка','ЛиХоЛат','Zikkurat2015','fgkvtsi','putana@gmail.com',0,'ru');
+(54,'Никиточка','ЛиХоЛат','Zikkurat2015','fgkvtsi','putana@gmail.com',0,'ru'),
+(60,'Даниил','Чесноков','Chesk','qwert','tret@mfai.com',0,'ru');
 
 /*Table structure for table `users_notifications` */
 
@@ -208,14 +219,14 @@ DROP TABLE IF EXISTS `users_notifications`;
 CREATE TABLE `users_notifications` (
   `id` int NOT NULL AUTO_INCREMENT,
   `user_id` int NOT NULL,
-  `booked_id` int NOT NULL,
+  `booked_id` int DEFAULT NULL,
   `text` varchar(2000) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
   KEY `booked_id` (`booked_id`),
   CONSTRAINT `users_notifications_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
   CONSTRAINT `users_notifications_ibfk_2` FOREIGN KEY (`booked_id`) REFERENCES `booked_rooms` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=44 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=69 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 /*Data for the table `users_notifications` */
 
@@ -236,17 +247,23 @@ DELIMITER ;
 
 /*!50106 set global event_scheduler = 1*/;
 
-/* Event structure for event `delete_unpaied_booking` */
+/* Event structure for event `delete_unpaied` */
 
-/*!50106 DROP EVENT IF EXISTS `delete_unpaied_booking`*/;
+/*!50106 DROP EVENT IF EXISTS `delete_unpaied`*/;
 
 DELIMITER $$
 
-/*!50106 CREATE DEFINER=`root`@`localhost` EVENT `delete_unpaied_booking` ON SCHEDULE AT '2021-06-17 00:00:00' ON COMPLETION PRESERVE DISABLE DO DELETE FROM booked_rooms 
-	WHERE 
-		DATEDIFF(CURRENT_DATE, booked_rooms.time_creating) > 2
-	AND
-		is_paied != true */$$
+/*!50106 CREATE DEFINER=`root`@`localhost` EVENT `delete_unpaied` ON SCHEDULE EVERY 1 DAY STARTS '2021-06-22 20:48:55' ON COMPLETION NOT PRESERVE ENABLE DO BEGIN
+	DELETE FROM users_notifications
+	WHERE booked_id IN
+		(SELECT id FROM booked_rooms WHERE booked_rooms.is_paid = FALSE
+		AND
+		DATEDIFF(CURRENT_DATE, booked_rooms.time_creating) >= 2);
+		
+	DELETE FROM booked_rooms WHERE booked_rooms.is_paid = FALSE
+	AND
+	DATEDIFF(CURRENT_DATE, booked_rooms.time_creating) >= 2;
+END */$$
 DELIMITER ;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;

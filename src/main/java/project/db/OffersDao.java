@@ -1,7 +1,6 @@
 package project.db;
 
 import project.db.entity.Offer;
-import project.db.entity.RequestWish;
 
 import java.sql.*;
 import java.time.LocalDate;

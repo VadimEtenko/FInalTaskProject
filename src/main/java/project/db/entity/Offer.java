@@ -41,6 +41,11 @@ public class Offer extends Entity {
         this.time_out = time_out;
     }
 
+
+    /**
+     * Builder
+     */
+
     public static class Builder implements BuilderInterface {
         private Offer offer;
 

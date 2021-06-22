@@ -26,15 +26,27 @@
                     <tr>
                         <td><c:out value="${k}"/></td>
                         <td>${item.text}</td>
+                            <%-- If the notification of approval - add a button to pay  --%>
+
                         <td>
-                            <form id="nitification-form" action="controller">
+
+                            <form id="notification-form" action="controller">
                                 <input type="hidden" name="command" value="delete-notification"/>
                                 <input type="submit"
-                                       value='<fmt:message key="user_notification_list_jsp.button.pay" bundle="${rb}"/>'/>
+                                <c:choose>
+                                    <c:when test="${item.bookedId == null}">
+                                           value='<fmt:message key="user_notification_list_jsp.button.pay" bundle="${rb}"/>'
+                                    </c:when>
+                                    <c:when test="${item.bookedId != null}">
+                                        value='<fmt:message key="user_notification_list_jsp.button.delete" bundle="${rb}"/>'
+                                    </c:when>
+                                </c:choose>
+                                />
                                 <input type="hidden" name="notificationId" value="${item.id}"/>
-                                <input type="hidden" name="bookedId" value="${item.bookedId}"/>
                             </form>
+
                         </td>
+
                     </tr>
                 </c:forEach>
             </table>

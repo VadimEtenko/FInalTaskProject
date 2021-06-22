@@ -1,4 +1,3 @@
-<%@ page import="java.time.LocalDate" %>
 <%@ include file="../../jspf/header.jspf" %>
 <c:set var="title" value="Free rooms"/>
 <%@ include file="../../jspf/head.jspf" %>
@@ -45,16 +44,7 @@
 
                 <input type="submit"
                        value='<fmt:message key="find_free_room_list_jsp.button.send.apply" bundle="${rb}"/>'/>
-                <br>
-                <table id="date_table">
-                    <thead>
-                    <tr>
-                        <td><fmt:message key="find_free_room_list_jsp.label.date.timein" bundle="${rb}"/></td>
-                        <td><fmt:message key="find_free_room_list_jsp.label.date.timeout" bundle="${rb}"/></td>
-                    </tr>
-                    </thead>
-                </table>
-                <br>
+                <br/>
                 <table id="free_rooms_list_table">
                     <thead>
                     <tr>

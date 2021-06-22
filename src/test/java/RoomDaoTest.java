@@ -7,10 +7,8 @@ import project.db.OffersDao;
 import project.db.RoomDao;
 import project.db.entity.Room;
 
-import java.sql.Connection;
-import java.sql.Date;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
+import java.time.LocalDate;
 import java.util.List;
 
 public class RoomDaoTest {
@@ -21,10 +19,16 @@ public class RoomDaoTest {
     @Before
     public void setUp() throws SQLException {
         Connection con = DBManager.getInstance().getConnection();
-        Statement stmt = con.createStatement();
-        stmt.executeUpdate(
-                "INSERT INTO hotel.offers(user_id, room_id)\n" +
-                        "VALUES (0,2),(0,1)");
+        PreparedStatement preStmt = con.prepareStatement("INSERT INTO hotel.offers(user_id, room_id, time_in, time_out)\n" +
+                "VALUES (0,2,?,?),(0,1,?,?)");
+        int indexValue = 1;
+        preStmt.setDate(indexValue++, Date.valueOf(LocalDate.now()));
+        preStmt.setDate(indexValue++, Date.valueOf(LocalDate.now()));
+        preStmt.setDate(indexValue++, Date.valueOf(LocalDate.now()));
+        preStmt.setDate(indexValue, Date.valueOf(LocalDate.now()));
+        preStmt.executeUpdate();
+        preStmt.close();
+
         DBManager.getInstance().commitAndClose(con);
     }
 

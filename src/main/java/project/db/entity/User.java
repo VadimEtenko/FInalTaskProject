@@ -77,13 +77,17 @@ public class User extends Entity{
 	public String toString(){
 		return "User [name=" + name + 
 		", surname=" + surname +
-		", login=" + login + 
-		", password=" + password + 
+		", login=" + login +
 		", email=" + email + 
 		", roleId=" + roleId +
         ", local=" + locale +
         "];";
 	}
+
+
+    /**
+     * Builder
+     */
 
     public static class Builder implements BuilderInterface{
         private User user;

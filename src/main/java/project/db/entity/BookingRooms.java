@@ -110,6 +110,10 @@ public class BookingRooms extends Entity{
                 ']';
     }
 
+    /**
+     * Builder
+     */
+
     public static class Builder implements BuilderInterface{
         private BookingRooms bookingRooms;
 

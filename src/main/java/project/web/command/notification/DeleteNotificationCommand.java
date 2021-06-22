@@ -23,12 +23,11 @@ public class DeleteNotificationCommand extends Command {
         long notificationId = Long.parseLong(request.getParameter("notificationId"));
         log.trace("Request parameter: notificationId --> " + notificationId);
 
-        long bookedId = Long.parseLong(request.getParameter("bookedId"));
-        log.trace("Request parameter: bookedId --> " + bookedId);
 
         //First - pay, then - delete !!!
         new BookingDao().makePaidByNotificationId(notificationId);
         log.info("Booked was paid");
+
 
         notificationDao.deleteNotificationById(notificationId);
         log.trace("Notification was deleted");

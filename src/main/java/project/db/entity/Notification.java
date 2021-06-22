@@ -96,7 +96,7 @@ public class Notification extends Entity {
     }
 
     /**
-     * Builder for this class
+     * Builder
      */
 
     public static class Builder implements BuilderInterface{

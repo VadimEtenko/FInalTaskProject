@@ -26,14 +26,16 @@ public class CreateRequestWishCommand extends Command {
 
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-
+        log.debug("Command started");
         RequestWishDao requestWishDao = new RequestWishDao();
 
         LocalDate time_in;
         LocalDate time_out;
         try {
             time_in = new Date(BookingRooms.sdf.parse(request.getParameter("time_in")).getTime()).toLocalDate();
+            log.trace("Get request parameter time_in: " + time_in);
             time_out = new Date(BookingRooms.sdf.parse(request.getParameter("time_out")).getTime()).toLocalDate();
+            log.trace("Get request parameter time_out: " + time_out);
             if (time_in.isAfter(time_out)) {
                 String errorMessage = "The entered date is incorrect";
                 request.setAttribute("errorMessage", errorMessage);
@@ -55,6 +57,7 @@ public class CreateRequestWishCommand extends Command {
         log.trace("Request by wish was created: " + userId + " " +
                 classId + " " + numberOfBeds + " " + time_in + " " + time_out);
 
+        log.debug("Command finished");
         return Path.PAGE__FIND_FREE_ROOM_LIST;
     }
 }
